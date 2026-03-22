@@ -1,0 +1,150 @@
+/* Custom styles for Medical Search Page */
+.medical-search-tabs .ant-tabs-tab {
+  position: relative;
+  padding: 16px 24px;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  margin-right: 8px;
+}
+
+.medical-search-tabs .ant-tabs-tab:hover {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.medical-search-tabs .ant-tabs-tab-active {
+  background: #ffffff;
+  color: #1890ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medical-search-tabs .ant-tabs-tab-active::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1890ff, #40a9ff);
+  border-radius: 2px;
+}
+
+.medical-search-tabs .ant-tabs-content-holder {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: 400px;
+}
+
+.medical-search-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  /* background: #fafafa; */
+  border-radius: 8px;
+}
+
+.medical-search-loading .ant-spin {
+  margin-bottom: 16px;
+}
+
+.medical-search-loading-text {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.medical-search-content {
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.medical-search-content h1,
+.medical-search-content h2,
+.medical-search-content h3 {
+  color: #1890ff;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.medical-search-content h1 {
+  font-size: 24px;
+  border-bottom: 2px solid #e6f7ff;
+  padding-bottom: 8px;
+}
+
+.medical-search-content h2 {
+  font-size: 20px;
+}
+
+.medical-search-content h3 {
+  font-size: 18px;
+}
+
+.medical-search-content ul,
+.medical-search-content ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.medical-search-content li {
+  margin: 8px 0;
+}
+
+.medical-search-content code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #d63384;
+}
+
+.medical-search-content pre {
+  background: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #1890ff;
+  overflow-x: auto;
+}
+
+.medical-search-content blockquote {
+  border-left: 4px solid #1890ff;
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: #f0f8ff;
+  border-radius: 0 8px 8px 0;
+}
+
+.medical-search-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.medical-search-content table th,
+.medical-search-content table td {
+  border: 1px solid #d9d9d9;
+  padding: 12px;
+  text-align: left;
+}
+
+.medical-search-content table th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.medical-search-content table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.medical-search-empty {
+  padding: 60px 20px;
+  text-align: center;
+}

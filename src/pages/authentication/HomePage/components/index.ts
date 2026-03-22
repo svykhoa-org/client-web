@@ -1,0 +1,1 @@
+// export { HotCoursesList } from './HotCoursesList';

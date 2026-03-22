@@ -1,0 +1,51 @@
+/* Import styles của Ant Design */
+/* Không cần import antd css vì nó đã được import tự động qua ConfigProvider */
+
+/* CSS tùy chỉnh để fix một số vấn đề chung với Ant Design */
+.ant-btn-primary {
+  background-color: var(--color-primary-6);
+}
+
+.ant-btn-primary:hover {
+  background-color: var(--color-primary-7) !important;
+}
+
+.ant-btn-primary:active {
+  background-color: var(--color-primary-8) !important;
+}
+
+/* Tùy chỉnh một số component khác của Ant Design */
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: var(--color-primary-2);
+  color: var(--color-primary-9);
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+  background-color: var(--color-primary-6);
+}
+
+.ant-tabs-ink-bar {
+  background-color: var(--color-primary-6);
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--color-primary-6);
+  border-color: var(--color-primary-6);
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: var(--color-primary-6);
+}
+
+.ant-radio-inner::after {
+  background-color: var(--color-primary-6);
+}
+
+/* Đảm bảo màu chính được áp dụng cho tất cả các component */
+.ant-btn-link {
+  color: var(--color-primary-6);
+}
+
+.ant-btn-link:hover {
+  color: var(--color-primary-5);
+}

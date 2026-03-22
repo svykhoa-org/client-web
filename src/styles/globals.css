@@ -1,0 +1,270 @@
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('../assets/fonts/BeVietnamPro-Regular.ttf') format('truetype');
+}
+
+@import 'tailwindcss';
+@import './antd.css';
+
+/* Global Styles */
+@theme {
+  --font-be-vietnam-pro: 'Be Vietnam Pro', sans-serif;
+
+  /* ==============================================
+     PRIMARY COLORS
+     ============================================== */
+  --color-primary-1: #e8f1fb; /* Lightest green - hover states, backgrounds */
+  --color-primary-2: #b8d5f1; /* Very light green - subtle backgrounds */
+  --color-primary-3: #95c0ea; /* Light green - disabled states, soft highlights */
+  --color-primary-4: #65a3e1; /* Medium light green - secondary actions */
+  --color-primary-5: #1976d2; /* Medium green - interactive elements */
+  --color-primary-6: #1976d2; /* Base primary green - main brand color */
+  --color-primary-7: #176bbf; /* Medium dark green - hover states */
+  --color-primary-8: #125495; /* Dark green - active states */
+  --color-primary-9: #0e4174; /* Darker green - text on light backgrounds */
+  --color-primary-10: #0b3258; /* Darkest green - high contrast text */
+
+  /* ==============================================
+     SECONDARY COLORS
+     ============================================== */
+  --color-secondary-1: #f0f9ff; /* Lightest blue - backgrounds */
+  --color-secondary-2: #e0f2fe; /* Very light blue */
+  --color-secondary-3: #bae6fd; /* Light blue */
+  --color-secondary-4: #65a3e1; /* Medium light blue */
+  --color-secondary-5: #4791db; /* Medium blue */
+  --color-secondary-6: #1976d2; /* Base secondary blue */
+  --color-secondary-7: #176bbf; /* Medium dark blue */
+  --color-secondary-8: #125495; /* Dark blue */
+  --color-secondary-9: #0e4174; /* Darker blue */
+  --color-secondary-10: #0b3258; /* Darkest blue */
+
+  /* ==============================================
+     NEUTRAL COLORS
+     ============================================== */
+  --color-neutral-1: #fafafa; /* Almost white - page backgrounds */
+  --color-neutral-2: #f5f5f5; /* Very light gray - card backgrounds */
+  --color-neutral-3: #e5e5e5; /* Light gray - borders, dividers */
+  --color-neutral-4: #d4d4d4; /* Medium light gray - disabled elements */
+  --color-neutral-5: #a3a3a3; /* Medium gray - placeholder text */
+  --color-neutral-6: #737373; /* Base neutral - secondary text */
+  --color-neutral-7: #525252; /* Medium dark gray - body text */
+  --color-neutral-8: #404040; /* Dark gray - headings */
+  --color-neutral-9: #262626; /* Darker gray - important text */
+  --color-neutral-10: #171717; /* Darkest gray - high contrast text */
+
+  /* ========================================
+     WARNING COLORS
+     ============================================== */
+  --color-warning-1: #fff7e0;
+  --color-warning-2: #ffd666;
+  --color-warning-3: #faad14;
+
+  /* ========================================
+     ERROR COLORS
+     ============================================== */
+  --color-error-1: #fff1f0;
+  --color-error-2: #ff7875;
+  --color-error-3: #f5222d;
+
+  /* ========================================
+     SUCCESS COLORS
+     ============================================== */
+  --color-success-1: #f6ffed;
+  --color-success-2: #b7eb8f;
+  --color-success-3: #52c41a;
+
+  /* ========================================
+     INFO COLORS
+     ============================================== */
+  --color-info-1: #e6f4ff;
+  --color-info-2: #91d5ff;
+  --color-info-3: #1677ff;
+
+  /* ========================================
+     COMMON COLORS
+     ============================================== */
+  --color-page: var(--color-neutral-2);
+
+  /* ========================================
+     Z-INDEX
+     ============================================== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+body {
+  @apply font-be-vietnam-pro bg-page text-neutral-10;
+}
+
+@utility display {
+  @apply text-[40px] leading-[48px] font-bold;
+}
+@utility headline-1 {
+  @apply text-[32px] leading-[40px] font-bold;
+}
+@utility headline-2 {
+  @apply text-[24px] leading-[32px] font-semibold;
+}
+@utility title-1 {
+  @apply text-[20px] leading-[28px] font-semibold;
+}
+@utility title-2 {
+  @apply text-[16px] leading-[24px] font-semibold;
+}
+@utility body-1 {
+  @apply text-[16px] leading-[24px] font-normal;
+}
+@utility body-2 {
+  @apply text-[14px] leading-[20px] font-normal;
+}
+@utility caption {
+  @apply text-[12px] leading-[16px] font-normal;
+}
+@utility label {
+  @apply text-[12px] leading-[16px] font-semibold;
+}
+@utility link {
+  @apply text-[16px] leading-[24px] font-semibold underline underline-offset-2;
+}
+@utility button-text {
+  @apply text-[14px] leading-[20px] font-bold tracking-wider uppercase;
+}
+
+/* ========================================
+   PROSE STYLING FOR MARKDOWN
+   ======================================== */
+.prose {
+  @apply text-neutral-9 max-w-none;
+}
+
+.prose h1 {
+  @apply text-neutral-10 mt-8 mb-6 text-2xl font-bold;
+}
+
+.prose h2 {
+  @apply text-neutral-10 mt-6 mb-4 text-xl font-bold;
+}
+
+.prose h3 {
+  @apply text-neutral-10 mt-5 mb-3 text-lg font-semibold;
+}
+
+.prose h4 {
+  @apply text-neutral-10 mt-4 mb-2 text-base font-semibold;
+}
+
+.prose h5 {
+  @apply text-neutral-10 mt-3 mb-2 text-sm font-semibold;
+}
+
+.prose h6 {
+  @apply text-neutral-10 mt-3 mb-2 text-xs font-semibold;
+}
+
+.prose p {
+  @apply mb-4 leading-relaxed;
+}
+
+.prose ul {
+  @apply mb-4 list-inside list-disc space-y-2;
+}
+
+.prose ol {
+  @apply mb-4 list-inside list-decimal space-y-2;
+}
+
+.prose li {
+  @apply leading-relaxed;
+}
+
+.prose blockquote {
+  @apply border-primary-6 text-neutral-7 my-4 border-l-4 pl-4 italic;
+}
+
+.prose code {
+  @apply bg-neutral-2 text-primary-8 rounded px-2 py-1 font-mono text-xs;
+}
+
+.prose pre {
+  @apply bg-neutral-2 my-4 overflow-x-auto rounded-lg p-4;
+}
+
+.prose pre code {
+  @apply text-neutral-9 bg-transparent p-0 text-sm;
+}
+
+.prose a {
+  @apply text-primary-6 hover:text-primary-7 underline underline-offset-2;
+}
+
+.prose strong {
+  @apply text-neutral-10 font-bold;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose table {
+  @apply border-neutral-3 my-4 w-full border-collapse border text-sm;
+}
+
+.prose th {
+  @apply bg-neutral-2 border-neutral-3 border px-4 py-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border-neutral-3 border px-4 py-2;
+}
+
+.prose img {
+  @apply my-4 h-auto max-w-full rounded-lg;
+}
+
+.prose hr {
+  @apply border-neutral-3 my-6;
+}
+
+/* Prose sizes */
+.prose-sm {
+  @apply text-sm;
+}
+
+.prose-sm h1 {
+  @apply text-lg;
+}
+
+.prose-sm h2 {
+  @apply text-base;
+}
+
+.prose-sm h3 {
+  @apply text-sm;
+}
+
+.prose-lg {
+  @apply text-lg;
+}
+
+.prose-lg h1 {
+  @apply text-3xl;
+}
+
+.prose-lg h2 {
+  @apply text-2xl;
+}
+
+.prose-lg h3 {
+  @apply text-xl;
+}
+
+/* Video Player Custom Styles */
+.shadow-text {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}

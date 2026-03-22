@@ -1,0 +1,17 @@
+.avatar-uploader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-uploader .ant-upload-list {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-uploader .ant-upload-select {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
