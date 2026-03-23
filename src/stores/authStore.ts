@@ -4,30 +4,30 @@
  * Quản lý trạng thái xác thực người dùng trong ứng dụng sử dụng Zustand
  * Bao gồm các chức năng: đăng nhập, đăng xuất, quản lý token và thông tin người dùng
  */
-import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
-import type { User } from '@/models/User';
-import type { AuthResponseData, LoginRequest } from '@/services/auth';
-import { login as authLogin, register as authRegister } from '@/services/auth';
+import type { User } from '@/models/User'
+import type { AuthResponseData, LoginRequest } from '@/services/auth'
+import { login as authLogin, register as authRegister } from '@/services/auth'
 
 /**
  * Định nghĩa trạng thái xác thực
  */
 interface AuthState {
   // Trạng thái đang đăng nhập
-  isLoggingIn: boolean;
+  isLoggingIn: boolean
   // Token xác thực
-  token: string | null;
+  token: string | null
   // Thông tin người dùng đã đăng nhập
-  user: User | null;
+  user: User | null
   // Thông tin lỗi
-  error: string | null;
+  error: string | null
   // Trạng thái đã xác thực
-  isAuthenticated: boolean;
+  isAuthenticated: boolean
   // 2FA state
-  isTwoFactorRequired: boolean;
-  tempToken: string | null;
+  isTwoFactorRequired: boolean
+  tempToken: string | null
 }
 
 /**
@@ -35,29 +35,31 @@ interface AuthState {
  */
 interface AuthActions {
   // Đăng nhập với email và mật khẩu
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>
   // Đăng ký người dùng mới
-  register: (data: { email: string; password: string; fullName: string }) => Promise<void>;
+  register: (data: { email: string; password: string; fullName: string }) => Promise<void>
   // Đăng xuất khỏi hệ thống
-  logout: () => void;
+  logout: () => void
   // Cập nhật token xác thực
-  setToken: (token: string) => void;
+  setToken: (token: string) => void
   // Cập nhật thông tin người dùng
-  setUser: (user: User) => void;
+  setUser: (user: User) => void
   // Xóa thông tin lỗi
-  clearError: () => void;
+  clearError: () => void
   // Cập nhật trạng thái xác thực
-  setAuthenticated: (isAuthenticated: boolean) => void;
+  setAuthenticated: (isAuthenticated: boolean) => void
   // Khởi tạo lại trạng thái
-  resetState: () => void;
+  resetState: () => void
 }
 
 /**
  * Định nghĩa Auth Store bao gồm state và actions
  */
 interface AuthStore extends AuthActions {
-  state: AuthState;
+  state: AuthState
 }
+
+type PersistedAuthState = Pick<AuthState, 'token' | 'user' | 'isAuthenticated'>
 
 /**
  * Trạng thái mặc định của Auth Store
@@ -70,7 +72,7 @@ const defaultAuthState: AuthState = {
   isAuthenticated: false,
   isTwoFactorRequired: false,
   tempToken: null,
-};
+}
 
 /**
  * Tạo và export Auth Store sử dụng Zustand
@@ -95,17 +97,17 @@ export const useAuthStore = create<AuthStore>()(
               isLoggingIn: true,
               error: null,
             },
-          }));
+          }))
 
           try {
             // Chuẩn bị thông tin đăng nhập
-            const credentials: LoginRequest = { email, password };
+            const credentials: LoginRequest = { email, password }
             // Gọi API đăng nhập
-            const response = await authLogin(credentials);
+            const response = await authLogin(credentials)
 
             // Kiểm tra và xử lý kết quả đăng nhập
             if (response.data && typeof response.data === 'object') {
-              const data = response.data as AuthResponseData;
+              const data = response.data as AuthResponseData
 
               if (data.isTwoFactorRequired && data.tempToken) {
                 // Case 2FA required
@@ -118,7 +120,7 @@ export const useAuthStore = create<AuthStore>()(
                     user: data.user,
                     error: null,
                   },
-                }));
+                }))
               } else if (data.accessToken) {
                 // Case normal login
                 set(state => ({
@@ -132,28 +134,32 @@ export const useAuthStore = create<AuthStore>()(
                     tempToken: null,
                     error: null,
                   },
-                }));
+                }))
               } else {
-                throw new Error('Phản hồi không hợp lệ từ máy chủ: Thiếu token');
+                throw new Error('Phản hồi không hợp lệ từ máy chủ: Thiếu token')
               }
             } else {
               // Xử lý trường hợp response không đúng định dạng
-              throw new Error('Phản hồi không hợp lệ từ máy chủ');
+              throw new Error('Phản hồi không hợp lệ từ máy chủ')
             }
           } catch (error) {
             // Xử lý lỗi đăng nhập
-            const errorMessage = error instanceof Error ? error.message : 'Đăng nhập thất bại';
+            const errorMessage = error instanceof Error ? error.message : 'Đăng nhập thất bại'
 
             set(state => ({
               state: {
                 ...state.state,
                 isLoggingIn: false,
                 error: errorMessage,
+                token: null,
+                user: null,
                 isAuthenticated: false,
+                isTwoFactorRequired: false,
+                tempToken: null,
               },
-            }));
+            }))
 
-            throw error;
+            throw error
           }
         },
 
@@ -169,15 +175,15 @@ export const useAuthStore = create<AuthStore>()(
               isLoggingIn: true,
               error: null,
             },
-          }));
+          }))
 
           try {
             // Gọi API đăng ký
-            const response = await authRegister(data);
+            const response = await authRegister(data)
 
             // Kiểm tra và xử lý kết quả
             if (response.data && typeof response.data === 'object') {
-              const resData = response.data as AuthResponseData;
+              const resData = response.data as AuthResponseData
 
               // Tương tự login, cập nhật state nếu server trả về token/user
               if (resData.accessToken) {
@@ -192,7 +198,7 @@ export const useAuthStore = create<AuthStore>()(
                     tempToken: null,
                     error: null,
                   },
-                }));
+                }))
               } else {
                 // Trường hợp register thành công nhưng không auto-login (tùy backend),
                 // ở đây giả sử backend trả về data như login.
@@ -207,25 +213,29 @@ export const useAuthStore = create<AuthStore>()(
                       error: null,
                       // Không set authenticated
                     },
-                  }));
+                  }))
                 } else {
-                  throw new Error('Phản hồi không hợp lệ từ máy chủ: Thiếu token');
+                  throw new Error('Phản hồi không hợp lệ từ máy chủ: Thiếu token')
                 }
               }
             } else {
-              throw new Error('Phản hồi không hợp lệ từ máy chủ');
+              throw new Error('Phản hồi không hợp lệ từ máy chủ')
             }
           } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Đăng ký thất bại';
+            const errorMessage = error instanceof Error ? error.message : 'Đăng ký thất bại'
             set(state => ({
               state: {
                 ...state.state,
                 isLoggingIn: false,
                 error: errorMessage,
+                token: null,
+                user: null,
                 isAuthenticated: false,
+                isTwoFactorRequired: false,
+                tempToken: null,
               },
-            }));
-            throw error;
+            }))
+            throw error
           }
         },
 
@@ -234,7 +244,7 @@ export const useAuthStore = create<AuthStore>()(
          */
         logout: () => {
           // Đặt lại trạng thái về mặc định
-          set({ state: defaultAuthState });
+          set({ state: { ...defaultAuthState } })
         },
 
         /**
@@ -248,7 +258,7 @@ export const useAuthStore = create<AuthStore>()(
               token,
               isAuthenticated: !!token,
             },
-          }));
+          }))
         },
 
         /**
@@ -262,7 +272,7 @@ export const useAuthStore = create<AuthStore>()(
               user,
               isAuthenticated: !!user,
             },
-          }));
+          }))
         },
 
         /**
@@ -274,7 +284,7 @@ export const useAuthStore = create<AuthStore>()(
               ...state.state,
               error: null,
             },
-          }));
+          }))
         },
 
         /**
@@ -287,26 +297,43 @@ export const useAuthStore = create<AuthStore>()(
               ...state.state,
               isAuthenticated,
             },
-          }));
+          }))
         },
 
         /**
          * Khởi tạo lại trạng thái
          */
         resetState: () => {
-          set({ state: defaultAuthState });
+          set({ state: { ...defaultAuthState } })
         },
-      };
+      }
     },
     {
       // Cấu hình lưu trữ
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
-      // Chỉ lưu trữ state, không lưu trữ các actions
-      partialize: state => ({ state: state.state }),
-    }
-  )
-);
+      // Chỉ lưu các giá trị cần thiết để duy trì phiên đăng nhập
+      partialize: state => ({
+        state: {
+          token: state.state.token,
+          user: state.state.user,
+          isAuthenticated: state.state.isAuthenticated,
+        } satisfies PersistedAuthState,
+      }),
+      merge: (persistedState, currentState) => {
+        const typedPersisted = persistedState as { state?: PersistedAuthState }
+
+        return {
+          ...currentState,
+          state: {
+            ...currentState.state,
+            ...(typedPersisted.state ?? {}),
+          },
+        }
+      },
+    },
+  ),
+)
 
 /**
  * Các selectors để truy cập trạng thái
@@ -315,24 +342,24 @@ export const useAuthStore = create<AuthStore>()(
 /**
  * Lấy trạng thái hiện tại của store mà không cần hook
  */
-export const getAuthState = () => useAuthStore.getState().state;
+export const getAuthState = () => useAuthStore.getState().state
 
 /**
  * Kiểm tra người dùng đã đăng nhập hay chưa
  */
-export const isAuthenticated = () => useAuthStore.getState().state.isAuthenticated;
+export const isAuthenticated = () => useAuthStore.getState().state.isAuthenticated
 
 /**
  * Lấy thông tin người dùng hiện tại
  */
-export const getCurrentUser = () => useAuthStore.getState().state.user;
+export const getCurrentUser = () => useAuthStore.getState().state.user
 
 /**
  * Lấy token xác thực hiện tại
  */
-export const getAuthToken = () => useAuthStore.getState().state.token;
+export const getAuthToken = () => useAuthStore.getState().state.token
 
 /**
  * Lấy thông tin lỗi hiện tại
  */
-export const getAuthError = () => useAuthStore.getState().state.error;
+export const getAuthError = () => useAuthStore.getState().state.error

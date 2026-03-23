@@ -1,37 +1,38 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter } from 'react-router'
 
-import RouteConfig from '@/constants/RouteConfig';
-import AuthLayout from '@/layouts/AuthLayout';
-import MainLayout from '@/layouts/MainLayout';
-import { CourseLearningPage } from '@/pages/authentication/CourseLearningPage/CourseLearningPage';
-import { DetailCoursePage } from '@/pages/authentication/CoursePage/DetailCoursePage';
-import { ListCoursePage } from '@/pages/authentication/CoursePage/ListCoursePage';
+import RouteConfig from '@/constants/RouteConfig'
+import AuthLayout from '@/layouts/AuthLayout'
+import MainLayout from '@/layouts/MainLayout'
+import { CourseLearningPage } from '@/pages/authentication/CourseLearningPage/CourseLearningPage'
+import { DetailCoursePage } from '@/pages/authentication/CoursePage/DetailCoursePage'
+import { ListCoursePage } from '@/pages/authentication/CoursePage/ListCoursePage'
 // import { CoursePlayerPage } from '@/pages/authentication/CoursePlayerPage/CoursePlayerPage';
-import CreatePostPage from '@/pages/authentication/CreatePostPage';
-import { HomePage } from '@/pages/authentication/HomePage/HomePage';
-import { MedicalSearchPage } from '@/pages/authentication/MedicalSearchPage/MedicalSearchPage';
-import { MyCoursesPage } from '@/pages/authentication/MyCoursesPage/MyCoursesPage';
-import { OrderCancelPage } from '@/pages/authentication/OrderPage/OrderCancelPage';
-import { OrderErrorPage } from '@/pages/authentication/OrderPage/OrderErrorPage';
-import { OrderSuccessPage } from '@/pages/authentication/OrderPage/OrderSuccessPage';
-import { PaymentResultPage, PaymentTestPage } from '@/pages/authentication/PaymentTestPage';
-import ProfilePage from '@/pages/authentication/ProfilePage';
-import { DetailResourcePage } from '@/pages/authentication/ResourcePage/DetailResourcePage';
-import { ListResourcePage } from '@/pages/authentication/ResourcePage/ListResourcePage';
-import AboutPage from '@/pages/unauthentication/AboutPage';
-import ArticleDetailPage from '@/pages/unauthentication/ArticleDetailPage';
-import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage';
+import CreatePostPage from '@/pages/authentication/CreatePostPage'
+import { HomePage } from '@/pages/authentication/HomePage/HomePage'
+import { MedicalSearchPage } from '@/pages/authentication/MedicalSearchPage/MedicalSearchPage'
+import { MyCoursesPage } from '@/pages/authentication/MyCoursesPage/MyCoursesPage'
+import { OrderCancelPage } from '@/pages/authentication/OrderPage/OrderCancelPage'
+import { OrderErrorPage } from '@/pages/authentication/OrderPage/OrderErrorPage'
+import { OrderSuccessPage } from '@/pages/authentication/OrderPage/OrderSuccessPage'
+import { PaymentResultPage, PaymentTestPage } from '@/pages/authentication/PaymentTestPage'
+import ProfilePage from '@/pages/authentication/ProfilePage'
+import { DetailResourcePage } from '@/pages/authentication/ResourcePage/DetailResourcePage'
+import { ListResourcePage } from '@/pages/authentication/ResourcePage/ListResourcePage'
+import AboutPage from '@/pages/unauthentication/AboutPage'
+import ArticleDetailPage from '@/pages/unauthentication/ArticleDetailPage'
+import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage'
 // import { CoursePlayerPage } from '@/pages/unauthentication/CoursePlayerPage';
-import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage';
-import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage';
-import { ForumPage } from '@/pages/unauthentication/ForumPage';
-import { JobDetailPage } from '@/pages/unauthentication/JobPage/JobDetailPage';
-import { JobListPage } from '@/pages/unauthentication/JobPage/JobListPage';
-import { LoginPage } from '@/pages/unauthentication/LoginPage/LoginPage';
-import { NotFound } from '@/pages/unauthentication/NotFound/NotFound';
-import PostDetailPage from '@/pages/unauthentication/PostDetailPage';
-import PostsPage from '@/pages/unauthentication/PostsPage';
-import RegisterPage from '@/pages/unauthentication/RegisterPage';
+import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage'
+import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
+import { ForumPage } from '@/pages/unauthentication/ForumPage'
+import { JobDetailPage } from '@/pages/unauthentication/JobPage/JobDetailPage'
+import { JobListPage } from '@/pages/unauthentication/JobPage/JobListPage'
+import { LoginPage } from '@/pages/unauthentication/LoginPage/LoginPage'
+import { NotFound } from '@/pages/unauthentication/NotFound/NotFound'
+import PostDetailPage from '@/pages/unauthentication/PostDetailPage'
+import PostsPage from '@/pages/unauthentication/PostsPage'
+import RegisterPage from '@/pages/unauthentication/RegisterPage'
+import { PublicPath, PublicRoute } from './PublicRoute'
 
 // import ResourceListPage from '@/pages/unauthentication/ResourceListPage';
 
@@ -189,8 +190,14 @@ const router = createBrowserRouter([
         path: RouteConfig.ResourceDetailPage.path,
         element: <DetailResourcePage />,
       },
+
+      ...PublicRoute,
     ],
   },
-]);
+])
 
-export default router;
+export const RoutePath = {
+  ...PublicPath,
+}
+
+export default router

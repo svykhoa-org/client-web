@@ -1,10 +1,18 @@
-import type { BaseModel } from '@/shared/interface/BaseModel';
-
-export enum FileResourceMode {
-  PUBLIC = 'PUBLIC',
-  PRIVATE = 'PRIVATE',
+export enum FileVisibility {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
 }
 
-export interface FileResource extends BaseModel {
-  mode: FileResourceMode;
+export interface FileResource {
+  id: string;
+  originalName?: string;
+  fileName?: string;
+  mimeType?: string;
+  size?: number;
+  key?: string;
+  bucket?: string;
+  provider?: string;
+  visibility?: FileVisibility;
+  url?: string;
+  metadata?: Record<string, unknown>;
 }

@@ -1,6 +1,7 @@
 import type { BaseModel } from '@/shared/interface/BaseModel';
 
 import type { DocumentClassify } from './DocumentClassify';
+import type { FileResource } from './FileResource';
 
 export enum DocumentStatus {
   DRAFT = 'DRAFT',
@@ -9,18 +10,18 @@ export enum DocumentStatus {
 
 export interface Document extends BaseModel {
   title: string;
-  description: string;
+  description?: string | null;
   slug: string;
   price: number;
-
-  // FIXME: Cần thay đổi để trả về id & FileResource thay vì url
-  thumbnailUrl: string;
-  // FIXME: Cần thay đổi để trả về id & FileResource thay vì url
-  previewUrl: string;
-
-  categoryId: string;
-  category?: DocumentClassify;
-  totalPages: number;
-  fileSize: number;
+  thumbnailId?: string | null;
+  thumbnail?: FileResource | null;
+  previewId?: string | null;
+  preview?: FileResource | null;
+  fileId?: string | null;
+  file?: FileResource | null;
+  categoryId?: string | null;
+  category?: Omit<DocumentClassify, 'parent' | 'parentId'> | null;
+  totalPages?: number | null;
+  fileSize?: number | null;
   status: DocumentStatus;
 }

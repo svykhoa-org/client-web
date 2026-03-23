@@ -1,7 +1,7 @@
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore'
 
 export const useAuth = () => {
-  const store = useAuthStore();
+  const store = useAuthStore()
 
   return {
     isAuthenticated: store.state.isAuthenticated,
@@ -9,7 +9,6 @@ export const useAuth = () => {
     login: store.login,
     logout: store.logout,
     register: store.register,
-    // loading: store.state.isLoggingIn, // Map isLoggingIn to loading if needed, or false if not used heavily
-    loading: false, // Legacy loading state, authStore handles isLoggingIn separately
-  };
-};
+    loading: store.state.isLoggingIn,
+  }
+}

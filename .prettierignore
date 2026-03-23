@@ -1,31 +1,27 @@
-# Build
 dist
-build
-
-# Node modules
 node_modules
-
-# Lock files
-package-lock.json
-pnpm-lock.yaml
 yarn.lock
-
-# Env & config
-.env
+*.lock
 *.log
-
-# Vite cache
-.vite
-.cache
-
-# Git stuff
-.git
-.gitignore
-
-# IDE folders
-.vscode
-.idea
-
-# Output hoặc static assets
-public
+*.tsbuildinfo
+*.d.ts
+*.map
+*.test.*
+*.spec.*
+*.snap
 coverage
+build
+tmp
+temp
+*.cache
+*.tscache
+*.eslintcache
+*.prettiercache
+*.vscode
+.idea
+.DS_Store
+*.bak
+*.tmp
+*.swp
+*.swo
+*.zip

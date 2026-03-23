@@ -1,16 +1,16 @@
-import { type ReactNode, useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react'
 
-import { ConfigProvider, theme as antdTheme } from 'antd';
-import type { ThemeConfig } from 'antd';
+import { ConfigProvider, theme as antdTheme } from 'antd'
+import type { ThemeConfig } from 'antd'
 
-import { ThemeContext } from './ThemeContext';
+import { ThemeContext } from './ThemeContext'
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
+    setIsDarkMode(prev => !prev)
+  }
 
   // Tạo theme config cho Ant Design từ system colors
   const theme = useMemo<ThemeConfig>(
@@ -67,8 +67,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         Select: {
           colorBgContainer: isDarkMode ? '#404040' : '#ffffff',
           colorBorder: isDarkMode ? '#525252' : '#d4d4d4',
-          optionSelectedBg: '#0b3258', // primary-2
-          optionActiveBg: '#0e4174', // primary-1
+          optionSelectedBg: isDarkMode ? '#404040' : '#e8f1fb',
+          optionSelectedColor: isDarkMode ? '#e5e5e5' : '#0e4174',
+          optionActiveBg: isDarkMode ? '#525252' : '#f0f9ff',
         },
         Card: {
           colorBgContainer: isDarkMode ? '#262626' : '#ffffff',
@@ -91,8 +92,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         },
       },
     }),
-    [isDarkMode]
-  );
+    [isDarkMode],
+  )
 
   return (
     <ThemeContext.Provider
@@ -103,5 +104,5 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     >
       <ConfigProvider theme={theme}>{children}</ConfigProvider>
     </ThemeContext.Provider>
-  );
-};
+  )
+}

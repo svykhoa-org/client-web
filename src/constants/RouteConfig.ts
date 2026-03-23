@@ -75,12 +75,6 @@ const RouteConfig = {
   JobDetailPage: {
     path: '/job/:id',
   },
-  DocumentListPage: {
-    path: '/documents',
-  },
-  DocumentDetailPage: {
-    path: '/document/:id',
-  },
 
   // E-Learning
 
@@ -96,7 +90,7 @@ const RouteConfig = {
   CourseLearningPage: {
     path: '/course/:courseId/learning/:lessonId',
     getPath: (courseId: string, lessonId: string) => {
-      return `/course/${courseId}/learning/${lessonId}`;
+      return `/course/${courseId}/learning/${lessonId}`
     },
     paramKey: {
       courseId: 'courseId',
@@ -113,6 +107,6 @@ const RouteConfig = {
   OrderErrorPage: {
     path: '/order/error',
   },
-};
+}
 
-export default RouteConfig;
+export default RouteConfig
