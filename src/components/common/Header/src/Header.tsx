@@ -5,6 +5,7 @@ import {
   BankOutlined,
   BookOutlined,
   CloseOutlined,
+  DownOutlined,
   LogoutOutlined,
   MedicineBoxOutlined,
   MenuOutlined,
@@ -207,10 +208,14 @@ const HeaderUserMenu = ({
 
   return (
     <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
-      <div className="flex cursor-pointer items-center space-x-2 rounded-lg border border-slate-200 bg-white px-3 py-2 transition-all hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
-        <Avatar size="small" icon={<UserOutlined />} className="bg-blue-600" />
-        <span className="hidden font-medium text-slate-700 sm:inline">{displayName}</span>
-      </div>
+      <button
+        type="button"
+        className="flex h-10 items-center gap-1 rounded-full border border-slate-200 bg-white px-1.5 transition-all hover:border-blue-300 hover:bg-blue-50"
+        aria-label="Mở menu tài khoản"
+      >
+        <Avatar size={30} icon={<UserOutlined />} className="bg-blue-600" />
+        <DownOutlined className="pr-1 text-xs text-slate-500" />
+      </button>
     </Dropdown>
   )
 }
@@ -301,7 +306,6 @@ const Header = () => {
           <div className="hidden items-center space-x-4 md:flex">
             <HeaderUserMenu
               isAuthenticated={isAuthenticated}
-              userName={userName}
               onLogin={handleLogin}
               onRegister={handleRegister}
               onLogout={handleLogout}
