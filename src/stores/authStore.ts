@@ -1,69 +1,37 @@
-/**
- * Authentication Store
- *
- * Quản lý trạng thái xác thực người dùng trong ứng dụng sử dụng Zustand
- * Bao gồm các chức năng: đăng nhập, đăng xuất, quản lý token và thông tin người dùng
- */
+import { clearTokens, getRefreshToken, setAccessToken, setTokens } from '@/lib/axios'
+import type { User } from '@/models/User'
+import type { AuthResponseData, LoginRequest, RegisterRequest } from '@/services/auth'
+import { login as authLogin, logout as authLogout, register as authRegister } from '@/services/auth'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import type { User } from '@/models/User'
-import type { AuthResponseData, LoginRequest } from '@/services/auth'
-import { login as authLogin, register as authRegister } from '@/services/auth'
-
-/**
- * Định nghĩa trạng thái xác thực
- */
 interface AuthState {
-  // Trạng thái đang đăng nhập
   isLoggingIn: boolean
-  // Token xác thực
   token: string | null
-  // Thông tin người dùng đã đăng nhập
   user: User | null
-  // Thông tin lỗi
   error: string | null
-  // Trạng thái đã xác thực
   isAuthenticated: boolean
-  // 2FA state
   isTwoFactorRequired: boolean
   tempToken: string | null
 }
 
-/**
- * Định nghĩa các actions của Auth Store
- */
 interface AuthActions {
-  // Đăng nhập với email và mật khẩu
   login: (email: string, password: string) => Promise<void>
-  // Đăng ký người dùng mới
-  register: (data: { email: string; password: string; fullName: string }) => Promise<void>
-  // Đăng xuất khỏi hệ thống
+  register: (data: RegisterRequest) => Promise<void>
   logout: () => void
-  // Cập nhật token xác thực
   setToken: (token: string) => void
-  // Cập nhật thông tin người dùng
   setUser: (user: User) => void
-  // Xóa thông tin lỗi
   clearError: () => void
-  // Cập nhật trạng thái xác thực
   setAuthenticated: (isAuthenticated: boolean) => void
-  // Khởi tạo lại trạng thái
   resetState: () => void
 }
 
-/**
- * Định nghĩa Auth Store bao gồm state và actions
- */
 interface AuthStore extends AuthActions {
   state: AuthState
 }
 
 type PersistedAuthState = Pick<AuthState, 'token' | 'user' | 'isAuthenticated'>
 
-/**
- * Trạng thái mặc định của Auth Store
- */
 const defaultAuthState: AuthState = {
   isLoggingIn: false,
   token: null,
@@ -74,245 +42,209 @@ const defaultAuthState: AuthState = {
   tempToken: null,
 }
 
-/**
- * Tạo và export Auth Store sử dụng Zustand
- */
+const normalizeAuthError = (error: unknown, fallback: string) => {
+  if (error instanceof Error && error.message) {
+    return error.message
+  }
+  return fallback
+}
+
+const applyAuthenticatedSession = (data: AuthResponseData) => {
+  const accessToken = data.accessToken ?? null
+  const refreshToken = data.refreshToken ?? null
+
+  if (!accessToken) {
+    throw new Error('Phan hoi khong hop le tu may chu: Thieu accessToken')
+  }
+
+  if (refreshToken) {
+    setTokens(accessToken, refreshToken)
+  } else {
+    setAccessToken(accessToken)
+  }
+
+  return {
+    token: accessToken,
+    user: data.user,
+    isAuthenticated: true,
+    isTwoFactorRequired: false,
+    tempToken: null,
+  } satisfies Pick<
+    AuthState,
+    'token' | 'user' | 'isAuthenticated' | 'isTwoFactorRequired' | 'tempToken'
+  >
+}
+
 export const useAuthStore = create<AuthStore>()(
   persist(
-    set => {
-      return {
-        // Trạng thái ban đầu
-        state: defaultAuthState,
+    set => ({
+      state: defaultAuthState,
 
-        /**
-         * Đăng nhập với email và mật khẩu
-         * @param email Email người dùng
-         * @param password Mật khẩu người dùng
-         */
-        login: async (email: string, password: string) => {
-          // Cập nhật trạng thái đang đăng nhập
-          set(state => ({
-            state: {
-              ...state.state,
-              isLoggingIn: true,
-              error: null,
-            },
-          }))
+      login: async (email: string, password: string) => {
+        set(prev => ({
+          state: {
+            ...prev.state,
+            isLoggingIn: true,
+            error: null,
+          },
+        }))
 
-          try {
-            // Chuẩn bị thông tin đăng nhập
-            const credentials: LoginRequest = { email, password }
-            // Gọi API đăng nhập
-            const response = await authLogin(credentials)
+        try {
+          const credentials: LoginRequest = { email, password }
+          const data = await authLogin(credentials)
 
-            // Kiểm tra và xử lý kết quả đăng nhập
-            if (response.data && typeof response.data === 'object') {
-              const data = response.data as AuthResponseData
-
-              if (data.isTwoFactorRequired && data.tempToken) {
-                // Case 2FA required
-                set(state => ({
-                  state: {
-                    ...state.state,
-                    isLoggingIn: false,
-                    isTwoFactorRequired: true,
-                    tempToken: data.tempToken || null,
-                    user: data.user,
-                    error: null,
-                  },
-                }))
-              } else if (data.accessToken) {
-                // Case normal login
-                set(state => ({
-                  state: {
-                    ...state.state,
-                    isLoggingIn: false,
-                    token: data.accessToken || null,
-                    user: data.user,
-                    isAuthenticated: true,
-                    isTwoFactorRequired: false,
-                    tempToken: null,
-                    error: null,
-                  },
-                }))
-              } else {
-                throw new Error('Phản hồi không hợp lệ từ máy chủ: Thiếu token')
-              }
-            } else {
-              // Xử lý trường hợp response không đúng định dạng
-              throw new Error('Phản hồi không hợp lệ từ máy chủ')
-            }
-          } catch (error) {
-            // Xử lý lỗi đăng nhập
-            const errorMessage = error instanceof Error ? error.message : 'Đăng nhập thất bại'
-
-            set(state => ({
+          if (data.isTwoFactorRequired && data.tempToken) {
+            clearTokens()
+            set(prev => ({
               state: {
-                ...state.state,
+                ...prev.state,
                 isLoggingIn: false,
-                error: errorMessage,
                 token: null,
-                user: null,
                 isAuthenticated: false,
-                isTwoFactorRequired: false,
-                tempToken: null,
+                isTwoFactorRequired: true,
+                tempToken: data.tempToken ?? null,
+                user: data.user,
+                error: null,
               },
             }))
-
-            throw error
+            return
           }
-        },
 
-        /**
-         * Đăng ký người dùng mới
-         * @param data Dữ liệu đăng ký
-         */
-        register: async (data: { email: string; password: string; fullName: string }) => {
-          // Cập nhật trạng thái đang đăng nhập (hoặc thêm isRegistering nếu cần, nhưng dùng chung isLoggingIn cũng tạm ổn cho loading)
-          set(state => ({
+          set(prev => ({
             state: {
-              ...state.state,
-              isLoggingIn: true,
+              ...prev.state,
+              isLoggingIn: false,
+              ...applyAuthenticatedSession(data),
               error: null,
             },
           }))
+        } catch (error) {
+          clearTokens()
+          set(prev => ({
+            state: {
+              ...prev.state,
+              isLoggingIn: false,
+              token: null,
+              user: null,
+              isAuthenticated: false,
+              isTwoFactorRequired: false,
+              tempToken: null,
+              error: normalizeAuthError(error, 'Dang nhap that bai'),
+            },
+          }))
 
-          try {
-            // Gọi API đăng ký
-            const response = await authRegister(data)
+          throw error
+        }
+      },
 
-            // Kiểm tra và xử lý kết quả
-            if (response.data && typeof response.data === 'object') {
-              const resData = response.data as AuthResponseData
+      register: async (payload: RegisterRequest) => {
+        set(prev => ({
+          state: {
+            ...prev.state,
+            isLoggingIn: true,
+            error: null,
+          },
+        }))
 
-              // Tương tự login, cập nhật state nếu server trả về token/user
-              if (resData.accessToken) {
-                set(state => ({
-                  state: {
-                    ...state.state,
-                    isLoggingIn: false,
-                    token: resData.accessToken || null,
-                    user: resData.user,
-                    isAuthenticated: true,
-                    isTwoFactorRequired: false,
-                    tempToken: null,
-                    error: null,
-                  },
-                }))
-              } else {
-                // Trường hợp register thành công nhưng không auto-login (tùy backend),
-                // ở đây giả sử backend trả về data như login.
-                // Nếu backend chỉ trả message success thì cần handle kiểu khác,
-                // nhưng interface AuthResponseData cho thấy nó trả về giống login.
-                if (resData.user && !resData.accessToken) {
-                  // Có user nhưng không có token -> Có thể cần verify email?
-                  set(state => ({
-                    state: {
-                      ...state.state,
-                      isLoggingIn: false,
-                      error: null,
-                      // Không set authenticated
-                    },
-                  }))
-                } else {
-                  throw new Error('Phản hồi không hợp lệ từ máy chủ: Thiếu token')
-                }
-              }
-            } else {
-              throw new Error('Phản hồi không hợp lệ từ máy chủ')
-            }
-          } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Đăng ký thất bại'
-            set(state => ({
+        try {
+          const data = await authRegister(payload)
+
+          if (data.accessToken) {
+            set(prev => ({
               state: {
-                ...state.state,
+                ...prev.state,
                 isLoggingIn: false,
-                error: errorMessage,
-                token: null,
-                user: null,
-                isAuthenticated: false,
-                isTwoFactorRequired: false,
-                tempToken: null,
+                ...applyAuthenticatedSession(data),
+                error: null,
               },
             }))
-            throw error
+            return
           }
-        },
 
-        /**
-         * Đăng xuất khỏi hệ thống
-         */
-        logout: () => {
-          // Đặt lại trạng thái về mặc định
-          set({ state: { ...defaultAuthState } })
-        },
-
-        /**
-         * Cập nhật token xác thực
-         * @param token Token mới
-         */
-        setToken: (token: string) => {
-          set(state => ({
+          set(prev => ({
             state: {
-              ...state.state,
-              token,
-              isAuthenticated: !!token,
-            },
-          }))
-        },
-
-        /**
-         * Cập nhật thông tin người dùng
-         * @param user Thông tin người dùng mới
-         */
-        setUser: (user: User) => {
-          set(state => ({
-            state: {
-              ...state.state,
-              user,
-              isAuthenticated: !!user,
-            },
-          }))
-        },
-
-        /**
-         * Xóa thông tin lỗi
-         */
-        clearError: () => {
-          set(state => ({
-            state: {
-              ...state.state,
+              ...prev.state,
+              isLoggingIn: false,
+              user: data.user ?? null,
               error: null,
             },
           }))
-        },
-
-        /**
-         * Cập nhật trạng thái xác thực
-         * @param isAuthenticated Trạng thái xác thực mới
-         */
-        setAuthenticated: (isAuthenticated: boolean) => {
-          set(state => ({
+        } catch (error) {
+          clearTokens()
+          set(prev => ({
             state: {
-              ...state.state,
-              isAuthenticated,
+              ...prev.state,
+              isLoggingIn: false,
+              token: null,
+              user: null,
+              isAuthenticated: false,
+              isTwoFactorRequired: false,
+              tempToken: null,
+              error: normalizeAuthError(error, 'Dang ky that bai'),
             },
           }))
-        },
+          throw error
+        }
+      },
 
-        /**
-         * Khởi tạo lại trạng thái
-         */
-        resetState: () => {
-          set({ state: { ...defaultAuthState } })
-        },
-      }
-    },
+      logout: () => {
+        const refreshToken = getRefreshToken()
+
+        set({ state: { ...defaultAuthState } })
+        clearTokens()
+
+        if (refreshToken) {
+          void authLogout().catch(() => undefined)
+        }
+      },
+
+      setToken: (token: string) => {
+        setAccessToken(token)
+        set(prev => ({
+          state: {
+            ...prev.state,
+            token,
+            isAuthenticated: !!token,
+          },
+        }))
+      },
+
+      setUser: (user: User) => {
+        set(prev => ({
+          state: {
+            ...prev.state,
+            user,
+            isAuthenticated: !!(prev.state.token && user),
+          },
+        }))
+      },
+
+      clearError: () => {
+        set(prev => ({
+          state: {
+            ...prev.state,
+            error: null,
+          },
+        }))
+      },
+
+      setAuthenticated: (isAuthenticated: boolean) => {
+        set(prev => ({
+          state: {
+            ...prev.state,
+            isAuthenticated,
+          },
+        }))
+      },
+
+      resetState: () => {
+        clearTokens()
+        set({ state: { ...defaultAuthState } })
+      },
+    }),
     {
-      // Cấu hình lưu trữ
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
-      // Chỉ lưu các giá trị cần thiết để duy trì phiên đăng nhập
       partialize: state => ({
         state: {
           token: state.state.token,
@@ -322,44 +254,26 @@ export const useAuthStore = create<AuthStore>()(
       }),
       merge: (persistedState, currentState) => {
         const typedPersisted = persistedState as { state?: PersistedAuthState }
+        const mergedState = {
+          ...currentState.state,
+          ...(typedPersisted.state ?? {}),
+        }
+
+        if (mergedState.token) {
+          setAccessToken(mergedState.token)
+        }
 
         return {
           ...currentState,
-          state: {
-            ...currentState.state,
-            ...(typedPersisted.state ?? {}),
-          },
+          state: mergedState,
         }
       },
     },
   ),
 )
 
-/**
- * Các selectors để truy cập trạng thái
- */
-
-/**
- * Lấy trạng thái hiện tại của store mà không cần hook
- */
 export const getAuthState = () => useAuthStore.getState().state
-
-/**
- * Kiểm tra người dùng đã đăng nhập hay chưa
- */
 export const isAuthenticated = () => useAuthStore.getState().state.isAuthenticated
-
-/**
- * Lấy thông tin người dùng hiện tại
- */
 export const getCurrentUser = () => useAuthStore.getState().state.user
-
-/**
- * Lấy token xác thực hiện tại
- */
 export const getAuthToken = () => useAuthStore.getState().state.token
-
-/**
- * Lấy thông tin lỗi hiện tại
- */
 export const getAuthError = () => useAuthStore.getState().state.error

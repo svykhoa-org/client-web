@@ -53,6 +53,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           colorPrimaryHover: '#0e4174',
           colorPrimaryActive: '#0e4174',
           colorPrimaryText: '#ffffff',
+          defaultShadow: 'none',
+          primaryShadow: 'none',
 
           controlOutline: '#0b3258',
           borderRadius: 8,

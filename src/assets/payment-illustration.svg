@@ -1,0 +1,42 @@
+<svg width="960" height="720" viewBox="0 0 960 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="840" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C4A6E"/>
+      <stop offset="0.55" stop-color="#075985"/>
+      <stop offset="1" stop-color="#022C4B"/>
+    </linearGradient>
+    <linearGradient id="card" x1="262" y1="140" x2="760" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E2E8F0"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="300" y1="470" x2="660" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="720" rx="40" fill="url(#bg)"/>
+
+  <circle cx="140" cy="120" r="110" fill="#0EA5E9" fill-opacity="0.22"/>
+  <circle cx="860" cy="590" r="150" fill="#22D3EE" fill-opacity="0.18"/>
+  <circle cx="790" cy="170" r="78" fill="#7DD3FC" fill-opacity="0.2"/>
+
+  <rect x="240" y="130" width="480" height="460" rx="28" fill="url(#card)"/>
+  <rect x="240" y="130" width="480" height="460" rx="28" stroke="#BFDBFE" stroke-width="2"/>
+
+  <rect x="280" y="180" width="180" height="28" rx="14" fill="#DBEAFE"/>
+  <rect x="280" y="236" width="400" height="16" rx="8" fill="#CBD5E1"/>
+  <rect x="280" y="264" width="320" height="16" rx="8" fill="#CBD5E1"/>
+
+  <rect x="280" y="316" width="400" height="84" rx="16" fill="#F1F5F9"/>
+  <rect x="302" y="342" width="110" height="14" rx="7" fill="#94A3B8"/>
+  <rect x="302" y="366" width="180" height="14" rx="7" fill="#64748B"/>
+  <rect x="540" y="340" width="120" height="34" rx="10" fill="#DCFCE7"/>
+
+  <rect x="300" y="446" width="360" height="48" rx="14" fill="url(#cta)"/>
+  <circle cx="340" cy="470" r="10" fill="#DBEAFE"/>
+  <rect x="362" y="462" width="160" height="16" rx="8" fill="#E0F2FE"/>
+
+  <path d="M770 202L806 236L742 300" stroke="#67E8F9" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M176 520L214 558L146 625" stroke="#38BDF8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

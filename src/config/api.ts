@@ -6,6 +6,14 @@ export const apiConfig = {
 
   // Build full API URL
   get apiBaseURL() {
-    return `${this.baseURL}/api/${this.apiVersion}`;
+    const normalizedBaseURL = this.baseURL.replace(/\/+$/, '')
+    const apiPath = `/api/${this.apiVersion}`
+
+    // Avoid duplicating /api/v1 when env already includes the API prefix.
+    if (normalizedBaseURL.endsWith(apiPath)) {
+      return normalizedBaseURL
+    }
+
+    return `${normalizedBaseURL}${apiPath}`
   },
-};
+}

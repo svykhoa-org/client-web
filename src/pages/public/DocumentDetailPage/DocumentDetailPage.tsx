@@ -1,19 +1,27 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { DownloadOutlined, LockOutlined } from '@ant-design/icons'
-import { Alert, Avatar, Button, Card, Skeleton, Tag, Typography, message } from 'antd'
+import { Alert, Avatar, Button, Card, Modal, Skeleton, Tag, Typography, message } from 'antd'
 
+import RouteConfig from '@/constants/RouteConfig'
 import { PageHeader } from '@/components/ui/PageHeader'
-import { useDetail } from '@/hooks'
+import { useDetail, useRequest } from '@/hooks'
+import { useAuth } from '@/hooks/useAuth'
 import type { Document } from '@/models/Document'
 import { DocumentLicenseStatus } from '@/models/DocumentLicense'
 import { FileSize } from '@/models/enum/FileSize'
 import { RoutePath } from '@/routes'
-import { getDocumentDetail } from '@/services/Document'
+import {
+  checkoutDocumentOrder,
+  type DocumentCheckoutOutput,
+  getDocumentDetail,
+  getDocumentDownloadUrl,
+} from '@/services/Document'
 import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
+import { DocumentCheckoutModalContent } from './components/DocumentCheckoutModalContent'
 
 const { Title, Text } = Typography
 
@@ -40,6 +48,9 @@ const resolvePreviewUrl = (document?: Document | null) => {
 export const DocumentDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false)
+  const [checkoutData, setCheckoutData] = useState<DocumentCheckoutOutput | null>(null)
 
   const requestDocumentDetail = useCallback(async (documentId: string) => {
     return getDocumentDetail({ id: documentId })
@@ -54,6 +65,11 @@ export const DocumentDetailPage = () => {
     immediate: false,
   })
 
+  const { execute: executeCheckout, isLoading: isCheckingOut } = useRequest(checkoutDocumentOrder)
+
+  const { execute: executeDownloadUrl, isLoading: isPreparingDownload } =
+    useRequest(getDocumentDownloadUrl)
+
   useEffect(() => {
     if (!id) return
     void execute(id)
@@ -66,16 +82,100 @@ export const DocumentDetailPage = () => {
   const previewUrl = useMemo(() => resolvePreviewUrl(document), [document])
 
   const handleDownload = () => {
-    if (!fileUrl) {
-      message.warning('Chưa có tệp tải xuống khả dụng cho tài liệu này.')
+    if (!document?.id) {
+      message.warning('Không tìm thấy thông tin tài liệu để tải xuống.')
       return
     }
 
-    window.open(fileUrl, '_blank', 'noopener,noreferrer')
+    void (async () => {
+      try {
+        const response = await executeDownloadUrl({ documentId: document.id })
+
+        if (response.downloadUrl) {
+          window.open(response.downloadUrl, '_blank', 'noopener,noreferrer')
+          return
+        }
+
+        if (fileUrl) {
+          window.open(fileUrl, '_blank', 'noopener,noreferrer')
+          return
+        }
+
+        message.warning('Chưa có tệp tải xuống khả dụng cho tài liệu này.')
+      } catch (nextError) {
+        const errorMessage =
+          nextError instanceof Error
+            ? nextError.message
+            : 'Không thể chuẩn bị link tải xuống tài liệu.'
+        message.error(errorMessage)
+      }
+    })()
   }
 
   const handlePurchase = () => {
-    message.info('Tính năng mua tài liệu sẽ sớm được cập nhật.')
+    if (!document?.id) {
+      message.warning('Không tìm thấy thông tin tài liệu để thanh toán.')
+      return
+    }
+
+    if (!isAuthenticated) {
+      const redirect = encodeURIComponent(window.location.pathname)
+      navigate(`${RouteConfig.LoginPage.path}?redirect=${redirect}`)
+      return
+    }
+
+    void (async () => {
+      try {
+        const checkoutData = await executeCheckout({
+          documentId: document.id,
+          successUrl: RoutePath.DocumentOrderSuccessPage.path,
+          cancelUrl: RoutePath.DocumentOrderCancelPage.path,
+          errorUrl: RoutePath.DocumentOrderErrorPage.path,
+        })
+
+        if (!checkoutData.checkoutUrl) {
+          message.error('Không nhận được đường dẫn thanh toán từ hệ thống.')
+          return
+        }
+
+        if (Object.keys(checkoutData.checkoutFields ?? {}).length === 0) {
+          window.location.href = checkoutData.checkoutUrl
+          return
+        }
+
+        setCheckoutData(checkoutData)
+        setIsCheckoutModalOpen(true)
+      } catch (nextError) {
+        const rawMessage = nextError instanceof Error ? nextError.message : 'Thanh toán thất bại.'
+        const normalizedMessage = rawMessage.toLowerCase()
+
+        if (
+          normalizedMessage.includes('không tồn tại') ||
+          normalizedMessage.includes('not found')
+        ) {
+          message.error('Tài liệu không tồn tại.')
+          return
+        }
+
+        if (normalizedMessage.includes('published') || normalizedMessage.includes('chưa bán')) {
+          message.warning('Tài liệu chưa được phát hành để bán.')
+          return
+        }
+
+        if (normalizedMessage.includes('active license') || normalizedMessage.includes('đã mua')) {
+          message.info('Bạn đã sở hữu tài liệu này.')
+          return
+        }
+
+        if (normalizedMessage.includes('401') || normalizedMessage.includes('unauthorized')) {
+          const redirect = encodeURIComponent(window.location.pathname)
+          navigate(`${RouteConfig.LoginPage.path}?redirect=${redirect}`)
+          return
+        }
+
+        message.error(rawMessage)
+      }
+    })()
   }
 
   if (isLoading) {
@@ -181,11 +281,17 @@ export const DocumentDetailPage = () => {
                   size="large"
                   icon={<DownloadOutlined />}
                   onClick={handleDownload}
+                  loading={isPreparingDownload}
                 >
                   Tải xuống PDF
                 </Button>
               ) : (
-                <Button type="primary" size="large" onClick={handlePurchase}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={handlePurchase}
+                  loading={isCheckingOut}
+                >
                   Mua tài liệu
                 </Button>
               )}
@@ -210,6 +316,19 @@ export const DocumentDetailPage = () => {
           </Card>
         </aside>
       </div>
+
+      <Modal
+        title="Thanh toán tài liệu"
+        open={isCheckoutModalOpen}
+        onCancel={() => setIsCheckoutModalOpen(false)}
+        footer={null}
+        width={960}
+        destroyOnClose
+      >
+        {checkoutData ? (
+          <DocumentCheckoutModalContent checkoutData={checkoutData} title={document.title} />
+        ) : null}
+      </Modal>
     </div>
   )
 }
