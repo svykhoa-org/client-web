@@ -1,7 +1,8 @@
-import type { BaseModel } from '@/shared/interface/BaseModel';
+import type { BaseModel } from '@/shared/interface/BaseModel'
 
-import type { DocumentClassify } from './DocumentClassify';
-import type { FileResource } from './FileResource';
+import type { DocumentClassify } from './DocumentClassify'
+import type { FileResource } from './FileResource'
+import type { DocumentLicense } from './DocumentLicense'
 
 export enum DocumentStatus {
   DRAFT = 'DRAFT',
@@ -9,19 +10,20 @@ export enum DocumentStatus {
 }
 
 export interface Document extends BaseModel {
-  title: string;
-  description?: string | null;
-  slug: string;
-  price: number;
-  thumbnailId?: string | null;
-  thumbnail?: FileResource | null;
-  previewId?: string | null;
-  preview?: FileResource | null;
-  fileId?: string | null;
-  file?: FileResource | null;
-  categoryId?: string | null;
-  category?: Omit<DocumentClassify, 'parent' | 'parentId'> | null;
-  totalPages?: number | null;
-  fileSize?: number | null;
-  status: DocumentStatus;
+  title: string
+  description?: string | null
+  slug: string
+  price: number
+  thumbnailId?: string | null
+  thumbnail?: FileResource | null
+  previewId?: string | null
+  preview?: FileResource | null
+  fileId?: string | null
+  file?: FileResource | null
+  categoryId?: string | null
+  category?: Omit<DocumentClassify, 'parent' | 'parentId'> | null
+  totalPages?: number | null
+  fileSize?: number | null
+  status: DocumentStatus
+  license: DocumentLicense | null
 }

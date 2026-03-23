@@ -1,3 +1,4 @@
+import { DocumentDetailPage } from '@/pages/public/DocumentDetailPage/DocumentDetailPage'
 import { DocumentListPage } from '@/pages/public/DocumentListPage/DocumentListPage'
 import type { RouteObject } from 'react-router'
 
@@ -18,5 +19,9 @@ export const PublicRoute: RouteObject[] = [
   {
     path: PublicPath.DocumentListPage.path,
     element: <DocumentListPage />,
+  },
+  {
+    path: PublicPath.DocumentDetailPage.path,
+    element: <DocumentDetailPage />,
   },
 ]

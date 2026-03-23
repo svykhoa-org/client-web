@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { RequestState } from './types'
 import type { ApiListData } from '@/shared/types/api'
 import type { SetStateAction } from 'react'
@@ -98,8 +98,10 @@ export function useList<TItem, TParams extends object = Record<string, never>>(
     setParams((initialParams ?? {}) as TParams)
   }, [initialParams])
 
+  const items = useMemo(() => data?.items ?? [], [data])
+
   return {
-    items: data?.items ?? [],
+    items,
     data,
     error,
     isLoading,

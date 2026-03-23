@@ -204,7 +204,7 @@ export const DocumentListPage = () => {
 
   useEffect(() => {
     if (!categoryTree.length) {
-      setExpandedCategoryIds([])
+      setExpandedCategoryIds(previous => (previous.length ? [] : previous))
       return
     }
 
