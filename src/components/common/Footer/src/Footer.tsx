@@ -1,115 +1,76 @@
-import {
-  EnvironmentFilled,
-  FacebookFilled,
-  HeartFilled,
-  MailFilled,
-  MedicineBoxFilled,
-  PhoneFilled,
-  TwitterOutlined,
-  YoutubeFilled,
-} from '@ant-design/icons';
+import { EnvironmentFilled, FacebookFilled, HeartFilled, MailFilled, PhoneFilled, YoutubeFilled } from '@ant-design/icons';
+
+import logoImage from '@/assets/images/logo.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-neutral-1 border-neutral-3 border-t pt-8 pb-4">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-neutral-3 border-t bg-slate-50">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
           {/* Logo và thông tin */}
-          <div className="flex flex-col gap-4">
-            <h4 className="text-primary-6 mb-0 text-xl font-semibold">
-              <MedicineBoxFilled className="mr-2" />
-              SVYKHOA
-            </h4>
-            <p className="text-neutral-7">
-              Nền tảng học tập trực tuyến dành cho sinh viên y khoa, cung cấp khóa học chuyên ngành và tài liệu y học
-              chất lượng cao.
+          <div className="col-span-2 flex flex-col gap-3 lg:col-span-1">
+            <img src={logoImage} alt="SVYKHOA" className="h-8 w-auto object-contain" style={{ transformOrigin: 'left' }} />
+            <p className="text-neutral-6 text-sm leading-relaxed">
+              Nền tảng học tập dành cho sinh viên y khoa, cung cấp khóa học chuyên ngành và tài liệu y học chất lượng cao.
             </p>
-            <div className="flex gap-2">
-              <button className="text-primary-6 hover:text-primary-5 p-2 text-lg">
-                <FacebookFilled />
+            <div className="flex gap-1">
+              <button className="text-neutral-5 hover:text-primary-6 rounded p-1.5 transition-colors">
+                <FacebookFilled className="text-sm" />
               </button>
-              <button className="text-primary-6 hover:text-primary-5 p-2 text-lg">
-                <TwitterOutlined />
-              </button>
-              <button className="text-primary-6 hover:text-primary-5 p-2 text-lg">
-                <YoutubeFilled />
+              <button className="text-neutral-5 hover:text-primary-6 rounded p-1.5 transition-colors">
+                <YoutubeFilled className="text-sm" />
               </button>
             </div>
           </div>
 
           {/* Liên kết hữu ích */}
-          <div>
-            <h5 className="text-neutral-8 mb-4 text-lg font-medium">Liên kết hữu ích</h5>
-            <div className="flex flex-col gap-2">
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Trang chủ
+          <div className="flex flex-col gap-2">
+            <h5 className="text-neutral-8 mb-1 text-sm font-semibold uppercase tracking-wider">Liên kết</h5>
+            {['Trang chủ', 'Về chúng tôi', 'Điều khoản sử dụng', 'Chính sách bảo mật'].map(label => (
+              <a key={label} href="/" className="text-neutral-6 hover:text-primary-6 text-sm transition-colors">
+                {label}
               </a>
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Về chúng tôi
-              </a>
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Điều khoản sử dụng
-              </a>
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Chính sách bảo mật
-              </a>
-            </div>
+            ))}
           </div>
 
           {/* Danh mục */}
-          <div>
-            <h5 className="text-neutral-8 mb-4 text-lg font-medium">Danh mục</h5>
-            <div className="flex flex-col gap-2">
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Sức khỏe tổng quát
+          <div className="flex flex-col gap-2">
+            <h5 className="text-neutral-8 mb-1 text-sm font-semibold uppercase tracking-wider">Danh mục</h5>
+            {['Sức khỏe tổng quát', 'Dược phẩm', 'Dinh dưỡng', 'Sức khỏe tinh thần'].map(label => (
+              <a key={label} href="/" className="text-neutral-6 hover:text-primary-6 text-sm transition-colors">
+                {label}
               </a>
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Dược phẩm
-              </a>
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Dinh dưỡng
-              </a>
-              <a href="/" className="text-neutral-7 hover:text-primary-6">
-                Sức khỏe tinh thần
-              </a>
-            </div>
+            ))}
           </div>
 
-          {/* Thông tin liên hệ */}
-          <div>
-            <h5 className="text-neutral-8 mb-4 text-lg font-medium">Liên hệ</h5>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <EnvironmentFilled className="text-primary-6" />
-                <span className="text-neutral-7">123 Đường Y Học, Quận Sức Khỏe, TP. Hà Nội</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <PhoneFilled className="text-primary-6" />
-                <span className="text-neutral-7">+84 (0)123 456 789</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MailFilled className="text-primary-6" />
-                <span className="text-neutral-7">contact@diendanyduoc.vn</span>
-              </div>
-              <div className="mt-3">
-                <button className="bg-primary-6 hover:bg-primary-5 rounded-md px-4 py-2 text-white">
-                  Liên hệ ngay
-                </button>
-              </div>
+          {/* Liên hệ */}
+          <div className="flex flex-col gap-2">
+            <h5 className="text-neutral-8 mb-1 text-sm font-semibold uppercase tracking-wider">Liên hệ</h5>
+            <div className="flex items-start gap-1.5">
+              <EnvironmentFilled className="text-primary-6 mt-0.5 text-sm shrink-0" />
+              <span className="text-neutral-6 text-sm leading-relaxed">123 Đường Y Học, TP. Hà Nội</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <PhoneFilled className="text-primary-6 text-sm shrink-0" />
+              <span className="text-neutral-6 text-sm">+84 (0)123 456 789</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <MailFilled className="text-primary-6 text-sm shrink-0" />
+              <span className="text-neutral-6 text-sm">contact@svykhoa.vn</span>
             </div>
           </div>
         </div>
 
-        <hr className="border-neutral-3 my-6" />
+        <hr className="border-neutral-3 my-4" />
 
-        <div className="text-center">
-          <p className="text-neutral-6">© {currentYear} Diễn đàn Y dược Việt Nam. Tất cả quyền được bảo lưu.</p>
-          <div className="text-neutral-6 mt-2 flex items-center justify-center text-sm">
+        <div className="flex flex-col items-center justify-between gap-1 sm:flex-row">
+          <p className="text-neutral-5 text-sm">© {currentYear} SVYKHOA. Tất cả quyền được bảo lưu.</p>
+          <div className="text-neutral-5 flex items-center gap-1 text-sm">
             <span>Phát triển với</span>
-            <HeartFilled className="text-error-3 mx-1" />
-            <span>bởi Đội ngũ Diễn đàn Y dược</span>
+            <HeartFilled className="text-error-3 text-sm" />
+            <span>bởi Đội ngũ SVYKHOA</span>
           </div>
         </div>
       </div>

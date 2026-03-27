@@ -7,7 +7,6 @@ import {
   CloseOutlined,
   DownOutlined,
   LogoutOutlined,
-  MedicineBoxOutlined,
   MenuOutlined,
   MessageOutlined,
   FileTextOutlined,
@@ -17,6 +16,7 @@ import {
 import { Avatar, Button, Drawer, Dropdown, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 
+import logoImage from '@/assets/images/logo.png'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
@@ -143,12 +143,12 @@ const HeaderUserMenu = ({
 
   if (!isAuthenticated) {
     return (
-      <div className={cn('flex', isMobile ? 'flex-col space-y-3' : 'flex-row space-x-3')}>
+      <div className={cn('flex', isMobile ? 'flex-col space-y-3' : 'flex-row items-center space-x-2')}>
         <Button
-          type="default"
+          type="text"
           size={isMobile ? 'large' : 'middle'}
           onClick={onLogin}
-          className="border-blue-500 text-blue-600 hover:border-blue-600 hover:bg-blue-50"
+          className="sv-btn-login font-medium"
           block={isMobile}
         >
           Đăng nhập
@@ -157,7 +157,7 @@ const HeaderUserMenu = ({
           type="primary"
           size={isMobile ? 'large' : 'middle'}
           onClick={onRegister}
-          className="border-blue-600 bg-blue-600 hover:border-blue-700 hover:bg-blue-700"
+          className="sv-btn-register font-semibold"
           block={isMobile}
         >
           Đăng ký
@@ -210,11 +210,12 @@ const HeaderUserMenu = ({
     <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
       <button
         type="button"
-        className="flex h-10 items-center gap-1 rounded-full border border-slate-200 bg-white px-1.5 transition-all hover:border-blue-300 hover:bg-blue-50"
+        className="sv-user-btn flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white pl-1 pr-3 transition-all"
         aria-label="Mở menu tài khoản"
       >
-        <Avatar size={30} icon={<UserOutlined />} className="bg-blue-600" />
-        <DownOutlined className="pr-1 text-xs text-slate-500" />
+        <Avatar size={28} icon={<UserOutlined />} className="bg-blue-600" />
+        <span className="max-w-24 truncate text-sm font-medium text-slate-700">{displayName}</span>
+        <DownOutlined className="text-[10px] text-slate-400" />
       </button>
     </Dropdown>
   )
@@ -235,13 +236,7 @@ const HeaderLogo = ({ onClick }: HeaderLogoProps) => {
       onClick={onClick}
       aria-label="Về trang chủ"
     >
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white shadow-md transition-all duration-200 hover:bg-blue-700 hover:shadow-lg">
-        <MedicineBoxOutlined className="text-xl text-white" />
-      </div>
-
-      <div className="hidden sm:block">
-        <h1 className="text-lg font-bold text-blue-700">SVYKHOA</h1>
-      </div>
+      <img src={logoImage} alt="SVYKHOA" className="h-10 w-auto scale-150 object-contain" />
     </button>
   )
 }

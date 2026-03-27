@@ -11,35 +11,66 @@
   color: #0f172a;
 }
 
+/* ===== NAV MENU ===== */
 .sv-header-nav {
-  color: #1e40af;
+  color: #475569;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .sv-header-nav.ant-menu-horizontal {
   line-height: 62px;
 }
 
-.sv-header-nav.ant-menu-horizontal .ant-menu-item-selected,
-.sv-header-nav.ant-menu-horizontal .ant-menu-item-selected:hover {
-  background-color: transparent !important;
-  color: #2563eb !important;
-  border-bottom-color: #2563eb !important;
+/* Remove default bottom border indicator */
+.sv-header-nav.ant-menu-horizontal::after {
+  display: none !important;
 }
 
-.sv-header-nav.ant-menu-horizontal .ant-menu-item-selected .ant-menu-title-content {
-  color: #2563eb !important;
-  font-weight: 600;
+.sv-header-nav.ant-menu-horizontal .ant-menu-item {
+  margin-inline: 2px !important;
+  padding-inline: 14px !important;
+  border-radius: 8px;
+  border-bottom: none !important;
+  color: #475569 !important;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.sv-header-nav.ant-menu-horizontal .ant-menu-item::after {
+  display: none !important;
 }
 
 .sv-header-nav.ant-menu-horizontal .ant-menu-item:hover {
-  color: #2563eb !important;
+  background-color: #f1f5f9 !important;
+  color: #1d4ed8 !important;
 }
 
-.sv-header-nav.ant-menu-vertical .ant-menu-item-selected,
-.sv-header-nav.ant-menu-vertical .ant-menu-item-selected:hover {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
+.sv-header-nav.ant-menu-horizontal .ant-menu-item-selected {
+  background-color: transparent !important;
+  color: #1d4ed8 !important;
+}
+
+.sv-header-nav.ant-menu-horizontal .ant-menu-item-selected .ant-menu-title-content {
+  color: #1d4ed8 !important;
+  font-weight: 600;
+}
+
+/* Vertical (mobile drawer) */
+.sv-header-nav.ant-menu-vertical {
+  padding: 8px;
+}
+
+.sv-header-nav.ant-menu-vertical .ant-menu-item {
   border-radius: 8px;
+  margin-block: 2px;
+  color: #475569 !important;
+  transition: all 0.15s ease;
+}
+
+.sv-header-nav.ant-menu-vertical .ant-menu-item-selected {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
 }
 
 .sv-header-nav.ant-menu-vertical .ant-menu-item-selected .ant-menu-title-content {
@@ -49,5 +80,56 @@
 
 .sv-header-nav.ant-menu-vertical .ant-menu-item:hover {
   background-color: #f1f5f9 !important;
-  border-radius: 8px;
+  color: #1d4ed8 !important;
+}
+
+/* ===== BUTTONS ===== */
+.sv-btn-login.ant-btn {
+  height: 36px;
+  padding-inline: 16px;
+  border-radius: 8px !important;
+  color: #1d4ed8 !important;
+  background: transparent !important;
+  border: 1.5px solid #bfdbfe !important;
+  transition: all 0.2s ease;
+}
+
+.sv-btn-login.ant-btn:hover {
+  background: #eff6ff !important;
+  border-color: #93c5fd !important;
+  color: #1d4ed8 !important;
+}
+
+.sv-btn-register.ant-btn {
+  height: 36px;
+  padding-inline: 18px;
+  border-radius: 8px !important;
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  color: #fff !important;
+  box-shadow: 0 1px 3px rgba(29, 78, 216, 0.3), 0 1px 2px rgba(29, 78, 216, 0.2) !important;
+  transition: all 0.2s ease;
+}
+
+.sv-btn-register.ant-btn:hover {
+  background: #1e40af !important;
+  border-color: #1e40af !important;
+  box-shadow: 0 4px 8px rgba(29, 78, 216, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.sv-btn-register.ant-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(29, 78, 216, 0.2) !important;
+}
+
+/* ===== USER BUTTON ===== */
+.sv-user-btn {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.sv-user-btn:hover {
+  border-color: #bfdbfe !important;
+  background-color: #f8faff !important;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.12);
 }

@@ -98,22 +98,22 @@ export const apiConfig = {
   baseURL: 'http://localhost:3000', // từ env
   apiVersion: 'v1',
   // Tự động build thành: http://localhost:3000/api/v1
-};
+}
 ```
 
 ### Custom API Client
 
 ```typescript
 // Sử dụng default client (api/v1)
-import { httpClient } from '@/services/apiClient';
+import { httpClient } from '@/services/apiClient'
 // Tạo custom client với version khác
-import { createApiClient } from '@/services/apiClient';
+import { createApiClient } from '@/services/apiClient'
 
-const v2Client = createApiClient({ apiVersion: 'v2' });
+const v2Client = createApiClient({ apiVersion: 'v2' })
 const customClient = createApiClient({
   baseURL: 'https://api.other-service.com',
   apiVersion: 'v3',
-});
+})
 ```
 
 ### API Endpoints
@@ -168,13 +168,13 @@ Component để hiển thị loading states:
 Hook để quản lý async operations:
 
 ```tsx
-const { state, execute, reset } = useAsyncState<DataType>();
+const { state, execute, reset } = useAsyncState<DataType>()
 
 // Execute async function
-await execute(() => fetchData());
+await execute(() => fetchData())
 
 // Access state
-const { data, loading, error } = state;
+const { data, loading, error } = state
 ```
 
 ## Scripts
