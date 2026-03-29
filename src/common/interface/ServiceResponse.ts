@@ -37,6 +37,10 @@ export interface ErrorResponse {
   status: 'error';
   statusCode: number;
   message: string;
+  error?: string;
+  errorCode?: string;
+  requestId?: string;
+  timestamp?: string;
   stack?: string;
   path?: string;
   method?: string;

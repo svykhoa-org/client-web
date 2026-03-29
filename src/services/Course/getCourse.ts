@@ -18,7 +18,7 @@ export interface GetCourseDetailData {
 }
 
 export const getCourse = bindStage<string, GetCourseDetailData>({
-  stage: 'dev',
+  stage: 'mock',
   mockFn: async (courseId: string): Promise<GetCourseDetailData> => {
     return {
       course: {

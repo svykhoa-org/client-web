@@ -12,6 +12,15 @@ const RouteConfig = {
   RegisterPage: {
     path: '/register',
   },
+  VerifyEmailPage: {
+    path: '/verify-email',
+  },
+  ForgotPasswordPage: {
+    path: '/forgot-password',
+  },
+  ResetPasswordPage: {
+    path: '/reset-password',
+  },
   // END AUTH
 
   HomePage: {
@@ -37,12 +46,6 @@ const RouteConfig = {
   },
   FeaturedUserDetailPage: {
     path: '/featured-user/:id',
-  },
-  ResourceListPage: {
-    path: '/resources',
-  },
-  ResourceDetailPage: {
-    path: '/resource/:id',
   },
   ELearningPage: {
     path: '/e-learning',

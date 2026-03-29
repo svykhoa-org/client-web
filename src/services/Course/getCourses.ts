@@ -18,7 +18,7 @@ export interface GetCourses {
 }
 
 export const getCourses = bindStage<GetCourses, ListResponseDataV2<GetCoursesResponseData>>({
-  stage: 'dev',
+  stage: 'mock',
   mockFn: async (inputs: GetCourses): Promise<ListResponseDataV2<GetCoursesResponseData>> => {
     await Promise.resolve(new Promise(resolve => setTimeout(resolve, 1500)));
 

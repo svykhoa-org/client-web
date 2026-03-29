@@ -33,22 +33,18 @@ const RegisterPage = () => {
     setLoading(true)
     setError(null)
     try {
-      // Chuẩn bị dữ liệu đăng ký
       const registerData = {
         email: values.email,
         password: values.password,
         fullName: values.name,
       }
 
-      // Gọi register service
       await register(registerData)
 
-      // Chuyển hướng đến trang trước đó
-      if (postId) {
-        navigate(`/post/${postId}`)
-      } else {
-        navigate(redirect)
-      }
+      // Redirect to verify-email page after successful registration
+      navigate(
+        `${RouteConfig.VerifyEmailPage.path}?email=${encodeURIComponent(values.email)}`,
+      )
     } catch (error) {
       console.error('Registration failed:', error)
       setError(error instanceof Error ? error.message : 'Đăng ký thất bại')

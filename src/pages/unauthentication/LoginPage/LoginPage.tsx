@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Alert, Button, Form, Input, Typography } from 'antd'
+import { isAxiosError } from 'axios'
 
 import authImage from '@/assets/images/auth.jpg'
 import RouteConfig from '@/constants/RouteConfig'
@@ -39,9 +40,15 @@ export const LoginPage = () => {
       } else {
         navigate(redirect)
       }
-    } catch (error) {
-      console.error('Login failed:', error)
-      setError(error instanceof Error ? error.message : 'Đăng nhập thất bại')
+    } catch (err) {
+      console.error('Login failed:', err)
+      const status = isAxiosError(err) ? err.response?.status : undefined
+      const message: string = isAxiosError(err) ? (err.response?.data?.message ?? '') : ''
+      if (status === 403 && message.toLowerCase().includes('verify')) {
+        navigate(`${RouteConfig.VerifyEmailPage.path}?email=${encodeURIComponent(values.email)}`)
+        return
+      }
+      setError(err instanceof Error ? err.message : 'Đăng nhập thất bại')
     } finally {
       setLoading(false)
     }
@@ -110,7 +117,7 @@ export const LoginPage = () => {
             <Form.Item>
               <div className="flex justify-end">
                 <span
-                  onClick={() => {}}
+                  onClick={() => navigate(RouteConfig.ForgotPasswordPage.path)}
                   className="cursor-pointer text-sm text-blue-600 hover:text-blue-800"
                 >
                   Quên mật khẩu?

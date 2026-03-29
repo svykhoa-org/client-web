@@ -16,8 +16,6 @@ import { OrderErrorPage } from '@/pages/authentication/OrderPage/OrderErrorPage'
 import { OrderSuccessPage } from '@/pages/authentication/OrderPage/OrderSuccessPage'
 import { PaymentResultPage, PaymentTestPage } from '@/pages/authentication/PaymentTestPage'
 import ProfilePage from '@/pages/authentication/ProfilePage'
-import { DetailResourcePage } from '@/pages/authentication/ResourcePage/DetailResourcePage'
-import { ListResourcePage } from '@/pages/authentication/ResourcePage/ListResourcePage'
 import AboutPage from '@/pages/unauthentication/AboutPage'
 import ArticleDetailPage from '@/pages/unauthentication/ArticleDetailPage'
 import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage'
@@ -27,11 +25,14 @@ import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
 import { ForumPage } from '@/pages/unauthentication/ForumPage'
 import { JobDetailPage } from '@/pages/unauthentication/JobPage/JobDetailPage'
 import { JobListPage } from '@/pages/unauthentication/JobPage/JobListPage'
+import { ForgotPasswordPage } from '@/pages/unauthentication/ForgotPasswordPage/ForgotPasswordPage'
 import { LoginPage } from '@/pages/unauthentication/LoginPage/LoginPage'
 import { NotFound } from '@/pages/unauthentication/NotFound/NotFound'
 import PostDetailPage from '@/pages/unauthentication/PostDetailPage'
 import PostsPage from '@/pages/unauthentication/PostsPage'
 import RegisterPage from '@/pages/unauthentication/RegisterPage'
+import { ResetPasswordPage } from '@/pages/unauthentication/ResetPasswordPage/ResetPasswordPage'
+import { VerifyEmailPage } from '@/pages/unauthentication/VerifyEmailPage/VerifyEmailPage'
 import { PublicPath, PublicRoute } from './PublicRoute'
 
 // import ResourceListPage from '@/pages/unauthentication/ResourceListPage';
@@ -55,6 +56,18 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.RegisterPage.path,
         element: <RegisterPage />,
+      },
+      {
+        path: RouteConfig.VerifyEmailPage.path,
+        element: <VerifyEmailPage />,
+      },
+      {
+        path: RouteConfig.ForgotPasswordPage.path,
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: RouteConfig.ResetPasswordPage.path,
+        element: <ResetPasswordPage />,
       },
     ],
   },
@@ -179,16 +192,6 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.OrderErrorPage.path,
         element: <OrderErrorPage />,
-      },
-
-      // Resource
-      {
-        path: RouteConfig.ResourceListPage.path,
-        element: <ListResourcePage />,
-      },
-      {
-        path: RouteConfig.ResourceDetailPage.path,
-        element: <DetailResourcePage />,
       },
 
       ...PublicRoute,

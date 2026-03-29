@@ -38,8 +38,18 @@ export interface ForgotPasswordRequest {
   email: string;
 }
 
+export interface VerifyEmailRequest {
+  email: string;
+  code: string;
+}
+
+export interface ResendVerifyEmailRequest {
+  email: string;
+}
+
 export interface ResetPasswordRequest {
-  token: string;
+  email: string;
+  code: string;
   newPassword: string;
 }
 
@@ -87,6 +97,14 @@ export const changePassword = async (data: ChangePasswordRequest): Promise<Succe
 };
 
 // 3. Account Recovery
+
+export const verifyEmail = async (data: VerifyEmailRequest): Promise<SuccessResponse<{ message: string }>> => {
+  return await httpClient.post<{ message: string }>('/auth/verify-email', data);
+};
+
+export const resendVerifyEmail = async (data: ResendVerifyEmailRequest): Promise<SuccessResponse<{ message: string }>> => {
+  return await httpClient.post<{ message: string }>('/auth/resend-verify-email', data);
+};
 
 export const forgotPassword = async (data: ForgotPasswordRequest): Promise<SuccessResponse<{ message: string }>> => {
   return await httpClient.post<{ message: string }>('/auth/forgot-password', data);

@@ -1,6 +1,18 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
 
 import type { ErrorResponse, SuccessResponse } from '@/common/interface/ServiceResponse'
+
+export class ApiError extends Error {
+  errorCode?: string
+  statusCode?: number
+
+  constructor(message: string, errorCode?: string, statusCode?: number) {
+    super(message)
+    this.name = 'ApiError'
+    this.errorCode = errorCode
+    this.statusCode = statusCode
+  }
+}
 import { apiConfig } from '@/config/api'
 import { getAuthState } from '@/stores/authStore'
 
@@ -115,14 +127,15 @@ class HttpClient {
     }
   }
 
-  private handleError(error: AxiosError<ErrorResponse>): Error {
+  private handleError(error: AxiosError<ErrorResponse>): ApiError {
     if (error.response?.data) {
-      return new Error(error.response.data.message || 'Server error')
+      const { message, errorCode, statusCode } = error.response.data
+      return new ApiError(message || 'Server error', errorCode, statusCode ?? error.response.status)
     }
     if (error.request) {
-      return new Error('Network error - Please check your connection')
+      return new ApiError('Network error - Please check your connection')
     }
-    return new Error(error.message || 'An unexpected error occurred')
+    return new ApiError(error.message || 'An unexpected error occurred')
   }
 }
 

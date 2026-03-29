@@ -11,10 +11,8 @@ import { useLayout } from '@/hooks/useLayout';
 // import { mockFeaturedDocuments } from '@/mocks/categories';
 import type { Category } from '@/models/Category';
 import type { Post } from '@/models/Post';
-import type { Resource } from '@/models/Resource';
 import { getCategories } from '@/services/category/mockCategoryService';
 import { type GetPostsResponse, getPosts } from '@/services/post/mockGetPosts';
-import { getFeaturedResources } from '@/services/resource';
 
 import CategorySidebar from './components/CategorySidebar';
 import PostList from './components/PostList';
@@ -62,7 +60,6 @@ export const ForumPage = () => {
 
   const postsState = useAsyncState<GetPostsResponse>();
   const categoriesState = useAsyncState<Category[]>();
-  const resourcesState = useAsyncState<Resource[]>();
 
   const loadPosts = useCallback(async () => {
     console.log('loadPosts called with:', { selectedCategory, searchQuery: debouncedSearchQuery, currentPage });
@@ -106,20 +103,6 @@ export const ForumPage = () => {
     console.log('Loading categories...');
     loadCategories();
   }, [loadCategories]);
-
-  // Load featured resources - only once when component mounts
-  const loadFeaturedResources = useCallback(async () => {
-    // Only load if we don't already have data
-    if (!resourcesState.state.data) {
-      await resourcesState.execute(() => getFeaturedResources(5).then(response => response.data as Resource[]));
-    }
-  }, [resourcesState]);
-
-  useEffect(() => {
-    loadFeaturedResources();
-    // Only run this effect once on component mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleViewMore = (post: Post) => {
     navigate(`/post/${post._id}`);
@@ -221,7 +204,6 @@ export const ForumPage = () => {
     selectedCategory,
     categoriesState.state.data,
     categoriesState.state.loading,
-    resourcesState.state.data,
     setLeftSidebar,
     setRightSidebar,
     setBanner,
