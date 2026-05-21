@@ -1,84 +1,118 @@
-import { ClockCircleOutlined, TeamOutlined, TrophyOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, Rate, Tag } from 'antd';
+// src/pages/authentication/CoursePage/components/CourseInfo.tsx
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  StarFilled,
+  TeamOutlined,
+} from '@ant-design/icons'
+import { Tag } from 'antd'
 
-import { type Course, CourseLevelColor, CourseLevelLabel, CourseStatusColor, CourseStatusLabel } from '@/models/Course';
+import defaultThumbnail from '@/assets/course-thumbnail-default.jpeg'
+import type { CourseApiItem } from '@/types/course-api'
 
 interface CourseInfoProps {
-  course: Course;
+  course: CourseApiItem
 }
 
 export const CourseInfo = ({ course }: CourseInfoProps) => {
+  const durationHours = course.totalDurationMinutes
+    ? Math.round(course.totalDurationMinutes / 60)
+    : null
+
   return (
-    <Card className="mb-6 shadow-sm">
-      {/* Course Header */}
-      <div className="mb-6">
-        <div className="mb-4 flex items-start justify-between">
-          <div className="flex-1">
-            <h1 className="mb-2 text-3xl font-bold text-gray-900">{course.title}</h1>
-            <div className="flex flex-wrap items-center gap-3">
-              <Tag color={CourseLevelColor[course.level]}>{CourseLevelLabel[course.level]}</Tag>
-              <Tag color={CourseStatusColor[course.status]}>{CourseStatusLabel[course.status]}</Tag>
-              {course.price === 0 && <Tag color="gold">Miễn phí</Tag>}
-            </div>
-          </div>
-          {course.thumbnail && (
-            <img src={course.thumbnail} alt={course.title} className="ml-4 h-32 w-48 rounded-lg object-cover" />
-          )}
-        </div>
-
-        {course.description && <p className="text-base leading-relaxed text-gray-600">{course.description}</p>}
+    <div className="flex flex-col gap-5">
+      {/* Thumbnail */}
+      <div className="overflow-hidden rounded-xl">
+        <img
+          src={course.thumbnail ?? defaultThumbnail}
+          alt={course.title}
+          className="h-56 w-full object-cover sm:h-72"
+          onError={e => {
+            ;(e.target as HTMLImageElement).src = defaultThumbnail
+          }}
+        />
       </div>
 
-      {/* Course Stats */}
-      <div className="mb-6 grid grid-cols-2 gap-4 rounded-lg bg-gray-50 p-4 md:grid-cols-4">
-        <div className="flex items-center gap-2">
-          <ClockCircleOutlined className="text-lg text-blue-500" />
-          <div>
-            <div className="text-xs text-gray-500">Thời lượng</div>
-            <div className="font-semibold">{course.duration || 0} phút</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <TeamOutlined className="text-lg text-green-500" />
-          <div>
-            <div className="text-xs text-gray-500">Học viên</div>
-            <div className="font-semibold">{course.enrollmentCount || 0}</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <TrophyOutlined className="text-lg text-yellow-500" />
-          <div>
-            <div className="text-xs text-gray-500">Đánh giá</div>
-            <div className="flex items-center gap-1">
-              <Rate disabled value={course.averageRating / 20} allowHalf className="text-xs" />
-              <span className="text-xs text-gray-500">({course.reviewCount || 0})</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <UserOutlined className="text-lg text-purple-500" />
-          <div>
-            <div className="text-xs text-gray-500">Giá</div>
-            <div className="font-semibold">
-              {course.price === 0 ? 'Miễn phí' : `${course.price.toLocaleString('vi-VN')} đ`}
-            </div>
-          </div>
-        </div>
+      {/* Title + subtitle */}
+      <div>
+        <h1 className="text-2xl font-bold leading-tight text-gray-900">{course.title}</h1>
+        {course.subTitle && <p className="mt-1 text-base text-gray-500">{course.subTitle}</p>}
       </div>
 
-      {/* Instructor Info */}
-      {course.instructorName && (
-        <div className="border-t pt-4">
-          <h3 className="mb-3 text-lg font-semibold">Giảng viên</h3>
-          <div className="flex items-start gap-4">
-            <Avatar size={64} src={course.instructorAvatar} icon={<UserOutlined />} className="flex-shrink-0" />
-            <div className="flex-1">
-              <h4 className="mb-1 text-base font-semibold">{course.instructorName}</h4>
-              {course.instructorBio && <p className="text-sm text-gray-600">{course.instructorBio}</p>}
-            </div>
+      {/* Stats row */}
+      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+        <span className="flex items-center gap-1 font-semibold text-amber-500">
+          <StarFilled />
+          4.5
+          <span className="font-normal text-gray-400">(mock)</span>
+        </span>
+        {course.currentEnrollments > 0 && (
+          <span className="flex items-center gap-1">
+            <TeamOutlined />
+            {course.currentEnrollments.toLocaleString('vi-VN')} học viên
+          </span>
+        )}
+        {durationHours !== null && (
+          <span className="flex items-center gap-1">
+            <ClockCircleOutlined />
+            {durationHours} giờ học
+          </span>
+        )}
+        {course.cmeCredits != null && <Tag color="gold">{course.cmeCredits} CME credits</Tag>}
+      </div>
+
+      {/* Description */}
+      {course.description && <p className="leading-relaxed text-gray-600">{course.description}</p>}
+
+      {/* Tags */}
+      {course.tags && course.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {course.tags.map(tag => (
+            <Tag key={tag.id} color={tag.color ?? 'blue'}>
+              {tag.name}
+            </Tag>
+          ))}
+        </div>
+      )}
+
+      {/* Objectives */}
+      {course.objectives.length > 0 && (
+        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+          <h2 className="mb-3 font-bold text-gray-900">Bạn sẽ học được gì</h2>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {course.objectives.map((obj, i) => (
+              <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                <CheckCircleOutlined className="mt-0.5 shrink-0 text-blue-500" />
+                <span>{obj}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
-    </Card>
-  );
-};
+
+      {/* Requirements */}
+      {course.requirements.length > 0 && (
+        <div>
+          <h2 className="mb-2 font-bold text-gray-900">Yêu cầu đầu vào</h2>
+          <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
+            {course.requirements.map((req, i) => (
+              <li key={i}>{req}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Suitable for */}
+      {course.suitableFor.length > 0 && (
+        <div>
+          <h2 className="mb-2 font-bold text-gray-900">Khoá học dành cho</h2>
+          <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
+            {course.suitableFor.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
