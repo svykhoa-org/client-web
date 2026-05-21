@@ -1,31 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
+// src/lib/tanstack-query/hooks/useEnrollmentQueries.ts
+import { useQuery } from '@tanstack/react-query'
 
-import { getMyCourses } from '@/services/enrollment';
+import { getAccessToken } from '@/lib/axios'
+import { getMyEnrollment } from '@/services/Enrollment/getMyEnrollment'
+import { getMyCourses } from '@/services/enrollment'
 
 const queryKeys = {
   enrollment: {
     all: ['enrollment'],
     myCourses: () => [...queryKeys.enrollment.all, 'my-courses'],
+    myEnrollment: (courseId: string) => [...queryKeys.enrollment.all, 'my-enrollment', courseId],
   },
-};
+}
 
 export const useMyCourses = () => {
   return useQuery({
     queryKey: queryKeys.enrollment.myCourses(),
-    queryFn: async () => {
-      const response = await getMyCourses();
-      return response;
-    },
-    select: data => {
-      // Handle array response or paginated response format from API
-      if (Array.isArray(data.data)) {
-        return data.data;
-      }
-      // If it's ListResponseData
-      if (data.data && typeof data.data === 'object' && 'items' in data.data) {
-        return data.data.items;
-      }
-      return [];
-    },
-  });
-};
+    queryFn: getMyCourses,
+  })
+}
+
+export const useMyEnrollment = (courseId: string) => {
+  return useQuery({
+    queryKey: queryKeys.enrollment.myEnrollment(courseId),
+    queryFn: () => getMyEnrollment(courseId),
+    enabled: !!courseId && !!getAccessToken(),
+    staleTime: 1000 * 60 * 2,
+    retry: false,
+  })
+}
