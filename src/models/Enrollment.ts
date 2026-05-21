@@ -1,29 +1,18 @@
-import type { BaseModel } from './BaseModel';
+// src/models/Enrollment.ts
+export type EnrollmentStatus = 'active' | 'completed' | 'expired' | 'refunded'
 
-export enum EnrollmentStatus {
-  PENDING = 'PENDING',
-  ACTIVE = 'ACTIVE',
-  EXPIRED = 'EXPIRED',
-  REFUNDED = 'REFUNDED',
-  CANCELLED = 'CANCELLED',
-}
-export enum EnrollmentSource {
-  DIRECT = 'DIRECT',
-  PURCHASE = 'PURCHASE',
-  GIFT = 'GIFT',
-  ADMIN = 'ADMIN',
-}
-
-/**
- * Model dùng cho việc quản lý đăng ký khóa học của user
- */
-export interface Enrollment extends BaseModel {
-  userId: string;
-  courseId: string;
-  orderId?: string;
-  status: EnrollmentStatus;
-  source: EnrollmentSource;
-  paidAmount: number;
-  paidAt?: string;
-  expiresAt?: string;
+export interface Enrollment {
+  id: string
+  userId: string
+  courseId: string
+  orderId: string | null
+  status: EnrollmentStatus
+  progress: number
+  enrolledAt: string
+  expireAt: string | null
+  completedAt: string | null
+  refundedAt: string | null
+  pricePaid: number
+  createdAt: string
+  updatedAt: string
 }

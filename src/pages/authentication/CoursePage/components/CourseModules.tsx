@@ -1,103 +1,99 @@
-import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  FileTextOutlined,
-  LockOutlined,
-  PlayCircleOutlined,
-} from '@ant-design/icons';
-import { Collapse, Empty, Tag } from 'antd';
+import { FileTextOutlined, FormOutlined, PlayCircleOutlined } from '@ant-design/icons'
+import { Collapse, Empty, Tag } from 'antd'
 
-import type { Lesson, LessonContentType, LessonStatus } from '@/models/Lesson';
-import type { Module } from '@/models/Module';
+import type { CourseLesson, CourseModuleWithLessons, LessonType } from '@/types/course-api'
 
 interface CourseModulesProps {
-  modules?: Module[];
-  isAccess?: boolean;
+  curriculum: CourseModuleWithLessons[]
 }
 
-const LessonIcon = ({ contentType }: { contentType: LessonContentType }) => {
-  return contentType === 'VIDEO' ? (
-    <PlayCircleOutlined className="text-blue-500" />
-  ) : (
-    <FileTextOutlined className="text-green-500" />
-  );
-};
+const lessonTypeConfig: Record<
+  LessonType,
+  { icon: React.ReactNode; label: string; color: string }
+> = {
+  video: {
+    icon: <PlayCircleOutlined />,
+    label: 'Video',
+    color: 'text-blue-500',
+  },
+  document: {
+    icon: <FileTextOutlined />,
+    label: 'Tài liệu',
+    color: 'text-green-500',
+  },
+  quiz: {
+    icon: <FormOutlined />,
+    label: 'Bài tập',
+    color: 'text-orange-500',
+  },
+}
 
-const LessonStatusTag = ({ status }: { status: LessonStatus }) => {
-  const statusConfig = {
-    PUBLISHED: { color: 'success', icon: <CheckCircleOutlined />, text: 'Đã xuất bản' },
-    DRAFT: { color: 'default', icon: <ClockCircleOutlined />, text: 'Bản nháp' },
-    UPLOADING: { color: 'processing', icon: <ClockCircleOutlined />, text: 'Đang tải lên' },
-  };
+const LessonRow = ({ lesson }: { lesson: CourseLesson }) => {
+  const config = lessonTypeConfig[lesson.type]
 
-  const config = statusConfig[status];
   return (
-    <Tag color={config.color} icon={config.icon} className="ml-2">
-      {config.text}
-    </Tag>
-  );
-};
-
-export const CourseModules = ({
-  modules,
-  onLessonClick,
-  isAccess = true,
-}: CourseModulesProps & { onLessonClick?: (lessonId: string) => void }) => {
-  if (!modules || modules.length === 0) {
-    return (
-      <div className="rounded-lg bg-white p-6">
-        <Empty description="Chưa có module nào" />
+    <div className="flex items-center justify-between rounded-lg px-3 py-2 transition-colors hover:bg-gray-50">
+      <div className="flex flex-1 items-center gap-3">
+        <span className={config.color}>{config.icon}</span>
+        <span className="text-sm text-gray-700">
+          {lesson.order}. {lesson.title}
+        </span>
       </div>
-    );
+      <Tag color="default" className="shrink-0 text-xs">
+        {config.label}
+      </Tag>
+    </div>
+  )
+}
+
+export const CourseModules = ({ curriculum }: CourseModulesProps) => {
+  if (curriculum.length === 0) {
+    return (
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <Empty description="Chưa có nội dung khoá học" />
+      </div>
+    )
   }
 
-  const items = modules.map(module => ({
-    key: module.id,
+  const totalLessons = curriculum.reduce((sum, mod) => sum + mod.lessons.length, 0)
+
+  const items = curriculum.map(mod => ({
+    key: mod.id,
     label: (
       <div className="flex items-center justify-between">
-        <span className="text-base font-semibold">
-          {module.rank}. {module.title}
+        <span className="font-semibold text-gray-800">
+          Chương {mod.order}: {mod.title}
         </span>
-        <span className="text-sm text-gray-500">{module.lessons?.length || 0} bài học</span>
+        <span className="ml-2 shrink-0 text-xs text-gray-400">{mod.lessons.length} bài</span>
       </div>
     ),
-    children: (
-      <div className="space-y-2">
-        {module.lessons && module.lessons.length > 0 ? (
-          module.lessons.map((lesson: Lesson, index: number) => (
-            <div
-              key={lesson.id}
-              onClick={() => onLessonClick?.(lesson.id || '')}
-              className="flex cursor-pointer items-center justify-between rounded-lg p-3 transition-colors hover:bg-gray-50"
-            >
-              <div className="flex flex-1 items-center gap-3">
-                <LessonIcon contentType={lesson.contentType} />
-                <span className="text-gray-700">
-                  {index + 1}. {lesson.title}
-                </span>
-                {!isAccess && <LockOutlined className="text-gray-400" />}
-              </div>
-              <LessonStatusTag status={lesson.status} />
-            </div>
-          ))
-        ) : (
-          <Empty description="Chưa có bài học nào" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        )}
-      </div>
-    ),
-  }));
+    children:
+      mod.lessons.length === 0 ? (
+        <Empty description="Chưa có bài học" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      ) : (
+        <div className="space-y-1">
+          {mod.lessons.map(lesson => (
+            <LessonRow key={lesson.id} lesson={lesson} />
+          ))}
+        </div>
+      ),
+  }))
 
   return (
     <div className="rounded-lg bg-white shadow-sm">
-      <div className="border-b p-4">
-        <h2 className="text-xl font-bold text-gray-900">Nội dung khóa học</h2>
-        <p className="mt-1 text-sm text-gray-500">
-          {modules.length} module • {modules.reduce((acc, m) => acc + (m.lessons?.length || 0), 0)} bài học
+      <div className="border-b px-5 py-4">
+        <h2 className="text-lg font-bold text-gray-900">Nội dung khoá học</h2>
+        <p className="mt-0.5 text-sm text-gray-500">
+          {curriculum.length} chương &bull; {totalLessons} bài học
         </p>
       </div>
       <div className="p-4">
-        <Collapse items={items} defaultActiveKey={modules[0]?.id} className="border-none bg-transparent" />
+        <Collapse
+          items={items}
+          defaultActiveKey={curriculum[0]?.id}
+          className="border-none bg-transparent"
+        />
       </div>
     </div>
-  );
-};
+  )
+}
