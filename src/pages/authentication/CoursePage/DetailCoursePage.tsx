@@ -1,112 +1,137 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useState } from 'react'
+import { useParams } from 'react-router'
 
-import { useMutation } from '@tanstack/react-query';
-import { Alert, Modal, Spin, message } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Alert, Button, Col, Modal, Row, Skeleton, message } from 'antd'
 
-import RouteConfig from '@/constants/RouteConfig';
-import { useDetailCourse } from '@/lib/tanstack-query/hooks/useCourseQueries';
-import { type CheckoutResponseData, orderService } from '@/services/Order/checkoutCourse';
+import axiosInstance, { getAccessToken } from '@/lib/axios'
+import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
+import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
+import { type CheckoutResponseData, orderService } from '@/services/Order/checkoutCourse'
 
-import { CourseActions } from './components/CourseActions';
-import { CourseInfo } from './components/CourseInfo';
-import { CourseModules } from './components/CourseModules';
-import { PaymentRedirectionForm } from './components/PaymentRedirectionForm';
+import { CourseActions } from './components/CourseActions'
+import { CourseInfo } from './components/CourseInfo'
+import { CourseModules } from './components/CourseModules'
+import { PaymentRedirectionForm } from './components/PaymentRedirectionForm'
 
 export const DetailCoursePage = () => {
-  const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [checkoutData, setCheckoutData] = useState<CheckoutResponseData | null>(null);
+  const { id } = useParams<{ id: string }>()
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+  const [checkoutData, setCheckoutData] = useState<CheckoutResponseData | null>(null)
+  const queryClient = useQueryClient()
 
-  const { data, isLoading, isError } = useDetailCourse(id || '');
+  const isLoggedIn = !!getAccessToken()
+
+  const { data, isLoading, isError } = useCourseWithCurriculum(id ?? '')
+  const { data: enrollment, isLoading: isEnrollmentLoading } = useMyEnrollment(id ?? '')
 
   const checkoutMutation = useMutation({
     mutationFn: (courseId: string) => orderService.checkoutCourse(courseId),
     onSuccess: response => {
       if (response.statusCode === 201) {
-        setCheckoutData(response.data as CheckoutResponseData);
-        setIsPaymentModalOpen(true);
+        setCheckoutData(response.data)
+        setIsPaymentModalOpen(true)
       } else {
-        message.error(response.message || 'Có lỗi xảy ra khi tạo đơn hàng');
+        void message.error(response.message || 'Có lỗi xảy ra khi tạo đơn hàng')
       }
     },
-    onError: () => {
-      message.error('Không thể kết nối đến hệ thống thanh toán');
+    onError: (error: unknown) => {
+      const msg =
+        error instanceof Error ? error.message : 'Không thể kết nối đến hệ thống thanh toán'
+      void message.error(msg)
     },
-  });
+  })
+
+  const freeEnrollMutation = useMutation({
+    mutationFn: async (courseId: string) => {
+      const response = await axiosInstance.post('/enrollments', { courseId })
+      return response.data
+    },
+    onSuccess: () => {
+      void message.success('Đăng ký khoá học thành công!')
+      void queryClient.invalidateQueries({ queryKey: ['enrollment'] })
+    },
+    onError: () => {
+      void message.error('Không thể đăng ký khoá học. Vui lòng thử lại.')
+    },
+  })
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spin size="large" tip="Đang tải thông tin khóa học..." />
+      <div className="w-full">
+        <Skeleton.Image active className="!mb-5 !h-56 !w-full sm:!h-72" />
+        <Skeleton active paragraph={{ rows: 4 }} className="mb-6" />
+        <Skeleton active paragraph={{ rows: 6 }} />
       </div>
-    );
+    )
   }
 
   if (isError) {
     return (
-      <div className="mx-auto max-w-4xl p-6">
-        <Alert
-          message="Lỗi"
-          description="Không thể tải thông tin khóa học. Vui lòng thử lại sau."
-          type="error"
-          showIcon
-        />
-      </div>
-    );
+      <Alert
+        message="Không thể tải thông tin khoá học"
+        description="Vui lòng thử lại sau hoặc kiểm tra đường dẫn."
+        type="error"
+        showIcon
+        action={
+          <Button size="small" icon={<ArrowLeftOutlined />} onClick={() => history.back()}>
+            Quay lại
+          </Button>
+        }
+      />
+    )
   }
 
   if (!data) {
     return (
-      <div className="mx-auto max-w-4xl p-6">
-        <Alert message="Không tìm thấy" description="Khóa học không tồn tại." type="warning" showIcon />
-      </div>
-    );
+      <Alert
+        message="Không tìm thấy khoá học"
+        description="Khoá học này không tồn tại hoặc đã bị xoá."
+        type="warning"
+        showIcon
+      />
+    )
   }
 
-  const { course, isPaid, canAccess } = data;
-
-  const handlePayment = () => {
-    if (course.id) {
-      checkoutMutation.mutate(course.id);
-    }
-  };
-
-  const handleStartLearning = () => {
-    // TODO: Implement navigation to learning page
-    console.log('Start learning clicked for course:', course.id);
-  };
+  const { course, curriculum } = data
+  const firstLesson = curriculum[0]?.lessons[0] ?? null
 
   return (
-    <div className="min-h-screen">
-      <div className="flex flex-col gap-4">
-        <CourseInfo course={course} />
+    <>
+      <Row gutter={[24, 24]}>
+        <Col xs={24} lg={16}>
+          <div className="flex flex-col gap-6">
+            <CourseInfo course={course} />
+            <CourseModules curriculum={curriculum} />
+          </div>
+        </Col>
 
-        <CourseActions
-          isPaid={isPaid}
-          canAccess={canAccess}
-          price={course.price}
-          onPayment={handlePayment}
-          onStartLearning={handleStartLearning}
-          isLoading={checkoutMutation.isPending}
-        />
-
-        <CourseModules
-          modules={course.modules}
-          isAccess={canAccess}
-          onLessonClick={lessonId => {
-            if (!canAccess) {
-              message.warning('Bạn cần mua khóa học để xem nội dung này');
-              return;
-            }
-            navigate(RouteConfig.CourseLearningPage.getPath(course.id || '', lessonId));
-          }}
-        />
-      </div>
+        <Col xs={24} lg={8}>
+          <div className="lg:sticky lg:top-24">
+            <CourseActions
+              course={{
+                id: course.id,
+                price: course.price,
+                totalDurationMinutes: course.totalDurationMinutes,
+                accessDurationDays: course.accessDurationDays,
+                cmeCredits: course.cmeCredits,
+              }}
+              enrollment={enrollment}
+              isEnrollmentLoading={isEnrollmentLoading}
+              isLoggedIn={isLoggedIn}
+              onPurchase={() => checkoutMutation.mutate(course.id)}
+              onFreeEnroll={() => freeEnrollMutation.mutate(course.id)}
+              isPurchaseLoading={checkoutMutation.isPending}
+              isFreeEnrollLoading={freeEnrollMutation.isPending}
+              firstLessonId={firstLesson?.id ?? null}
+            />
+          </div>
+        </Col>
+      </Row>
 
       <Modal
-        title="Thanh toán khóa học"
+        title="Thanh toán khoá học"
         open={isPaymentModalOpen}
         onCancel={() => setIsPaymentModalOpen(false)}
         footer={null}
@@ -115,6 +140,6 @@ export const DetailCoursePage = () => {
       >
         {checkoutData && <PaymentRedirectionForm checkoutData={checkoutData} />}
       </Modal>
-    </div>
-  );
-};
+    </>
+  )
+}
