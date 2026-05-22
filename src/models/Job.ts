@@ -1,4 +1,4 @@
-import type { BaseModel } from './BaseModel';
+import type { BaseModel } from './BaseModel'
 
 export enum JobStatus {
   OPEN = 'open',
@@ -6,20 +6,20 @@ export enum JobStatus {
 }
 
 export interface Job extends BaseModel {
-  title: string;
-  description: string;
-  status: JobStatus;
-  location: string;
-  company: string;
+  title: string
+  description: string
+  status: JobStatus
+  location: string
+  company: string
   salaryRange?: [
     number, // min salary
     number, // max salary
-  ];
-  expiresAt: Date;
+  ]
+  expiresAt: Date
   // Optional fields
-  requirements?: string[];
-  benefits?: string[];
-  contactEmail?: string;
-  contactPhone?: string;
-  applyLink?: string;
+  requirements?: string[]
+  benefits?: string[]
+  contactEmail?: string
+  contactPhone?: string
+  applyLink?: string
 }

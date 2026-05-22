@@ -1,7 +1,7 @@
-import type { Attachment } from './Attachment';
-import type { BaseModel } from './BaseModel';
-import type { Category } from './Category';
-import type { Author } from './User';
+import type { Attachment } from './Attachment'
+import type { BaseModel } from './BaseModel'
+import type { Category } from './Category'
+import type { Author } from './User'
 
 export enum PostStatus {
   Draft = 'draft',
@@ -12,20 +12,20 @@ export enum PostStatus {
 }
 
 export interface Post extends BaseModel {
-  title: string;
-  content: string;
-  tags: string[];
-  isPinned?: boolean;
-  commentCount?: number;
-  viewCount?: number;
-  status?: PostStatus;
+  title: string
+  content: string
+  tags: string[]
+  isPinned?: boolean
+  commentCount?: number
+  viewCount?: number
+  status?: PostStatus
 
-  authorId: string;
-  categoryId: string;
-  attachmentIds?: string[];
+  authorId: string
+  categoryId: string
+  attachmentIds?: string[]
 
   // Handle optional relationships
-  author?: Author;
-  category?: Category;
-  attachments?: Attachment[];
+  author?: Author
+  category?: Category
+  attachments?: Attachment[]
 }

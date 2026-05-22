@@ -20,4 +20,4 @@ export enum PaymentMethod {
   Free = 'free',
 }
 
-export type LessonStatus = 'not_started' | 'in_progress' | 'completed';
+export type LessonStatus = 'not_started' | 'in_progress' | 'completed'

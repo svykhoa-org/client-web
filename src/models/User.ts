@@ -1,4 +1,4 @@
-import type { BaseModel } from './BaseModel';
+import type { BaseModel } from './BaseModel'
 
 // FIXME: ĐỔi thành uppercase
 export enum UserRole {
@@ -15,27 +15,27 @@ export enum UserStatus {
 }
 
 export interface UserStats {
-  postCount?: number;
-  followerCount?: number;
-  viewCount?: number;
-  rating?: number;
+  postCount?: number
+  followerCount?: number
+  viewCount?: number
+  rating?: number
 }
 
 export interface User extends BaseModel {
-  fullName: string;
-  email: string;
-  role?: UserRole;
-  status?: UserStatus;
-  avatarUrl?: string;
-  bio?: string;
-  stats?: UserStats;
-  specialization?: string;
-  certificates?: string[];
-  workplaces?: string[];
+  fullName: string
+  email: string
+  role?: UserRole
+  status?: UserStatus
+  avatarUrl?: string
+  bio?: string
+  stats?: UserStats
+  specialization?: string
+  certificates?: string[]
+  workplaces?: string[]
 }
 
 export interface Author {
-  _id: string;
-  fullName: string;
-  avatarUrl?: string;
+  _id: string
+  fullName: string
+  avatarUrl?: string
 }

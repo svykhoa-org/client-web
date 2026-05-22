@@ -1,12 +1,30 @@
-import type { BaseModel } from './BaseModel';
-import type { Course } from './Course';
-import type { Lesson } from './Lesson';
+import type { BaseModel } from './BaseModel'
+import type { Lesson } from './Lesson'
 
-export interface Module extends BaseModel {
-  title: string;
-  rank: string; // Thứ tự sắp xếp (dạng chuỗi để dễ chèn giữa)
+// ── CourseModule ──────────────────────────────────────────────────────────────
 
-  courseId: string;
-  course?: Course;
-  lessons?: Lesson[];
+export interface CourseModule extends BaseModel {
+  courseId: string
+  title: string
+  description: string | null
+  order: number
+
+  /** Tổng thời gian học ước tính của module (phút). */
+  totalDurationMinutes: number | null
+
+  /**
+   * Khoá module khi các module trước chưa hoàn thành.
+   * Chỉ có tác dụng khi Course.selfPaced = false.
+   */
+  locked: boolean
+
+  /** Số lượng bài học trong module (cached counter trên DB). */
+  lessonCount: number
+
+  // Relations (optional)
+  lessons?: Lesson[]
 }
+
+/** @deprecated Dùng CourseModule thay thế */
+export type Module = CourseModule
+export default CourseModule
