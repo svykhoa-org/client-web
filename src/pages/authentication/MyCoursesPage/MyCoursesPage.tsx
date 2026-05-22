@@ -1,18 +1,18 @@
-import React from 'react';
-import { useNavigate } from 'react-router';
+import React from 'react'
+import { useNavigate } from 'react-router'
 
-import { HomeOutlined } from '@ant-design/icons';
-import { Breadcrumb, Col, Empty, Row, Spin } from 'antd';
+import { HomeOutlined } from '@ant-design/icons'
+import { Breadcrumb, Col, Empty, Row, Spin } from 'antd'
 
-import RouteConfig from '@/constants/RouteConfig';
-import { useMyCourses } from '@/lib/tanstack-query/hooks/useEnrollmentQueries';
-import type { Course } from '@/models/Course';
-import { CourseItem } from '@/pages/authentication/CoursePage/components/CourseItem';
+import RouteConfig from '@/constants/RouteConfig'
+import { useMyCourses } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
+import type { CourseApiItem } from '@/types/course-api'
+import { CourseItem } from '@/pages/authentication/CoursePage/components/CourseItem'
 
 export const MyCoursesPage: React.FC = () => {
-  const { data, isLoading } = useMyCourses();
-  const courses = (data as Course[]) || [];
-  const navigate = useNavigate();
+  const { data, isLoading } = useMyCourses()
+  const courses = (data as CourseApiItem[]) || []
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen">
@@ -44,7 +44,7 @@ export const MyCoursesPage: React.FC = () => {
         ) : (
           <Row gutter={[16, 24]}>
             {courses.map(course => (
-              <Col xs={24} sm={12} lg={8} xl={6} key={course._id}>
+              <Col xs={24} sm={12} lg={8} xl={6} key={course.id}>
                 <CourseItem course={course} />
               </Col>
             ))}
@@ -52,8 +52,8 @@ export const MyCoursesPage: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Export default for router lazy loading if needed, but named export is consistent with project
-export default MyCoursesPage;
+export default MyCoursesPage
