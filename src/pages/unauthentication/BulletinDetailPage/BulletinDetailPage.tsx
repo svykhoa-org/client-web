@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 
 import {
   ArrowLeftOutlined,
@@ -8,37 +8,36 @@ import {
   EyeOutlined,
   FileTextOutlined,
   NotificationOutlined,
-} from '@ant-design/icons';
-import { Alert, Avatar, Breadcrumb, Button, Card, Tag, Typography, message } from 'antd';
-import dayjs from 'dayjs';
+} from '@ant-design/icons'
+import { Alert, Avatar, Breadcrumb, Button, Card, Tag, Typography, message } from 'antd'
+import dayjs from 'dayjs'
 
-import { AsyncLoading } from '@/components/ui/AsyncLoading';
-import { useAsyncState } from '@/hooks/useAsyncState';
-import type { Attachment } from '@/models/Attachment';
-import type { Bulletin } from '@/models/Bulletin';
+import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import { useAsyncState } from '@/hooks/useAsyncState'
+import type { Attachment } from '@/models/Attachment'
+import type { Bulletin } from '@/models/Bulletin'
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
 const BulletinDetailPage: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
+  const [isBookmarked, setIsBookmarked] = useState(false)
 
-  const bulletinState = useAsyncState<Bulletin>();
+  const bulletinState = useAsyncState<Bulletin>()
 
   useEffect(() => {
     const loadBulletinData = async () => {
       if (!slug) {
-        message.error('Không tìm thấy thông báo');
-        navigate('/');
-        return;
+        message.error('Không tìm thấy thông báo')
+        navigate('/')
+        return
       }
 
       try {
         await bulletinState.execute(async () => {
           // Mock data for now - replace with actual service later
           const mockBulletin: Bulletin = {
-            _id: '1',
             id: '1',
             title: 'Thông báo triển khai Hệ thống Quản lý Bệnh án Điện tử mới',
             slug: slug,
@@ -191,10 +190,10 @@ const BulletinDetailPage: React.FC = () => {
               <em>Thứ trưởng Bộ Y tế</em>
             </p>
           `,
-            thumbnail: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=800&q=80',
+            thumbnail:
+              'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=800&q=80',
             attachment: [
               {
-                _id: 'att1',
                 id: 'att1',
                 postId: '1',
                 uploadedBy: 'system',
@@ -208,13 +207,13 @@ const BulletinDetailPage: React.FC = () => {
                 updatedAt: new Date().toISOString(),
               },
               {
-                _id: 'att2',
                 id: 'att2',
                 postId: '1',
                 uploadedBy: 'system',
                 metadata: {
                   fileName: 'Huong_dan_su_dung_EMR.docx',
-                  fileType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                  fileType:
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                   fileSize: 1.8,
                   url: '/documents/emr-user-guide.docx',
                 },
@@ -222,7 +221,6 @@ const BulletinDetailPage: React.FC = () => {
                 updatedAt: new Date().toISOString(),
               },
               {
-                _id: 'att3',
                 id: 'att3',
                 postId: '1',
                 uploadedBy: 'system',
@@ -238,45 +236,45 @@ const BulletinDetailPage: React.FC = () => {
             ],
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-          };
-          return mockBulletin;
-        });
+          }
+          return mockBulletin
+        })
       } catch (error) {
-        console.error('Error loading bulletin:', error);
-        message.error('Không thể tải thông báo');
+        console.error('Error loading bulletin:', error)
+        message.error('Không thể tải thông báo')
       }
-    };
+    }
 
-    loadBulletinData();
+    loadBulletinData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, navigate]);
+  }, [slug, navigate])
   const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    message.success(isBookmarked ? 'Đã bỏ lưu thông báo' : 'Đã lưu thông báo');
-  };
+    setIsBookmarked(!isBookmarked)
+    message.success(isBookmarked ? 'Đã bỏ lưu thông báo' : 'Đã lưu thông báo')
+  }
 
   const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    message.success('Đã sao chép liên kết thông báo');
-  };
+    navigator.clipboard.writeText(window.location.href)
+    message.success('Đã sao chép liên kết thông báo')
+  }
 
   const handleDownload = (attachment: Attachment) => {
-    message.success(`Đang tải xuống: ${attachment.metadata.fileName}`);
+    message.success(`Đang tải xuống: ${attachment.metadata.fileName}`)
     // Implement actual download logic here
-  };
+  }
 
   const getFileIcon = (type: string) => {
-    if (type.includes('pdf')) return '📄';
-    if (type.includes('word') || type.includes('doc')) return '📝';
-    if (type.includes('video')) return '🎥';
-    if (type.includes('image')) return '🖼️';
-    return '📁';
-  };
+    if (type.includes('pdf')) return '📄'
+    if (type.includes('word') || type.includes('doc')) return '📝'
+    if (type.includes('video')) return '🎥'
+    if (type.includes('image')) return '🖼️'
+    return '📁'
+  }
 
   const formatFileSize = (sizeInMB: number) => {
-    if (sizeInMB < 1) return `${(sizeInMB * 1024).toFixed(0)} KB`;
-    return `${sizeInMB.toFixed(1)} MB`;
-  };
+    if (sizeInMB < 1) return `${(sizeInMB * 1024).toFixed(0)} KB`
+    return `${sizeInMB.toFixed(1)} MB`
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -385,36 +383,43 @@ const BulletinDetailPage: React.FC = () => {
                 </Card>
 
                 {/* Attachments */}
-                {bulletinState.state.data.attachment && bulletinState.state.data.attachment.length > 0 && (
-                  <Card title="Tài liệu đính kèm" className="mb-6">
-                    <div className="space-y-4">
-                      {bulletinState.state.data.attachment.map(file => (
-                        <div
-                          key={file._id}
-                          className="cursor-pointer rounded-md border p-4 transition-colors hover:bg-gray-50"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl">{getFileIcon(file.metadata.fileType)}</span>
-                              <div>
-                                <Title level={5} className="mb-1">
-                                  {file.metadata.fileName}
-                                </Title>
-                                <Text type="secondary" className="text-sm">
-                                  {formatFileSize(file.metadata.fileSize)} •{' '}
-                                  {file.metadata.fileType.split('/')[1]?.toUpperCase()}
-                                </Text>
+                {bulletinState.state.data.attachment &&
+                  bulletinState.state.data.attachment.length > 0 && (
+                    <Card title="Tài liệu đính kèm" className="mb-6">
+                      <div className="space-y-4">
+                        {bulletinState.state.data.attachment.map(file => (
+                          <div
+                            key={file.id}
+                            className="cursor-pointer rounded-md border p-4 transition-colors hover:bg-gray-50"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <span className="text-2xl">
+                                  {getFileIcon(file.metadata.fileType)}
+                                </span>
+                                <div>
+                                  <Title level={5} className="mb-1">
+                                    {file.metadata.fileName}
+                                  </Title>
+                                  <Text type="secondary" className="text-sm">
+                                    {formatFileSize(file.metadata.fileSize)} •{' '}
+                                    {file.metadata.fileType.split('/')[1]?.toUpperCase()}
+                                  </Text>
+                                </div>
                               </div>
+                              <Button
+                                type="primary"
+                                icon={<DownloadOutlined />}
+                                onClick={() => handleDownload(file)}
+                              >
+                                Tải xuống
+                              </Button>
                             </div>
-                            <Button type="primary" icon={<DownloadOutlined />} onClick={() => handleDownload(file)}>
-                              Tải xuống
-                            </Button>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                )}
+                        ))}
+                      </div>
+                    </Card>
+                  )}
 
                 {/* Important Notice */}
                 <Card className="mb-6">
@@ -495,7 +500,9 @@ const BulletinDetailPage: React.FC = () => {
 
                     <div>
                       <Title level={5}>Email hỗ trợ</Title>
-                      <Text className="block text-lg font-semibold text-blue-600">emr-support@moh.gov.vn</Text>
+                      <Text className="block text-lg font-semibold text-blue-600">
+                        emr-support@moh.gov.vn
+                      </Text>
                       <Text type="secondary">Phản hồi trong 2 giờ</Text>
                     </div>
 
@@ -516,7 +523,7 @@ const BulletinDetailPage: React.FC = () => {
         </AsyncLoading>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BulletinDetailPage;
+export default BulletinDetailPage

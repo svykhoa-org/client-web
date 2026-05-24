@@ -1,9 +1,8 @@
-import type { Post } from '@/models/Post';
-import { PostStatus } from '@/models/Post';
+import type { Post } from '@/models/Post'
+import { PostStatus } from '@/models/Post'
 
 export const posts: Post[] = [
   {
-    _id: '1',
     id: '1',
     title: 'Bộ Y tế phê duyệt vaccine COVID-19 mới cho trẻ em dưới 5 tuổi',
     content:
@@ -16,12 +15,12 @@ export const posts: Post[] = [
     authorId: 'author1',
     categoryId: 'cat1',
     author: {
-      _id: 'author1',
+      id: 'author1',
       fullName: 'BS. Nguyễn Văn Minh',
-      avatarUrl: '/images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        '/images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat1',
       id: 'cat1',
       name: 'Vaccine & Tiêm chủng',
       slug: '',
@@ -33,7 +32,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-28T08:30:00.000Z',
   },
   {
-    _id: '2',
     id: '2',
     title: 'Phát hiện thuốc chữa ung thư gan từ thảo dược Việt Nam',
     content:
@@ -46,12 +44,12 @@ export const posts: Post[] = [
     authorId: 'author2',
     categoryId: 'cat2',
     author: {
-      _id: 'author2',
+      id: 'author2',
       fullName: 'PGS.TS Lê Thị Hương',
-      avatarUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat2',
       id: 'cat2',
       name: 'Nghiên cứu Y học',
       slug: '',
@@ -63,7 +61,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-27T14:15:00.000Z',
   },
   {
-    _id: '3',
     id: '3',
     title: 'Bệnh viện Chợ Rẫy ứng dụng AI trong chẩn đoán hình ảnh',
     content:
@@ -76,12 +73,12 @@ export const posts: Post[] = [
     authorId: 'author3',
     categoryId: 'cat3',
     author: {
-      _id: 'author3',
+      id: 'author3',
       fullName: 'BS.CKI Trần Minh Đức',
-      avatarUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat3',
       id: 'cat3',
       name: 'Công nghệ Y tế',
       slug: '',
@@ -93,7 +90,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-26T09:45:00.000Z',
   },
   {
-    _id: '4',
     id: '4',
     title: 'Chương trình khám sức khỏe miễn phí cho người cao tuổi tại Hà Nội',
     content:
@@ -106,12 +102,12 @@ export const posts: Post[] = [
     authorId: 'author4',
     categoryId: 'cat4',
     author: {
-      _id: 'author4',
+      id: 'author4',
       fullName: 'BS. Phạm Thị Mai',
-      avatarUrl: 'https://images.unsplash.com/photo-1594824694996-f635debc4464?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1594824694996-f635debc4464?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat4',
       id: 'cat4',
       name: 'Y tế cộng đồng',
       slug: '',
@@ -123,7 +119,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-25T16:20:00.000Z',
   },
   {
-    _id: '5',
     id: '5',
     title: 'Việt Nam sản xuất thành công kit test nhanh bệnh sốt xuất huyết',
     content:
@@ -136,12 +131,12 @@ export const posts: Post[] = [
     authorId: 'author5',
     categoryId: 'cat5',
     author: {
-      _id: 'author5',
+      id: 'author5',
       fullName: 'TS. Hoàng Văn Nam',
-      avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat5',
       id: 'cat5',
       name: 'Dược phẩm',
       slug: '',
@@ -153,7 +148,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-24T11:30:00.000Z',
   },
   {
-    _id: '6',
     id: '6',
     title: 'Bác sĩ Việt Nam đầu tiên thực hiện ca ghép tim nhân tạo thành công',
     content:
@@ -166,12 +160,12 @@ export const posts: Post[] = [
     authorId: 'author6',
     categoryId: 'cat6',
     author: {
-      _id: 'author6',
+      id: 'author6',
       fullName: 'PGS.TS Nguyễn Hoàng Định',
-      avatarUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat6',
       id: 'cat6',
       name: 'Phẫu thuật',
       slug: '',
@@ -183,7 +177,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-23T07:00:00.000Z',
   },
   {
-    _id: '7',
     id: '7',
     title: 'Phòng chống tác dụng phụ của thuốc kháng sinh: Khuyến cáo mới từ Bộ Y tế',
     content:
@@ -196,12 +189,12 @@ export const posts: Post[] = [
     authorId: 'author7',
     categoryId: 'cat7',
     author: {
-      _id: 'author7',
+      id: 'author7',
       fullName: 'BS.CKII Lê Văn Thành',
-      avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat7',
       id: 'cat7',
       name: 'Dược lâm sàng',
       slug: '',
@@ -213,7 +206,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-22T13:15:00.000Z',
   },
   {
-    _id: '8',
     id: '8',
     title: 'Tăng cường y tế cơ sở: 500 trạm y tế được nâng cấp thiết bị',
     content:
@@ -226,12 +218,12 @@ export const posts: Post[] = [
     authorId: 'author8',
     categoryId: 'cat8',
     author: {
-      _id: 'author8',
+      id: 'author8',
       fullName: 'BS. Vũ Thị Lan',
-      avatarUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat8',
       id: 'cat8',
       name: 'Chính sách Y tế',
       slug: '',
@@ -243,7 +235,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-21T10:00:00.000Z',
   },
   {
-    _id: '9',
     id: '9',
     title: 'Nghiên cứu mới: Lá sen có tác dụng hỗ trợ điều trị tiểu đường type 2',
     content:
@@ -256,12 +247,12 @@ export const posts: Post[] = [
     authorId: 'author9',
     categoryId: 'cat9',
     author: {
-      _id: 'author9',
+      id: 'author9',
       fullName: 'TS. Đặng Minh Hải',
-      avatarUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat9',
       id: 'cat9',
       name: 'Dược liệu',
       slug: '',
@@ -273,7 +264,6 @@ export const posts: Post[] = [
     updatedAt: '2025-06-20T15:30:00.000Z',
   },
   {
-    _id: '10',
     id: '10',
     title: 'Ứng dụng telemedicine trong khám chữa bệnh từ xa tại vùng cao',
     content:
@@ -286,12 +276,12 @@ export const posts: Post[] = [
     authorId: 'author10',
     categoryId: 'cat10',
     author: {
-      _id: 'author10',
+      id: 'author10',
       fullName: 'BS. Lò Văn Dũng',
-      avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
     },
     category: {
-      _id: 'cat10',
       id: 'cat10',
       name: 'Y tế từ xa',
       slug: '',
@@ -302,4 +292,4 @@ export const posts: Post[] = [
     createdAt: '2025-06-19T12:45:00.000Z',
     updatedAt: '2025-06-19T12:45:00.000Z',
   },
-];
+]

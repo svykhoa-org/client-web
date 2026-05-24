@@ -1,54 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 
-import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Breadcrumb, Button, Card, Tag, Typography, message } from 'antd';
-import dayjs from 'dayjs';
+import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, UserOutlined } from '@ant-design/icons'
+import { Avatar, Breadcrumb, Button, Card, Tag, Typography, message } from 'antd'
+import dayjs from 'dayjs'
 
-import { AsyncLoading } from '@/components/ui/AsyncLoading';
-import { useAsyncState } from '@/hooks/useAsyncState';
-import type { Article } from '@/models/Article';
+import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import { useAsyncState } from '@/hooks/useAsyncState'
+import type { Article } from '@/models/Article'
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph, Text } = Typography
 
 const ArticleDetailPage: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
+  const [isBookmarked, setIsBookmarked] = useState(false)
 
-  const articleState = useAsyncState<Article>();
+  const articleState = useAsyncState<Article>()
 
   useEffect(() => {
     const loadArticleData = async () => {
       if (!slug) {
-        message.error('Không tìm thấy bài viết');
-        navigate('/');
-        return;
+        message.error('Không tìm thấy bài viết')
+        navigate('/')
+        return
       }
 
       try {
         await articleState.execute(async () => {
           // Mock data for now - replace with actual service later
           const mockArticle: Article = {
-            _id: '1',
+            id: '1',
             title: 'Hướng dẫn chăm sóc sức khỏe tim mạch trong thời đại hiện đại',
             slug: slug,
             summary:
               'Tìm hiểu về các phương pháp chăm sóc và bảo vệ sức khỏe tim mạch hiệu quả, từ chế độ ăn uống đến tập luyện và kiểm tra sức khỏe định kỳ.',
             content: '',
-            thumbnail: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=800&q=80',
+            thumbnail:
+              'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=800&q=80',
             author: {
-              _id: '1',
+              id: '1',
               fullName: 'BS. Nguyễn Văn Minh',
               email: 'minh@hospital.com',
-              avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=100&q=80',
+              avatarUrl:
+                'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=100&q=80',
               bio: 'Bác sĩ chuyên khoa Tim mạch',
               specialization: 'Tim mạch',
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             },
             category: {
-              _id: '1',
+              id: '1',
               name: 'Tim mạch',
               slug: 'tim-mach',
               description: 'Chuyên khoa tim mạch',
@@ -58,28 +60,28 @@ const ArticleDetailPage: React.FC = () => {
             viewCount: 15420,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-          };
-          return mockArticle;
-        });
+          }
+          return mockArticle
+        })
       } catch (error) {
-        console.error('Error loading article:', error);
-        message.error('Không thể tải bài viết');
+        console.error('Error loading article:', error)
+        message.error('Không thể tải bài viết')
       }
-    };
+    }
 
-    loadArticleData();
+    loadArticleData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, navigate]);
+  }, [slug, navigate])
 
   const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    message.success(isBookmarked ? 'Đã bỏ lưu bài viết' : 'Đã lưu bài viết');
-  };
+    setIsBookmarked(!isBookmarked)
+    message.success(isBookmarked ? 'Đã bỏ lưu bài viết' : 'Đã lưu bài viết')
+  }
 
   const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    message.success('Đã sao chép liên kết bài viết');
-  };
+    navigator.clipboard.writeText(window.location.href)
+    message.success('Đã sao chép liên kết bài viết')
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -114,13 +116,19 @@ const ArticleDetailPage: React.FC = () => {
                       {articleState.state.data.title}
                     </Title>
 
-                    <Paragraph className="mb-6 text-lg text-gray-600">{articleState.state.data.summary}</Paragraph>
+                    <Paragraph className="mb-6 text-lg text-gray-600">
+                      {articleState.state.data.summary}
+                    </Paragraph>
                   </div>
 
                   {/* Author and Meta Info */}
                   <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <Avatar size={48} src={articleState.state.data.author.avatarUrl} icon={<UserOutlined />} />
+                      <Avatar
+                        size={48}
+                        src={articleState.state.data.author.avatarUrl}
+                        icon={<UserOutlined />}
+                      />
                       <div>
                         <Text strong className="block">
                           {articleState.state.data.author.fullName}
@@ -140,7 +148,9 @@ const ArticleDetailPage: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-1">
                         <EyeOutlined />
-                        <Text type="secondary">{articleState.state.data.viewCount.toLocaleString()} lượt xem</Text>
+                        <Text type="secondary">
+                          {articleState.state.data.viewCount.toLocaleString()} lượt xem
+                        </Text>
                       </div>
                     </div>
                   </div>
@@ -241,15 +251,19 @@ const ArticleDetailPage: React.FC = () => {
                 {/* Author Bio */}
                 <Card title="Về tác giả" className="mb-6">
                   <div className="flex gap-4">
-                    <Avatar size={80} src={articleState.state.data.author.avatarUrl} icon={<UserOutlined />} />
+                    <Avatar
+                      size={80}
+                      src={articleState.state.data.author.avatarUrl}
+                      icon={<UserOutlined />}
+                    />
                     <div className="flex-1">
                       <Title level={4} className="mb-2">
                         {articleState.state.data.author.fullName}
                       </Title>
                       <Paragraph type="secondary" className="mb-3">
-                        Bác sĩ chuyên khoa, có hơn 15 năm kinh nghiệm trong lĩnh vực y học lâm sàng. Từng công tác tại
-                        các bệnh viện hàng đầu và tham gia nhiều nghiên cứu khoa học được công bố trên các tạp chí y học
-                        uy tín trong và ngoài nước.
+                        Bác sĩ chuyên khoa, có hơn 15 năm kinh nghiệm trong lĩnh vực y học lâm sàng.
+                        Từng công tác tại các bệnh viện hàng đầu và tham gia nhiều nghiên cứu khoa
+                        học được công bố trên các tạp chí y học uy tín trong và ngoài nước.
                       </Paragraph>
                       <div className="flex gap-2">
                         <Tag>Chuyên gia y học</Tag>
@@ -268,7 +282,8 @@ const ArticleDetailPage: React.FC = () => {
                         Hướng dẫn chẩn đoán và điều trị - Bộ Y tế 2024
                       </Title>
                       <Text type="secondary" className="text-sm">
-                        Tài liệu chính thức từ Bộ Y tế về các phương pháp chẩn đoán và điều trị mới nhất
+                        Tài liệu chính thức từ Bộ Y tế về các phương pháp chẩn đoán và điều trị mới
+                        nhất
                       </Text>
                       <div className="mt-2">
                         <Tag color="green">PDF</Tag>
@@ -294,7 +309,8 @@ const ArticleDetailPage: React.FC = () => {
                         Video hướng dẫn kỹ thuật mới
                       </Title>
                       <Text type="secondary" className="text-sm">
-                        Series video chi tiết về các kỹ thuật điều trị tiên tiến từ chuyên gia hàng đầu
+                        Series video chi tiết về các kỹ thuật điều trị tiên tiến từ chuyên gia hàng
+                        đầu
                       </Text>
                       <div className="mt-2">
                         <Tag color="red">Video</Tag>
@@ -325,7 +341,7 @@ const ArticleDetailPage: React.FC = () => {
         </AsyncLoading>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ArticleDetailPage;
+export default ArticleDetailPage

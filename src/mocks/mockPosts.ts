@@ -1,66 +1,76 @@
-import type { Category } from '@/models/Category';
-import type { Post } from '@/models/Post';
-import { PostStatus } from '@/models/Post';
-import type { Author } from '@/models/User';
+import type { Category } from '@/models/Category'
+import type { Post } from '@/models/Post'
+import { PostStatus } from '@/models/Post'
+import type { Author } from '@/models/User'
 
 // Mock authors
 const mockAuthors: Author[] = [
   {
-    _id: 'author1',
+    id: 'author1',
     fullName: 'PGS.TS Nguyễn Thanh Liêm',
-    avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author2',
+    id: 'author2',
     fullName: 'TS.BS Trần Thị Minh Phương',
-    avatarUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author3',
+    id: 'author3',
     fullName: 'BS.CKII Lê Văn Hòa',
-    avatarUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author4',
+    id: 'author4',
     fullName: 'PGS.TS Phạm Thị Thu Hà',
-    avatarUrl: 'https://images.unsplash.com/photo-1594824488253-b66ef22493c2?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1594824488253-b66ef22493c2?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author5',
+    id: 'author5',
     fullName: 'TS.BS Hoàng Minh Đức',
-    avatarUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author6',
+    id: 'author6',
     fullName: 'BS.CKI Võ Thị Lan Anh',
-    avatarUrl: 'https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author7',
+    id: 'author7',
     fullName: 'PGS.TS Ngô Văn Toàn',
-    avatarUrl: 'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author8',
+    id: 'author8',
     fullName: 'TS.BS Đặng Thị Hương',
-    avatarUrl: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author9',
+    id: 'author9',
     fullName: 'BS.CKII Trương Minh Khải',
-    avatarUrl: 'https://images.unsplash.com/photo-1643297654240-0c1aa24159ba?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1643297654240-0c1aa24159ba?w=100&h=100&fit=crop&crop=face',
   },
   {
-    _id: 'author10',
+    id: 'author10',
     fullName: 'TS.BS Phan Thị Mai',
-    avatarUrl: 'https://images.unsplash.com/photo-1614583224978-f05ce51ef5fa?w=100&h=100&fit=crop&crop=face',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1614583224978-f05ce51ef5fa?w=100&h=100&fit=crop&crop=face',
   },
-];
+]
 
 // Mock categories
 const mockCategoriesForPosts: Category[] = [
   {
-    _id: 'cat1',
+    id: 'cat1',
     name: 'Tim mạch',
     description: 'Các bệnh lý về tim mạch',
     slug: 'tim-mach',
@@ -68,7 +78,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat2',
+    id: 'cat2',
     name: 'Nội tiết',
     description: 'Bệnh lý nội tiết',
     slug: 'noi-tiet',
@@ -76,7 +86,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat3',
+    id: 'cat3',
     name: 'Hô hấp',
     description: 'Các bệnh lý về đường hô hấp',
     slug: 'ho-hap',
@@ -84,7 +94,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat4',
+    id: 'cat4',
     name: 'Tiêu hóa',
     description: 'Bệnh lý về đường tiêu hóa',
     slug: 'tieu-hoa',
@@ -92,7 +102,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat5',
+    id: 'cat5',
     name: 'Thần kinh',
     description: 'Các bệnh lý thần kinh',
     slug: 'than-kinh',
@@ -100,7 +110,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat6',
+    id: 'cat6',
     name: 'Ung thư',
     description: 'Nghiên cứu và điều trị ung thư',
     slug: 'ung-thu',
@@ -108,7 +118,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat7',
+    id: 'cat7',
     name: 'Nhi khoa',
     description: 'Chăm sóc sức khỏe trẻ em',
     slug: 'nhi-khoa',
@@ -116,7 +126,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat8',
+    id: 'cat8',
     name: 'Sản phụ khoa',
     description: 'Sức khỏe phụ nữ',
     slug: 'san-phu-khoa',
@@ -124,7 +134,7 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat9',
+    id: 'cat9',
     name: 'Da liễu',
     description: 'Các bệnh lý về da',
     slug: 'da-lieu',
@@ -132,38 +142,38 @@ const mockCategoriesForPosts: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat10',
+    id: 'cat10',
     name: 'Mắt',
     description: 'Các bệnh lý về mắt',
     slug: 'mat',
     createdAt: '2025-01-01T00:00:00.000Z',
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
-];
+]
 
 function getRandomAuthor(): Author {
-  return mockAuthors[Math.floor(Math.random() * mockAuthors.length)];
+  return mockAuthors[Math.floor(Math.random() * mockAuthors.length)]
 }
 
 function getRandomCategory(): Category {
-  return mockCategoriesForPosts[Math.floor(Math.random() * mockCategoriesForPosts.length)];
+  return mockCategoriesForPosts[Math.floor(Math.random() * mockCategoriesForPosts.length)]
 }
 
 function getRandomDate(): string {
-  const start = new Date('2024-01-01');
-  const end = new Date('2025-08-24');
-  const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
-  return new Date(randomTime).toISOString();
+  const start = new Date('2024-01-01')
+  const end = new Date('2025-08-24')
+  const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  return new Date(randomTime).toISOString()
 }
 
 function getRandomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 // Main featured posts with detailed content
 const featuredPosts: Post[] = [
   {
-    _id: 'post1',
+    id: 'post1',
     title: 'Nghiên cứu mới về điều trị suy tim mạn tính bằng tế bào gốc',
     content: `Một nghiên cứu đột phá từ Viện Tim mạch Quốc gia đã chứng minh hiệu quả của liệu pháp tế bào gốc trong điều trị suy tim mạn tính. Nghiên cứu được thực hiện trên 200 bệnh nhân trong 2 năm với kết quả đáng khích lệ.
 
@@ -197,7 +207,7 @@ Nhóm nghiên cứu đang tiến hành thử nghiệm lâm sàng giai đoạn II
     updatedAt: getRandomDate(),
   },
   {
-    _id: 'post2',
+    id: 'post2',
     title: 'Phát hiện gen mới liên quan đến bệnh tiểu đường type 2 ở người Việt Nam',
     content: `Nhóm nghiên cứu của Đại học Y Hà Nội phối hợp với Viện Nghiên cứu Gene Stanford đã phát hiện một biến thể gen mới có liên quan chặt chẽ đến nguy cơ mắc bệnh tiểu đường type 2 ở người Việt Nam.
 
@@ -231,7 +241,7 @@ Biến thể gen được đặt tên VN-T2D1 nằm trên nhiễm sắc thể 11
     updatedAt: getRandomDate(),
   },
   {
-    _id: 'post3',
+    id: 'post3',
     title: 'Breakthrough trong điều trị COVID-19 kéo dài: Liệu pháp kháng thể đơn dòng mới',
     content: `Viện Pasteur TP.HCM vừa công bố kết quả thử nghiệm thành công liệu pháp kháng thể đơn dòng mới trong điều trị hội chứng COVID-19 kéo dài (Long COVID), mở ra hy vọng cho hàng triệu bệnh nhân trên toàn thế giới.
 
@@ -272,7 +282,7 @@ Kháng thể được thiết kế đặc biệt để:
     createdAt: getRandomDate(),
     updatedAt: getRandomDate(),
   },
-];
+]
 
 // Generate additional posts
 const postTitles = [
@@ -316,7 +326,7 @@ const postTitles = [
   'Liệu pháp tế bào CAR-T cho lymphoma tái phát',
   'Phòng ngừa các bệnh tim mạch bằng AI prediction',
   'Điều trị bệnh Crohn bằng thuốc ức chế JAK',
-];
+]
 
 const detailedContents = [
   `Viện Nghiên cứu AI Y tế Việt Nam đã phát triển thành công hệ thống trí tuệ nhân tạo có khả năng chẩn đoán chính xác 95% các bệnh lý qua hình ảnh X-quang, CT và MRI.
@@ -411,17 +421,16 @@ Theo dõi 2 năm sau phẫu thuật:
 - Tỷ lệ tái phát: 3%
 - 90% trở lại công việc bình thường
 - Không có biến chứng nghiêm trọng`,
-];
+]
 
 const additionalPosts: Post[] = Array.from({ length: 97 }, (_, index) => {
-  const postId = `post${index + 4}`;
-  const author = getRandomAuthor();
-  const category = getRandomCategory();
-  const titleIndex = index % postTitles.length;
-  const contentIndex = index % detailedContents.length;
+  const postId = `post${index + 4}`
+  const author = getRandomAuthor()
+  const category = getRandomCategory()
+  const titleIndex = index % postTitles.length
+  const contentIndex = index % detailedContents.length
 
   return {
-    _id: postId,
     id: postId,
     title: postTitles[titleIndex],
     content: detailedContents[contentIndex],
@@ -430,13 +439,13 @@ const additionalPosts: Post[] = Array.from({ length: 97 }, (_, index) => {
     commentCount: getRandomInt(3, 180),
     viewCount: getRandomInt(50, 8000),
     status: PostStatus.Published,
-    authorId: author._id,
-    categoryId: category._id!,
+    authorId: author.id,
+    categoryId: category.id!,
     author,
     category,
     createdAt: getRandomDate(),
     updatedAt: getRandomDate(),
-  };
-});
+  }
+})
 
-export const allMockPosts: Post[] = [...featuredPosts, ...additionalPosts];
+export const allMockPosts: Post[] = [...featuredPosts, ...additionalPosts]

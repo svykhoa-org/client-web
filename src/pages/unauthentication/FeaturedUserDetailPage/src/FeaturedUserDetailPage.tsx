@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { Link } from 'react-router';
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import { Link } from 'react-router'
 
 import {
   BookOutlined,
@@ -18,7 +18,7 @@ import {
   TrophyOutlined,
   TwitterOutlined,
   UserOutlined,
-} from '@ant-design/icons';
+} from '@ant-design/icons'
 import {
   Avatar,
   Button,
@@ -34,52 +34,52 @@ import {
   Tag,
   Tooltip,
   Typography,
-} from 'antd';
+} from 'antd'
 
-import { posts } from '@/mocks/posts';
-import type { User } from '@/models/User';
-import { getUserById } from '@/services/user';
+import { posts } from '@/mocks/posts'
+import type { User } from '@/models/User'
+import { getUserById } from '@/services/user'
 
-const { Title, Text, Paragraph } = Typography;
-const { TabPane } = Tabs;
+const { Title, Text, Paragraph } = Typography
+const { TabPane } = Tabs
 
 // Mẫu bài viết giả cho chuyên gia (dùng mock data)
 const userPosts = posts.slice(0, 3) as Array<{
-  _id: string;
-  title: string;
-  createdAt: string;
-  viewCount?: number;
-  rating?: number;
-  thumbnailUrl?: string;
-  summary?: string;
-  content?: string;
-  tags?: string[];
-}>;
+  id: string
+  title: string
+  createdAt: string
+  viewCount?: number
+  rating?: number
+  thumbnailUrl?: string
+  summary?: string
+  content?: string
+  tags?: string[]
+}>
 
 const FeaturedUserDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>()
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!id) return;
+      if (!id) return
 
       try {
-        setLoading(true);
-        const response = await getUserById(id);
+        setLoading(true)
+        const response = await getUserById(id)
         if (response.success && response.data) {
-          setUser(response.data);
+          setUser(response.data)
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchUserData();
-  }, [id]);
+    fetchUserData()
+  }, [id])
 
   if (loading) {
     return (
@@ -89,7 +89,7 @@ const FeaturedUserDetailPage = () => {
           <Skeleton active paragraph={{ rows: 6 }} />
         </div>
       </div>
-    );
+    )
   }
 
   if (!user) {
@@ -106,7 +106,7 @@ const FeaturedUserDetailPage = () => {
           </Link>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -253,7 +253,12 @@ const FeaturedUserDetailPage = () => {
                     renderItem={certificate => (
                       <List.Item>
                         <List.Item.Meta
-                          avatar={<Avatar icon={<FileTextOutlined />} style={{ backgroundColor: '#52c41a' }} />}
+                          avatar={
+                            <Avatar
+                              icon={<FileTextOutlined />}
+                              style={{ backgroundColor: '#52c41a' }}
+                            />
+                          }
                           title={certificate}
                         />
                       </List.Item>
@@ -275,7 +280,12 @@ const FeaturedUserDetailPage = () => {
                     renderItem={workplace => (
                       <List.Item>
                         <List.Item.Meta
-                          avatar={<Avatar icon={<MedicineBoxOutlined />} style={{ backgroundColor: '#1890ff' }} />}
+                          avatar={
+                            <Avatar
+                              icon={<MedicineBoxOutlined />}
+                              style={{ backgroundColor: '#1890ff' }}
+                            />
+                          }
                           title={workplace}
                         />
                       </List.Item>
@@ -300,7 +310,7 @@ const FeaturedUserDetailPage = () => {
                     dataSource={userPosts}
                     renderItem={post => (
                       <List.Item
-                        key={post._id}
+                        key={post.id}
                         extra={
                           post.thumbnailUrl && (
                             <img
@@ -315,7 +325,7 @@ const FeaturedUserDetailPage = () => {
                         <List.Item.Meta
                           title={
                             <Link
-                              to={`/post/${post._id}`}
+                              to={`/post/${post.id}`}
                               className="text-lg font-medium text-gray-900 hover:text-green-700"
                             >
                               {post.title}
@@ -354,7 +364,9 @@ const FeaturedUserDetailPage = () => {
                 ) : (
                   <div className="py-12 text-center">
                     <BookOutlined className="text-4xl text-gray-300" />
-                    <Paragraph className="mt-3 text-gray-500">Chưa có bài viết nào từ chuyên gia này</Paragraph>
+                    <Paragraph className="mt-3 text-gray-500">
+                      Chưa có bài viết nào từ chuyên gia này
+                    </Paragraph>
                   </div>
                 )}
               </TabPane>
@@ -363,7 +375,7 @@ const FeaturedUserDetailPage = () => {
         </Col>
       </Row>
     </div>
-  );
-};
+  )
+}
 
-export default FeaturedUserDetailPage;
+export default FeaturedUserDetailPage

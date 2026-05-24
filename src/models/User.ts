@@ -35,7 +35,7 @@ export interface User extends BaseModel {
 }
 
 export interface Author {
-  _id: string
+  id: string
   fullName: string
   avatarUrl?: string
 }

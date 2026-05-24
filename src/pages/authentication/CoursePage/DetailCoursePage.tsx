@@ -8,17 +8,17 @@ import { Alert, Button, Col, Modal, Row, Skeleton, message } from 'antd'
 import axiosInstance, { getAccessToken } from '@/lib/axios'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
-import { type CheckoutResponseData, orderService } from '@/services/Order/checkoutCourse'
+import { CheckoutModalContent, type CheckoutData } from '@/components/payment'
+import { orderService } from '@/services/Order/checkoutCourse'
 
 import { CourseActions } from './components/CourseActions'
 import { CourseInfo } from './components/CourseInfo'
 import { CourseModules } from './components/CourseModules'
-import { PaymentRedirectionForm } from './components/PaymentRedirectionForm'
 
 export const DetailCoursePage = () => {
   const { id } = useParams<{ id: string }>()
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
-  const [checkoutData, setCheckoutData] = useState<CheckoutResponseData | null>(null)
+  const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null)
   const queryClient = useQueryClient()
 
   const isLoggedIn = !!getAccessToken()
@@ -108,7 +108,7 @@ export const DetailCoursePage = () => {
         </Col>
 
         <Col xs={24} lg={8}>
-          <div className="lg:sticky lg:top-24">
+          <div className="lg:sticky lg:top-12">
             <CourseActions
               course={{
                 id: course.id,
@@ -138,7 +138,7 @@ export const DetailCoursePage = () => {
         width={600}
         destroyOnClose
       >
-        {checkoutData && <PaymentRedirectionForm checkoutData={checkoutData} />}
+        {checkoutData && <CheckoutModalContent checkoutData={checkoutData} />}
       </Modal>
     </>
   )

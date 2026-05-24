@@ -1,49 +1,49 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import React, { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router'
 
-import { SearchOutlined } from '@ant-design/icons';
-import { Input, Select } from 'antd';
+import { SearchOutlined } from '@ant-design/icons'
+import { Input, Select } from 'antd'
 
-import { ProtectedButton } from '@/components/auth';
-import { AsyncLoading } from '@/components/ui/AsyncLoading';
-import Button from '@/components/ui/Button';
-import { useAsyncState } from '@/hooks/useAsyncState';
-import { useDebounceValue } from '@/hooks/useDebounce';
-import type { Category } from '@/models/Category';
-import type { Post } from '@/models/Post';
-import { getCategories } from '@/services/category/categoryService';
-import { type GetPostsResponse, getPosts } from '@/services/post/getPosts';
+import { ProtectedButton } from '@/components/auth'
+import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import Button from '@/components/ui/Button'
+import { useAsyncState } from '@/hooks/useAsyncState'
+import { useDebounceValue } from '@/hooks/useDebounce'
+import type { Category } from '@/models/Category'
+import type { Post } from '@/models/Post'
+import { getCategories } from '@/services/category/categoryService'
+import { type GetPostsResponse, getPosts } from '@/services/post/getPosts'
 
-import PostList from './components/PostList';
+import PostList from './components/PostList'
 
-const { Search } = Input;
+const { Search } = Input
 
 const PostsPage: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   // URL search params
-  const [searchParams, setSearchParams] = useSearchParams();
-  const categoryParam = searchParams.get('category') || '';
-  const queryParam = searchParams.get('q') || '';
-  const sortParam = searchParams.get('sort') || 'latest';
+  const [searchParams, setSearchParams] = useSearchParams()
+  const categoryParam = searchParams.get('category') || ''
+  const queryParam = searchParams.get('q') || ''
+  const sortParam = searchParams.get('sort') || 'latest'
 
   // Component state
-  const [selectedCategory, setSelectedCategory] = useState<string>(categoryParam);
-  const [searchQuery, setSearchQuery] = useState<string>(queryParam);
-  const [sortOption, setSortOption] = useState<string>(sortParam);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>(categoryParam)
+  const [searchQuery, setSearchQuery] = useState<string>(queryParam)
+  const [sortOption, setSortOption] = useState<string>(sortParam)
+  const [currentPage, setCurrentPage] = useState(1)
 
   // Debounced search query to prevent excessive API calls
-  const debouncedSearchQuery = useDebounceValue(searchQuery, 500);
+  const debouncedSearchQuery = useDebounceValue(searchQuery, 500)
 
   // Data fetching state
-  const postsState = useAsyncState<GetPostsResponse>();
-  const categoriesState = useAsyncState<Category[]>();
+  const postsState = useAsyncState<GetPostsResponse>()
+  const categoriesState = useAsyncState<Category[]>()
 
   // Load posts with filters
   const loadPosts = useCallback(async () => {
     // Don't execute if already loading
-    if (postsState.state.loading) return;
+    if (postsState.state.loading) return
 
     await postsState.execute(() =>
       getPosts({
@@ -52,81 +52,85 @@ const PostsPage: React.FC = () => {
         ...(selectedCategory && { category: selectedCategory }),
         ...(debouncedSearchQuery && { search: debouncedSearchQuery }),
         ...(sortOption && { sort: sortOption }),
-      }).then(response => response.data as GetPostsResponse)
-    );
-  }, [selectedCategory, debouncedSearchQuery, sortOption, currentPage]);
+      }).then(response => response.data as GetPostsResponse),
+    )
+  }, [selectedCategory, debouncedSearchQuery, sortOption, currentPage])
 
   const loadCategories = useCallback(async () => {
-    if (categoriesState.state.data || categoriesState.state.loading) return;
+    if (categoriesState.state.data || categoriesState.state.loading) return
 
-    await categoriesState.execute(() => getCategories().then(response => response.data?.hits as Category[]));
-  }, []);
+    await categoriesState.execute(() =>
+      getCategories().then(response => response.data?.hits as Category[]),
+    )
+  }, [])
 
   // Update URL search params when filters change
   // Use debounced search query for URL updates to avoid frequent URL changes
   useEffect(() => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams()
 
-    if (selectedCategory) params.set('category', selectedCategory);
-    if (debouncedSearchQuery) params.set('q', debouncedSearchQuery);
-    if (sortOption) params.set('sort', sortOption);
+    if (selectedCategory) params.set('category', selectedCategory)
+    if (debouncedSearchQuery) params.set('q', debouncedSearchQuery)
+    if (sortOption) params.set('sort', sortOption)
 
-    setSearchParams(params);
-  }, [selectedCategory, debouncedSearchQuery, sortOption, setSearchParams]);
+    setSearchParams(params)
+  }, [selectedCategory, debouncedSearchQuery, sortOption, setSearchParams])
 
   // Load data when filters change
   // This effect will run when any of the dependencies of loadPosts change
   useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
+    loadPosts()
+  }, [loadPosts])
 
   // Load categories once on mount
   useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
+    loadCategories()
+  }, [loadCategories])
 
   // Handle category change
   const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value);
+    setSelectedCategory(value)
     // Reset to first page when changing category
     if (currentPage !== 1) {
-      setCurrentPage(1);
+      setCurrentPage(1)
     }
-  };
+  }
 
   // Handle search submit
   // The actual API call will happen when debouncedSearchQuery changes via useEffect
   const handleSearch = (value: string) => {
-    setSearchQuery(value);
+    setSearchQuery(value)
     // Reset to first page when searching
     if (currentPage !== 1) {
-      setCurrentPage(1);
+      setCurrentPage(1)
     }
-  };
+  }
 
   // Handle sort change
   const handleSortChange = (value: string) => {
-    setSortOption(value);
+    setSortOption(value)
     // No need to reset page on sort change
-  };
+  }
 
   // Handle pagination change
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   // Handle view post details
   const handleViewPost = (post: Post) => {
-    navigate(`/post/${post._id}`);
-  };
+    navigate(`/post/${post.id}`)
+  }
 
   return (
     <div className="container mx-auto px-4 py-6">
       {/* Header section */}
       <div className="mb-6">
         <h1 className="mb-4 text-3xl font-bold text-gray-800">Bài viết</h1>
-        <p className="text-gray-600">Tìm kiếm và khám phá các bài viết về sức khỏe, y tế và chăm sóc sức khỏe</p>
+        <p className="text-gray-600">
+          Tìm kiếm và khám phá các bài viết về sức khỏe, y tế và chăm sóc sức khỏe
+        </p>
       </div>
 
       {/* Search and filters */}
@@ -156,7 +160,7 @@ const PostsPage: React.FC = () => {
               className="flex-1"
             >
               {categoriesState.state.data?.map(category => (
-                <Select.Option key={category._id} value={category._id}>
+                <Select.Option key={category.id} value={category.id}>
                   {category.name}
                 </Select.Option>
               ))}
@@ -220,7 +224,7 @@ const PostsPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PostsPage;
+export default PostsPage

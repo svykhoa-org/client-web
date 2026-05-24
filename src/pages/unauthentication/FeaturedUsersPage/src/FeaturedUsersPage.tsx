@@ -1,42 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import { SearchOutlined, TeamOutlined } from '@ant-design/icons';
-import { Col, Empty, Input, Row, Select, Spin, Typography } from 'antd';
+import { SearchOutlined, TeamOutlined } from '@ant-design/icons'
+import { Col, Empty, Input, Row, Select, Spin, Typography } from 'antd'
 
-import FeaturedUserCard from '@/components/user/FeaturedUserCard';
-import type { User } from '@/models/User';
-import { getFeaturedUsers } from '@/services/user';
+import FeaturedUserCard from '@/components/user/FeaturedUserCard'
+import type { User } from '@/models/User'
+import { getFeaturedUsers } from '@/services/user'
 
-const { Title, Paragraph } = Typography;
-const { Option } = Select;
+const { Title, Paragraph } = Typography
+const { Option } = Select
 
 const FeaturedUsersPage = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [specialtyFilter, setSpecialtyFilter] = useState<string | null>(null);
-  const [sortOption, setSortOption] = useState<string>('rating');
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [specialtyFilter, setSpecialtyFilter] = useState<string | null>(null)
+  const [sortOption, setSortOption] = useState<string>('rating')
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setLoading(true);
-        const response = await getFeaturedUsers();
+        setLoading(true)
+        const response = await getFeaturedUsers()
         if (response.success) {
-          setUsers(response.data);
+          setUsers(response.data)
         }
       } catch (error) {
-        console.error('Error fetching featured users:', error);
+        console.error('Error fetching featured users:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
 
   // Get unique specializations for filter dropdown
-  const specializations = Array.from(new Set(users.map(user => user.specialization).filter(Boolean))) as string[];
+  const specializations = Array.from(
+    new Set(users.map(user => user.specialization).filter(Boolean)),
+  ) as string[]
 
   // Filter users based on search term and specialty filter
   const filteredUsers = users.filter(user => {
@@ -44,26 +46,26 @@ const FeaturedUsersPage = () => {
       ? true
       : user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (user.bio?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-        (user.specialization?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+        (user.specialization?.toLowerCase() || '').includes(searchTerm.toLowerCase())
 
-    const matchesSpecialty = !specialtyFilter ? true : user.specialization === specialtyFilter;
+    const matchesSpecialty = !specialtyFilter ? true : user.specialization === specialtyFilter
 
-    return matchesSearch && matchesSpecialty;
-  });
+    return matchesSearch && matchesSpecialty
+  })
 
   // Sort users based on selected option
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (sortOption === 'rating') {
-      return (b.stats?.rating || 0) - (a.stats?.rating || 0);
+      return (b.stats?.rating || 0) - (a.stats?.rating || 0)
     }
     if (sortOption === 'followers') {
-      return (b.stats?.followerCount || 0) - (a.stats?.followerCount || 0);
+      return (b.stats?.followerCount || 0) - (a.stats?.followerCount || 0)
     }
     if (sortOption === 'posts') {
-      return (b.stats?.postCount || 0) - (a.stats?.postCount || 0);
+      return (b.stats?.postCount || 0) - (a.stats?.postCount || 0)
     }
-    return 0;
-  });
+    return 0
+  })
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -73,8 +75,8 @@ const FeaturedUsersPage = () => {
           Chuyên gia nổi bật
         </Title>
         <Paragraph className="mx-auto max-w-2xl text-gray-600">
-          Kết nối với các bác sĩ, dược sĩ và chuyên gia y tế hàng đầu trong nhiều lĩnh vực. Họ là những người có kinh
-          nghiệm lâu năm và đã được xác thực bởi hệ thống của chúng tôi.
+          Kết nối với các bác sĩ, dược sĩ và chuyên gia y tế hàng đầu trong nhiều lĩnh vực. Họ là
+          những người có kinh nghiệm lâu năm và đã được xác thực bởi hệ thống của chúng tôi.
         </Paragraph>
       </div>
 
@@ -128,7 +130,7 @@ const FeaturedUsersPage = () => {
         ) : (
           <Row gutter={[24, 24]}>
             {sortedUsers.map(user => (
-              <Col key={user._id} xs={24} sm={12} md={8} lg={8} xl={6} className="h-full">
+              <Col key={user.id} xs={24} sm={12} md={8} lg={8} xl={6} className="h-full">
                 <FeaturedUserCard user={user} />
               </Col>
             ))}
@@ -136,7 +138,7 @@ const FeaturedUsersPage = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FeaturedUsersPage;
+export default FeaturedUsersPage

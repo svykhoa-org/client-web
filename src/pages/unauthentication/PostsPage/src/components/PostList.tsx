@@ -1,18 +1,18 @@
-import { Spin } from 'antd';
+import { Spin } from 'antd'
 
-import PostCard from '@/components/post/PostCard';
-import Pagination from '@/components/ui/Pagination';
-import type { Post } from '@/models/Post';
+import PostCard from '@/components/post/PostCard'
+import Pagination from '@/components/ui/Pagination'
+import type { Post } from '@/models/Post'
 
 interface PostListProps {
-  posts: Post[];
-  onViewMore?: (post: Post) => void;
-  onPageChange?: (page: number) => void;
-  loading?: boolean;
-  currentPage?: number;
-  totalItems?: number;
-  pageSize?: number;
-  showPagination?: boolean;
+  posts: Post[]
+  onViewMore?: (post: Post) => void
+  onPageChange?: (page: number) => void
+  loading?: boolean
+  currentPage?: number
+  totalItems?: number
+  pageSize?: number
+  showPagination?: boolean
 }
 
 const PostList = ({
@@ -29,7 +29,12 @@ const PostList = ({
     return (
       <div className="bg-neutral-1 text-neutral-6 rounded-lg p-8 text-center">
         <div className="mb-4">
-          <svg className="text-neutral-4 mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="text-neutral-4 mx-auto h-12 w-12"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -41,13 +46,13 @@ const PostList = ({
         <h3 className="text-neutral-8 mb-2 text-lg font-medium">Chưa có bài viết nào</h3>
         <p className="text-sm">Hiện tại chưa có bài viết nào phù hợp với tìm kiếm của bạn.</p>
       </div>
-    );
+    )
   }
 
   return (
     <div className="space-y-4">
       {posts.map(post => (
-        <div key={post._id} className="rounded-lg bg-white shadow-sm transition-all hover:shadow-md">
+        <div key={post.id} className="rounded-lg bg-white shadow-sm transition-all hover:shadow-md">
           <PostCard post={post} onViewMore={onViewMore} />
         </div>
       ))}
@@ -73,7 +78,7 @@ const PostList = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PostList;
+export default PostList

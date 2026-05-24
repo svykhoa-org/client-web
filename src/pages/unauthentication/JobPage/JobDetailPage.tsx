@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { useParams } from 'react-router';
+import { useEffect, useRef } from 'react'
+import { useParams } from 'react-router'
 
 import {
   CalendarOutlined,
@@ -9,22 +9,22 @@ import {
   MailOutlined,
   PhoneOutlined,
   UserAddOutlined,
-} from '@ant-design/icons';
-import { Alert, Button, Card, Col, Divider, Row, Skeleton, Space, Tag, Typography } from 'antd';
-import dayjs from 'dayjs';
+} from '@ant-design/icons'
+import { Alert, Button, Card, Col, Divider, Row, Skeleton, Space, Tag, Typography } from 'antd'
+import dayjs from 'dayjs'
 
-import { useDetail } from '@/hooks/useCRUD/useDetail';
-import type { Job } from '@/models/Job';
-import { getJobDetail } from '@/services/Job/jobService';
+import { useDetail } from '@/hooks/useCRUD/useDetail'
+import type { Job } from '@/models/Job'
+import { getJobDetail } from '@/services/Job/jobService'
 
-import { FormRegistration } from './components/FormRegistration';
+import { FormRegistration } from './components/FormRegistration'
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph, Text } = Typography
 
 export const JobDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const registrationRef = useRef<HTMLDivElement>(null);
-  const hasFetchedRef = useRef<string | null>(null); // Track đã fetch id nào chưa
+  const { id } = useParams<{ id: string }>()
+  const registrationRef = useRef<HTMLDivElement>(null)
+  const hasFetchedRef = useRef<string | null>(null) // Track đã fetch id nào chưa
 
   const {
     data: job,
@@ -34,40 +34,40 @@ export const JobDetailPage = () => {
   } = useDetail<Job>({
     getDetail: id
       ? async () => {
-          console.log('Fetching job detail for id:', id);
+          console.log('Fetching job detail for id:', id)
 
-          const result = await getJobDetail({ id });
-          return result || null;
+          const result = await getJobDetail({ id })
+          return result || null
         }
       : undefined,
-  });
+  })
 
   useEffect(() => {
     // Chỉ fetch khi id thay đổi và chưa fetch id này
     if (id && hasFetchedRef.current !== id) {
-      hasFetchedRef.current = id;
-      handleGetDetail();
+      hasFetchedRef.current = id
+      handleGetDetail()
     }
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const scrollToRegistration = () => {
     registrationRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
-    });
-  };
+    })
+  }
 
   const formatSalary = (salaryRange?: [number, number]) => {
-    if (!salaryRange) return 'Thỏa thuận';
-    return `${salaryRange[0].toLocaleString()} - ${salaryRange[1].toLocaleString()} VND`;
-  };
+    if (!salaryRange) return 'Thỏa thuận'
+    return `${salaryRange[0].toLocaleString()} - ${salaryRange[1].toLocaleString()} VND`
+  }
 
   if (isLoadingDetail) {
     return (
       <div className="mx-auto max-w-6xl p-6">
         <Skeleton active paragraph={{ rows: 8 }} />
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -80,18 +80,23 @@ export const JobDetailPage = () => {
           showIcon
         />
       </div>
-    );
+    )
   }
 
   if (!job) {
     return (
       <div className="mx-auto max-w-6xl p-6">
-        <Alert message="Không tìm thấy" description="Công việc không tồn tại hoặc đã bị xóa." type="warning" showIcon />
+        <Alert
+          message="Không tìm thấy"
+          description="Công việc không tồn tại hoặc đã bị xóa."
+          type="warning"
+          showIcon
+        />
       </div>
-    );
+    )
   }
 
-  const isExpired = dayjs().isAfter(dayjs(job.expiresAt));
+  const isExpired = dayjs().isAfter(dayjs(job.expiresAt))
 
   return (
     <div className="mx-auto max-w-6xl p-6">
@@ -270,7 +275,7 @@ export const JobDetailPage = () => {
           <Card title="Đăng ký ứng tuyển">
             <FormRegistration
               onSubmit={data => {
-                console.log('Job application data:', { jobId: job._id, ...data });
+                console.log('Job application data:', { jobId: job.id, ...data })
                 // Handle form submission here
               }}
               onSuccess={() => {
@@ -281,5 +286,5 @@ export const JobDetailPage = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

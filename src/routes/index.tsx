@@ -33,6 +33,8 @@ import PostsPage from '@/pages/unauthentication/PostsPage'
 import RegisterPage from '@/pages/unauthentication/RegisterPage'
 import { ResetPasswordPage } from '@/pages/unauthentication/ResetPasswordPage/ResetPasswordPage'
 import { VerifyEmailPage } from '@/pages/unauthentication/VerifyEmailPage/VerifyEmailPage'
+import { ComponentsPage } from '@/pages/public/ComponentsPage/ComponentsPage'
+
 import { PublicPath, PublicRoute } from './PublicRoute'
 
 // import ResourceListPage from '@/pages/unauthentication/ResourceListPage';
@@ -124,6 +126,10 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.MedicalSearchPage.path,
         element: <MedicalSearchPage />,
+      },
+      {
+        path: '/components',
+        element: <ComponentsPage />,
       },
       {
         path: '/payment-test',

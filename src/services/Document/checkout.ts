@@ -1,8 +1,9 @@
 import axiosInstance from '@/lib/axios'
+import type { CheckoutData } from '@/components/payment'
 import type { ApiDetailResponse } from '@/shared/types/api'
 import { unwrapDetail } from '@/utils/apiResponse'
 
-const DOCUMENT_ORDER_ENDPOINT = '/document-orders/checkout'
+const DOCUMENT_ORDER_ENDPOINT = '/orders/checkout/document'
 
 export interface DocumentCheckoutInput {
   documentId: string
@@ -11,25 +12,11 @@ export interface DocumentCheckoutInput {
   errorUrl: string
 }
 
-export interface DocumentCheckoutFields extends Record<
-  string,
-  string | number | boolean | null | undefined
-> {
-  order_invoice_number?: string
-  order_description?: string
-  order_amount?: number
-  currency?: string
-}
+// Re-export CheckoutData as DocumentCheckoutOutput for backward compatibility
+export type { CheckoutData as DocumentCheckoutOutput } from '@/components/payment'
 
-export interface DocumentCheckoutOutput {
-  checkoutUrl: string
-  checkoutFields: DocumentCheckoutFields
-}
-
-export async function checkoutDocumentOrder(
-  input: DocumentCheckoutInput,
-): Promise<DocumentCheckoutOutput> {
-  const response = await axiosInstance.post<ApiDetailResponse<DocumentCheckoutOutput>>(
+export async function checkoutDocumentOrder(input: DocumentCheckoutInput): Promise<CheckoutData> {
+  const response = await axiosInstance.post<ApiDetailResponse<CheckoutData>>(
     DOCUMENT_ORDER_ENDPOINT,
     input,
   )

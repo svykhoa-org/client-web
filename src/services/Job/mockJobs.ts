@@ -1,10 +1,9 @@
-import type { Job } from '@/models/Job';
-import { JobStatus } from '@/models/Job';
+import type { Job } from '@/models/Job'
+import { JobStatus } from '@/models/Job'
 
 // 50 sample job postings for major Vietnamese hospitals and medical institutions
 export const jobs: Job[] = [
   {
-    _id: 'job_001',
     id: 'job_001',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -26,12 +25,12 @@ export const jobs: Job[] = [
     applyLink: 'https://bachmai.vn/tuyen-dung',
   },
   {
-    _id: 'job_002',
     id: 'job_002',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Sản - Phụ khoa',
-    description: 'Thực hiện khám, chăm sóc thai sản, phẫu thuật sản phụ khoa, tham gia trực chuyên môn.',
+    description:
+      'Thực hiện khám, chăm sóc thai sản, phẫu thuật sản phụ khoa, tham gia trực chuyên môn.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Phụ Sản Trung ương, Hà Nội',
     company: 'Bệnh viện Phụ Sản Trung ương',
@@ -43,29 +42,33 @@ export const jobs: Job[] = [
     applyLink: 'https://ps.tw.vn/tuyen-dung',
   },
   {
-    _id: 'job_003',
     id: 'job_003',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Ngoại tổng quát',
-    description: 'Thực hiện phẫu thuật ngoại tổng quát, chăm sóc hậu phẫu và tham gia đào tạo sinh viên.',
+    description:
+      'Thực hiện phẫu thuật ngoại tổng quát, chăm sóc hậu phẫu và tham gia đào tạo sinh viên.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Việt Đức, Hà Nội',
     company: 'Bệnh viện Việt Đức',
     salaryRange: [18000000, 45000000],
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-    requirements: ['Bác sĩ chuyên khoa Ngoại', 'Kinh nghiệm phẫu thuật 5+ năm', 'Kỹ năng lãnh đạo kíp mổ'],
+    requirements: [
+      'Bác sĩ chuyên khoa Ngoại',
+      'Kinh nghiệm phẫu thuật 5+ năm',
+      'Kỹ năng lãnh đạo kíp mổ',
+    ],
     benefits: ['Chế độ nhà ở công vụ (theo chính sách)', 'Cơ hội hợp tác quốc tế'],
     contactEmail: 'tuyendung@vietduc.org.vn',
     applyLink: 'https://vietduc.org.vn/jobs',
   },
   {
-    _id: 'job_004',
     id: 'job_004',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Điều dưỡng Hồi sức cấp cứu',
-    description: 'Chăm sóc người bệnh tại khoa Hồi sức cấp cứu, vận hành thiết bị y tế hỗ trợ điều trị.',
+    description:
+      'Chăm sóc người bệnh tại khoa Hồi sức cấp cứu, vận hành thiết bị y tế hỗ trợ điều trị.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Chợ Rẫy, TP. HCM',
     company: 'Bệnh viện Chợ Rẫy',
@@ -76,12 +79,12 @@ export const jobs: Job[] = [
     contactEmail: 'nhansu@choray.vn',
   },
   {
-    _id: 'job_005',
     id: 'job_005',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Tai - Mũi - Họng',
-    description: 'Khám và phẫu thuật các bệnh lý tai mũi họng, tham gia khám sâu và điều trị ngoại trú.',
+    description:
+      'Khám và phẫu thuật các bệnh lý tai mũi họng, tham gia khám sâu và điều trị ngoại trú.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Tai Mũi Họng Trung ương, Hà Nội',
     company: 'Bệnh viện Tai Mũi Họng Trung ương',
@@ -95,7 +98,6 @@ export const jobs: Job[] = [
   // Generated programmatically-like entries to reach 50 items but written out for clarity
 
   {
-    _id: 'job_006',
     id: 'job_006',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -111,7 +113,6 @@ export const jobs: Job[] = [
     contactEmail: 'jobs@hmu.edu.vn',
   },
   {
-    _id: 'job_007',
     id: 'job_007',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -127,7 +128,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@vfmc.vn',
   },
   {
-    _id: 'job_008',
     id: 'job_008',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -143,7 +143,6 @@ export const jobs: Job[] = [
     contactEmail: 'tuyendung@nhi.vn',
   },
   {
-    _id: 'job_009',
     id: 'job_009',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -159,7 +158,6 @@ export const jobs: Job[] = [
     contactEmail: 'phongnhansu@huehosp.vn',
   },
   {
-    _id: 'job_010',
     id: 'job_010',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -178,12 +176,12 @@ export const jobs: Job[] = [
   // jobs 11-50: mix of roles across major hospitals
 
   {
-    _id: 'job_011',
     id: 'job_011',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Da liễu',
-    description: 'Khám và điều trị các bệnh lý da liễu, thực hiện thủ thuật laser và thẩm mỹ da cơ bản.',
+    description:
+      'Khám và điều trị các bệnh lý da liễu, thực hiện thủ thuật laser và thẩm mỹ da cơ bản.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Da liễu Trung ương, Hà Nội',
     company: 'Bệnh viện Da liễu Trung ương',
@@ -194,7 +192,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@derm.tw.vn',
   },
   {
-    _id: 'job_012',
     id: 'job_012',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -210,7 +207,6 @@ export const jobs: Job[] = [
     contactEmail: 'recruit@benhvienk.vn',
   },
   {
-    _id: 'job_013',
     id: 'job_013',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -226,7 +222,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@timhanoi.vn',
   },
   {
-    _id: 'job_014',
     id: 'job_014',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -242,12 +237,12 @@ export const jobs: Job[] = [
     contactEmail: 'neurosurgery@vietduc.org',
   },
   {
-    _id: 'job_015',
     id: 'job_015',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Chuyên gia dinh dưỡng lâm sàng',
-    description: 'Tư vấn dinh dưỡng cho bệnh nhân nội trú và ngoại trú, phối hợp điều trị đa chuyên khoa.',
+    description:
+      'Tư vấn dinh dưỡng cho bệnh nhân nội trú và ngoại trú, phối hợp điều trị đa chuyên khoa.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Đại học Y Dược TP.HCM',
     company: 'Đại học Y Dược TP.HCM - Bệnh viện',
@@ -258,12 +253,12 @@ export const jobs: Job[] = [
     contactEmail: 'nutrition@hcmc.edu.vn',
   },
   {
-    _id: 'job_016',
     id: 'job_016',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Y học cổ truyền',
-    description: 'Chẩn trị và phối hợp điều trị Y học cổ truyền cho bệnh nhân mãn tính và đau nhức.',
+    description:
+      'Chẩn trị và phối hợp điều trị Y học cổ truyền cho bệnh nhân mãn tính và đau nhức.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Y học cổ truyền Trung ương',
     company: 'Bệnh viện Y học cổ truyền Trung ương',
@@ -274,12 +269,12 @@ export const jobs: Job[] = [
     contactEmail: 'recruit@ytc.tw.vn',
   },
   {
-    _id: 'job_017',
     id: 'job_017',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Mắt',
-    description: 'Khám và phẫu thuật các bệnh lý mắt, phẫu thuật đục thủy tinh thể và phẫu thuật bằng laser.',
+    description:
+      'Khám và phẫu thuật các bệnh lý mắt, phẫu thuật đục thủy tinh thể và phẫu thuật bằng laser.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Mắt Trung ương, Hà Nội',
     company: 'Bệnh viện Mắt Trung ương',
@@ -290,12 +285,12 @@ export const jobs: Job[] = [
     contactEmail: 'hr@eye.vn',
   },
   {
-    _id: 'job_018',
     id: 'job_018',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Tâm thần',
-    description: 'Khám và điều trị các rối loạn tâm thần, tham gia tư vấn và chương trình cộng đồng.',
+    description:
+      'Khám và điều trị các rối loạn tâm thần, tham gia tư vấn và chương trình cộng đồng.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Tâm thần Trung ương I',
     company: 'Bệnh viện Tâm thần Trung ương I',
@@ -306,7 +301,6 @@ export const jobs: Job[] = [
     contactEmail: 'info@mental1.vn',
   },
   {
-    _id: 'job_019',
     id: 'job_019',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -322,12 +316,12 @@ export const jobs: Job[] = [
     contactEmail: 'hr@175.vn',
   },
   {
-    _id: 'job_020',
     id: 'job_020',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Cấp cứu',
-    description: 'Làm việc tại khoa Cấp cứu, xử lý bệnh nhân chấn thương, ngộ độc và cấp cứu nội khoa.',
+    description:
+      'Làm việc tại khoa Cấp cứu, xử lý bệnh nhân chấn thương, ngộ độc và cấp cứu nội khoa.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Việt Nam - Thụy Điển Uông Bí',
     company: 'Bệnh viện Việt Nam - Thụy Điển Uông Bí',
@@ -339,7 +333,6 @@ export const jobs: Job[] = [
   },
 
   {
-    _id: 'job_021',
     id: 'job_021',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -355,7 +348,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@rhm.vn',
   },
   {
-    _id: 'job_022',
     id: 'job_022',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -371,7 +363,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@rehab.vn',
   },
   {
-    _id: 'job_023',
     id: 'job_023',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -387,7 +378,6 @@ export const jobs: Job[] = [
     contactEmail: 'recruit@lunginstitute.vn',
   },
   {
-    _id: 'job_024',
     id: 'job_024',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -403,12 +393,12 @@ export const jobs: Job[] = [
     contactEmail: 'tuyendung@qnhosp.vn',
   },
   {
-    _id: 'job_025',
     id: 'job_025',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Y tế công cộng',
-    description: 'Tham gia chương trình tiêm chủng, giám sát dịch tễ và hoạt động phòng chống dịch.',
+    description:
+      'Tham gia chương trình tiêm chủng, giám sát dịch tễ và hoạt động phòng chống dịch.',
     status: JobStatus.OPEN,
     location: 'Sở Y tế TP. Hà Nội',
     company: 'Sở Y tế Hà Nội',
@@ -420,12 +410,12 @@ export const jobs: Job[] = [
   },
 
   {
-    _id: 'job_026',
     id: 'job_026',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Phục hồi chức năng thần kinh',
-    description: 'Điều trị phục hồi sau đột quỵ và chấn thương tủy sống, xây dựng phác đồ phục hồi.',
+    description:
+      'Điều trị phục hồi sau đột quỵ và chấn thương tủy sống, xây dựng phác đồ phục hồi.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Chấn thương Chỉnh hình, Hà Nội',
     company: 'Bệnh viện Chấn thương Chỉnh hình Trung ương',
@@ -436,7 +426,6 @@ export const jobs: Job[] = [
     contactEmail: 'recruit@ortho.vn',
   },
   {
-    _id: 'job_027',
     id: 'job_027',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -452,7 +441,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@endocrine.vn',
   },
   {
-    _id: 'job_028',
     id: 'job_028',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -468,7 +456,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@child1.vn',
   },
   {
-    _id: 'job_029',
     id: 'job_029',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -479,29 +466,34 @@ export const jobs: Job[] = [
     company: 'Bệnh viện Đa khoa Bình Dương',
     salaryRange: [6000000, 12000000],
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20),
-    requirements: ['Tốt nghiệp chuyên ngành quản trị nhân sự hoặc tương đương', 'Kinh nghiệm tuyển dụng là lợi thế'],
+    requirements: [
+      'Tốt nghiệp chuyên ngành quản trị nhân sự hoặc tương đương',
+      'Kinh nghiệm tuyển dụng là lợi thế',
+    ],
     benefits: ['Chế độ BH', 'Lương ổn định'],
     contactEmail: 'hr@bduh.vn',
   },
   {
-    _id: 'job_030',
     id: 'job_030',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Cột sống',
-    description: 'Chẩn đoán và phẫu thuật các bệnh lý cột sống, điều trị bệnh nhân thoát vị đĩa đệm.',
+    description:
+      'Chẩn đoán và phẫu thuật các bệnh lý cột sống, điều trị bệnh nhân thoát vị đĩa đệm.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Chấn thương Chỉnh hình TP.HCM',
     company: 'Bệnh viện Chấn thương Chỉnh hình TP.HCM',
     salaryRange: [22000000, 60000000],
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 40),
-    requirements: ['Chuyên khoa Cột sống/Chấn thương chỉnh hình', 'Kinh nghiệm phẫu thuật cột sống'],
+    requirements: [
+      'Chuyên khoa Cột sống/Chấn thương chỉnh hình',
+      'Kinh nghiệm phẫu thuật cột sống',
+    ],
     benefits: ['Hỗ trợ chuyển giao kỹ thuật', 'Chế độ lương theo hiệu suất'],
     contactEmail: 'spine@orthohcm.vn',
   },
 
   {
-    _id: 'job_031',
     id: 'job_031',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -512,17 +504,20 @@ export const jobs: Job[] = [
     company: 'Bệnh viện Bạch Mai',
     salaryRange: [16000000, 42000000],
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 55),
-    requirements: ['Chuyên ngành Thần kinh hoặc Can thiệp thần kinh', 'Kinh nghiệm làm việc với đột quỵ cấp'],
+    requirements: [
+      'Chuyên ngành Thần kinh hoặc Can thiệp thần kinh',
+      'Kinh nghiệm làm việc với đột quỵ cấp',
+    ],
     benefits: ['Chế độ đào tạo và hợp tác quốc tế', 'BHYT/BHXH'],
     contactEmail: 'neuro@bachmai.vn',
   },
   {
-    _id: 'job_032',
     id: 'job_032',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Chuyên viên Công nghệ thông tin y tế',
-    description: 'Quản trị hệ thống HIS, hỗ trợ triển khai phần mềm quản lý bệnh viện và bảo mật dữ liệu y tế.',
+    description:
+      'Quản trị hệ thống HIS, hỗ trợ triển khai phần mềm quản lý bệnh viện và bảo mật dữ liệu y tế.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Đại học Y Hà Nội',
     company: 'Đại học Y Hà Nội - Bệnh viện',
@@ -533,7 +528,6 @@ export const jobs: Job[] = [
     contactEmail: 'it@hmu.edu.vn',
   },
   {
-    _id: 'job_033',
     id: 'job_033',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -549,12 +543,12 @@ export const jobs: Job[] = [
     contactEmail: 'allergy@childcenter.vn',
   },
   {
-    _id: 'job_034',
     id: 'job_034',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Chuyên viên Marketing y tế',
-    description: 'Xây dựng chiến dịch truyền thông, quản lý thương hiệu bệnh viện và nội dung y tế.',
+    description:
+      'Xây dựng chiến dịch truyền thông, quản lý thương hiệu bệnh viện và nội dung y tế.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện FV, TP.HCM',
     company: 'Bệnh viện FV',
@@ -565,7 +559,6 @@ export const jobs: Job[] = [
     contactEmail: 'marketing@fv.vn',
   },
   {
-    _id: 'job_035',
     id: 'job_035',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -581,7 +574,6 @@ export const jobs: Job[] = [
     contactEmail: 'nutrition@child2.vn',
   },
   {
-    _id: 'job_036',
     id: 'job_036',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -597,7 +589,6 @@ export const jobs: Job[] = [
     contactEmail: 'anes@child1.vn',
   },
   {
-    _id: 'job_037',
     id: 'job_037',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -613,7 +604,6 @@ export const jobs: Job[] = [
     contactEmail: 'pediatriccardio@nhi.vn',
   },
   {
-    _id: 'job_038',
     id: 'job_038',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -624,12 +614,14 @@ export const jobs: Job[] = [
     company: 'Bệnh viện Nhi Đồng 2',
     salaryRange: [13000000, 30000000],
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-    requirements: ['Chuyên khoa Thần kinh nhi', 'Kinh nghiệm chẩn đoán rối loạn phát triển thần kinh'],
+    requirements: [
+      'Chuyên khoa Thần kinh nhi',
+      'Kinh nghiệm chẩn đoán rối loạn phát triển thần kinh',
+    ],
     benefits: ['Đào tạo liên tục', 'BHYT'],
     contactEmail: 'pedsneuro@child2.vn',
   },
   {
-    _id: 'job_039',
     id: 'job_039',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -645,7 +637,6 @@ export const jobs: Job[] = [
     contactEmail: 'ultrasound@vietduc.vn',
   },
   {
-    _id: 'job_040',
     id: 'job_040',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -662,7 +653,6 @@ export const jobs: Job[] = [
   },
 
   {
-    _id: 'job_041',
     id: 'job_041',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -678,7 +668,6 @@ export const jobs: Job[] = [
     contactEmail: 'family@hmuclinic.vn',
   },
   {
-    _id: 'job_042',
     id: 'job_042',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -694,7 +683,6 @@ export const jobs: Job[] = [
     contactEmail: 'recruit@obgyhanoi.vn',
   },
   {
-    _id: 'job_043',
     id: 'job_043',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -710,12 +698,12 @@ export const jobs: Job[] = [
     contactEmail: 'finance@hcmuh.vn',
   },
   {
-    _id: 'job_044',
     id: 'job_044',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Y tế dự phòng',
-    description: 'Tham gia giám sát dịch tễ, triển khai chương trình tiêm chủng và phòng chống dịch bệnh.',
+    description:
+      'Tham gia giám sát dịch tễ, triển khai chương trình tiêm chủng và phòng chống dịch bệnh.',
     status: JobStatus.OPEN,
     location: 'Viện Vệ sinh Dịch tễ Trung ương',
     company: 'Viện Vệ sinh Dịch tễ TW',
@@ -726,23 +714,25 @@ export const jobs: Job[] = [
     contactEmail: 'epid@nihe.vn',
   },
   {
-    _id: 'job_045',
     id: 'job_045',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Sức khỏe lao động',
-    description: 'Khám sức khỏe nghề nghiệp, tư vấn và quản lý chương trình sức khỏe lao động cho doanh nghiệp.',
+    description:
+      'Khám sức khỏe nghề nghiệp, tư vấn và quản lý chương trình sức khỏe lao động cho doanh nghiệp.',
     status: JobStatus.OPEN,
     location: 'Trung tâm Y tế dự phòng tỉnh Đồng Nai',
     company: 'Trung tâm Y tế Đồng Nai',
     salaryRange: [8000000, 18000000],
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-    requirements: ['Bác sĩ chuyên ngành Sức khỏe nghề nghiệp', 'Kinh nghiệm khám sức khỏe doanh nghiệp'],
+    requirements: [
+      'Bác sĩ chuyên ngành Sức khỏe nghề nghiệp',
+      'Kinh nghiệm khám sức khỏe doanh nghiệp',
+    ],
     benefits: ['Chế độ BH', 'Làm việc giờ hành chính'],
     contactEmail: 'occupational@dongnai.gov.vn',
   },
   {
-    _id: 'job_046',
     id: 'job_046',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -758,12 +748,12 @@ export const jobs: Job[] = [
     contactEmail: 'obgyn@ps.tw.vn',
   },
   {
-    _id: 'job_047',
     id: 'job_047',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Phẫu thuật Tim mạch',
-    description: 'Phẫu thuật tim mở, thay van tim và điều trị bệnh tim bẩm sinh ở người lớn và trẻ em.',
+    description:
+      'Phẫu thuật tim mở, thay van tim và điều trị bệnh tim bẩm sinh ở người lớn và trẻ em.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Tim mạch Quốc gia Việt Nam',
     company: 'Bệnh viện Tim mạch Quốc gia',
@@ -774,12 +764,12 @@ export const jobs: Job[] = [
     contactEmail: 'cardiosurgery@nationalheart.vn',
   },
   {
-    _id: 'job_048',
     id: 'job_048',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Nội tổng quát (Khám bệnh)',
-    description: 'Khám và điều trị các bệnh nội khoa thông thường, quản lý bệnh mãn tính tại phòng khám',
+    description:
+      'Khám và điều trị các bệnh nội khoa thông thường, quản lý bệnh mãn tính tại phòng khám',
     status: JobStatus.OPEN,
     location: 'Phòng khám đa khoa tư nhân, Hà Nội',
     company: 'Phòng khám Sức khỏe ABC',
@@ -790,7 +780,6 @@ export const jobs: Job[] = [
     contactEmail: 'hr@abcclinic.vn',
   },
   {
-    _id: 'job_049',
     id: 'job_049',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -806,12 +795,12 @@ export const jobs: Job[] = [
     contactEmail: 'icu@huehosp.vn',
   },
   {
-    _id: 'job_050',
     id: 'job_050',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Bác sĩ Phòng khám COVID-19 & Nhiễm',
-    description: 'Khám, chẩn đoán và điều trị các bệnh truyền nhiễm, tham gia chương trình kiểm soát nhiễm khuẩn.',
+    description:
+      'Khám, chẩn đoán và điều trị các bệnh truyền nhiễm, tham gia chương trình kiểm soát nhiễm khuẩn.',
     status: JobStatus.OPEN,
     location: 'Bệnh viện Bệnh Nhiệt đới Trung ương',
     company: 'Bệnh viện Bệnh Nhiệt đới TW',
@@ -821,4 +810,4 @@ export const jobs: Job[] = [
     benefits: ['Hỗ trợ nhiệm vụ cộng đồng', 'Chế độ BH'],
     contactEmail: 'infectious@nid.vn',
   },
-];
+]

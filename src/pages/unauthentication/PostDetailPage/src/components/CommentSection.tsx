@@ -1,164 +1,166 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 
-import { AsyncLoading } from '@/components/ui/AsyncLoading';
-import Card from '@/components/ui/Card';
-import RouteConfig from '@/constants/RouteConfig';
-import { useAsyncState } from '@/hooks/useAsyncState';
-import { useAuth } from '@/hooks/useAuth';
-import type { Comment } from '@/models/Comment';
-import { createComment, getComments } from '@/services/comment/commentService';
-import { buildCommentTree, getCommentCount } from '@/utils/commentTree';
+import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import Card from '@/components/ui/Card'
+import RouteConfig from '@/constants/RouteConfig'
+import { useAsyncState } from '@/hooks/useAsyncState'
+import { useAuth } from '@/hooks/useAuth'
+import type { Comment } from '@/models/Comment'
+import { createComment, getComments } from '@/services/comment/commentService'
+import { buildCommentTree, getCommentCount } from '@/utils/commentTree'
 
-import CommentItem from './CommentItem';
+import CommentItem from './CommentItem'
 
 interface CommentSectionProps {
-  postId: string;
+  postId: string
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const [comment, setComment] = useState('');
-  const [replyTo, setReplyTo] = useState<{ id: string; name: string } | null>(null);
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  const [comment, setComment] = useState('')
+  const [replyTo, setReplyTo] = useState<{ id: string; name: string } | null>(null)
 
   // Comments state
-  const commentsState = useAsyncState<Comment[]>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const commentsState = useAsyncState<Comment[]>()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Load comments function
   const loadComments = () => {
-    commentsState.execute(() => getComments({ postId, flat: true }).then(response => response.data?.hits as Comment[]));
-  };
+    commentsState.execute(() =>
+      getComments({ postId, flat: true }).then(response => response.data?.hits as Comment[]),
+    )
+  }
 
   // Load comments
   useEffect(() => {
-    loadComments();
+    loadComments()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postId]);
+  }, [postId])
 
-  const commentTree = commentsState.state.data ? buildCommentTree(commentsState.state.data) : [];
-  const totalComments = getCommentCount(commentTree);
+  const commentTree = commentsState.state.data ? buildCommentTree(commentsState.state.data) : []
+  const totalComments = getCommentCount(commentTree)
 
   const handleReply = (parentId: string) => {
     if (!isAuthenticated) {
-      alert('Vui lòng đăng nhập để trả lời bình luận');
-      return;
+      alert('Vui lòng đăng nhập để trả lời bình luận')
+      return
     }
 
     // Find the comment to reply to
     const findCommentById = (comments: Comment[], id: string): Comment | null => {
       for (const comment of comments) {
-        if (comment._id === id) return comment;
+        if (comment.id === id) return comment
       }
-      return null;
-    };
+      return null
+    }
 
-    const parentComment = findCommentById(commentsState.state.data || [], parentId);
+    const parentComment = findCommentById(commentsState.state.data || [], parentId)
     if (parentComment) {
       setReplyTo({
-        id: parentComment._id || '',
+        id: parentComment.id || '',
         name: parentComment.author?.fullName || 'Người dùng ẩn danh',
-      });
+      })
 
       // Scroll to comment form
-      const commentForm = document.getElementById('comment-form');
+      const commentForm = document.getElementById('comment-form')
       if (commentForm) {
-        commentForm.scrollIntoView({ behavior: 'smooth' });
+        commentForm.scrollIntoView({ behavior: 'smooth' })
         // Focus on textarea after scrolling
         setTimeout(() => {
-          const textarea = commentForm.querySelector('textarea');
+          const textarea = commentForm.querySelector('textarea')
           if (textarea) {
-            textarea.focus();
+            textarea.focus()
           }
-        }, 500);
+        }, 500)
       }
     }
-  };
+  }
 
   const handleLogin = () => {
-    navigate(`${RouteConfig.LoginPage.path}?postId=${postId}`);
-  };
+    navigate(`${RouteConfig.LoginPage.path}?postId=${postId}`)
+  }
 
   const handleRegister = () => {
-    navigate(`${RouteConfig.RegisterPage.path}?postId=${postId}`);
-  };
+    navigate(`${RouteConfig.RegisterPage.path}?postId=${postId}`)
+  }
 
   const handleSubmitComment = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!isAuthenticated) {
-      alert('Vui lòng đăng nhập để bình luận');
-      return;
+      alert('Vui lòng đăng nhập để bình luận')
+      return
     }
     if (!comment.trim()) {
-      return;
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
       const commentData = {
         content: comment.trim(),
         postId,
         ...(replyTo && { parentId: replyTo.id }),
-      };
+      }
 
-      await createComment(commentData);
+      await createComment(commentData)
 
       // Clear form
-      setComment('');
-      setReplyTo(null);
+      setComment('')
+      setReplyTo(null)
 
       // Reload comments to show the new comment
-      loadComments();
+      loadComments()
     } catch (error) {
-      console.error('Error creating comment:', error);
-      alert('Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.');
+      console.error('Error creating comment:', error)
+      alert('Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+      e.preventDefault()
 
       // Check conditions before submitting
       if (!isAuthenticated) {
-        alert('Vui lòng đăng nhập để bình luận');
-        return;
+        alert('Vui lòng đăng nhập để bình luận')
+        return
       }
       if (!comment.trim()) {
-        return;
+        return
       }
 
-      setIsSubmitting(true);
+      setIsSubmitting(true)
       try {
         const commentData = {
           content: comment.trim(),
           postId,
           ...(replyTo && { parentId: replyTo.id }),
-        };
+        }
 
-        await createComment(commentData);
+        await createComment(commentData)
 
         // Clear form
-        setComment('');
-        setReplyTo(null);
+        setComment('')
+        setReplyTo(null)
 
         // Reload comments to show the new comment
-        loadComments();
+        loadComments()
       } catch (error) {
-        console.error('Error creating comment:', error);
-        alert('Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.');
+        console.error('Error creating comment:', error)
+        alert('Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.')
       } finally {
-        setIsSubmitting(false);
+        setIsSubmitting(false)
       }
     }
-  };
+  }
 
   const removeReplyTag = () => {
-    setReplyTo(null);
-  };
+    setReplyTo(null)
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -170,7 +172,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           {!isAuthenticated ? (
             <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
               <div className="flex items-center">
-                <svg className="mr-3 h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="mr-3 h-5 w-5 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path
                     fillRule="evenodd"
                     d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
@@ -178,7 +184,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                   />
                 </svg>
                 <div>
-                  <p className="text-sm font-medium text-yellow-800">Vui lòng đăng nhập để bình luận</p>
+                  <p className="text-sm font-medium text-yellow-800">
+                    Vui lòng đăng nhập để bình luận
+                  </p>
                   <div className="mt-2 flex gap-2">
                     <button
                       onClick={() => handleLogin()}
@@ -201,7 +209,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
               {/* Reply Tag */}
               {replyTo && (
                 <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3">
-                  <svg className="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="h-4 w-4 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -212,9 +225,18 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                   <span className="text-sm text-blue-700">
                     Đang trả lời <strong>{replyTo.name}</strong>
                   </span>
-                  <button type="button" onClick={removeReplyTag} className="ml-auto text-blue-600 hover:text-blue-800">
+                  <button
+                    type="button"
+                    onClick={removeReplyTag}
+                    className="ml-auto text-blue-600 hover:text-blue-800"
+                  >
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -231,7 +253,9 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                   rows={4}
                   required
                 />
-                <p className="mt-1 text-xs text-gray-500">Nhấn Enter để gửi, Shift + Enter để xuống dòng</p>
+                <p className="mt-1 text-xs text-gray-500">
+                  Nhấn Enter để gửi, Shift + Enter để xuống dòng
+                </p>
               </div>
               <div className="flex justify-end gap-2">
                 {replyTo && (
@@ -265,7 +289,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
             {commentTree.length > 0 ? (
               <div className="space-y-0">
                 {commentTree.map(comment => (
-                  <CommentItem key={comment._id} comment={comment} onReply={handleReply} />
+                  <CommentItem key={comment.id} comment={comment} onReply={handleReply} />
                 ))}
               </div>
             ) : (
@@ -284,14 +308,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                   />
                 </svg>
                 <p>Chưa có bình luận nào.</p>
-                {!isAuthenticated && <p className="mt-1 text-sm">Hãy là người đầu tiên bình luận!</p>}
+                {!isAuthenticated && (
+                  <p className="mt-1 text-sm">Hãy là người đầu tiên bình luận!</p>
+                )}
               </div>
             )}
           </AsyncLoading>
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default CommentSection;
+export default CommentSection

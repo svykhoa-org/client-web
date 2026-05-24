@@ -1,19 +1,19 @@
-import ActiveUserItem from '@/components/user/ActiveUserItem';
-import type { ActiveUser } from '@/mocks/activeUsers';
-import type { FeaturedDocument } from '@/mocks/categories';
+import ActiveUserItem from '@/components/user/ActiveUserItem'
+import type { ActiveUser } from '@/mocks/activeUsers'
+import type { FeaturedDocument } from '@/mocks/categories'
 
 interface RightSidebarProps {
-  activeUsers: ActiveUser[];
-  featuredDocuments: FeaturedDocument[];
+  activeUsers: ActiveUser[]
+  featuredDocuments: FeaturedDocument[]
 }
 
 const RightSidebar = ({ activeUsers, featuredDocuments }: RightSidebarProps) => {
   const formatNumber = (num: number) => {
     if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'k';
+      return (num / 1000).toFixed(1) + 'k'
     }
-    return num.toString();
-  };
+    return num.toString()
+  }
 
   return (
     <div className="space-y-6">
@@ -22,7 +22,7 @@ const RightSidebar = ({ activeUsers, featuredDocuments }: RightSidebarProps) => 
         <h3 className="text-neutral-9 mb-4 text-lg font-semibold">Thành viên tích cực</h3>
         <div className="space-y-1">
           {activeUsers.map(user => (
-            <ActiveUserItem key={user._id} user={user} />
+            <ActiveUserItem key={user.id} user={user} />
           ))}
         </div>
       </div>
@@ -36,7 +36,7 @@ const RightSidebar = ({ activeUsers, featuredDocuments }: RightSidebarProps) => 
         <div className="space-y-4">
           {featuredDocuments.map(doc => (
             <div
-              key={doc._id}
+              key={doc.id}
               className="border-neutral-3 hover:bg-neutral-2 rounded-md border p-3 transition-colors"
             >
               <div className="flex items-start justify-between">
@@ -84,7 +84,7 @@ const RightSidebar = ({ activeUsers, featuredDocuments }: RightSidebarProps) => 
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RightSidebar;
+export default RightSidebar

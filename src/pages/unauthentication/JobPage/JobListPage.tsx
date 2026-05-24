@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
-import { Button, Input, List, Modal, Space } from 'antd';
+import { Button, Input, List, Modal, Space } from 'antd'
 
-import RouteConfig from '@/constants/RouteConfig';
-import { useListing } from '@/hooks/useCRUD/useListing';
-import type { Job } from '@/models/Job';
-import { getJobList } from '@/services/Job/jobService';
+import RouteConfig from '@/constants/RouteConfig'
+import { useListing } from '@/hooks/useCRUD/useListing'
+import type { Job } from '@/models/Job'
+import { getJobList } from '@/services/Job/jobService'
 
-import { FormRegistration } from './components/FormRegistration';
+import { FormRegistration } from './components/FormRegistration'
 
 export const JobListPage = () => {
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
-  const navigate = useNavigate();
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null)
+  const navigate = useNavigate()
 
   const {
     data: jobs,
@@ -24,17 +24,17 @@ export const JobListPage = () => {
   } = useListing<Job>({
     defaultSearchParams: { page: 1, limit: 10 },
     getListService: async params => {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const res = await getJobList(params);
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      const res = await getJobList(params)
       return {
         data: res.data.hits,
         totalItems: res.data.pagination.totalItems,
         totalPages: res.data.pagination.totalPages,
         page: res.data.pagination.currentPage,
         limit: res.data.pagination.itemsPerPage,
-      };
+      }
     },
-  });
+  })
 
   return (
     <>
@@ -47,11 +47,11 @@ export const JobListPage = () => {
             allowClear
             onChange={e => {
               setTimeout(() => {
-                setSearchParams(prev => ({ ...prev, search: e.target.value }));
-              }, 500);
+                setSearchParams(prev => ({ ...prev, search: e.target.value }))
+              }, 500)
             }}
             onSearch={value => {
-              setSearchParams(prev => ({ ...prev, search: value }));
+              setSearchParams(prev => ({ ...prev, search: value }))
             }}
             size="large"
           />
@@ -67,7 +67,7 @@ export const JobListPage = () => {
             pageSize: limit,
             total: totalItems,
             onChange: p => {
-              setSearchParams(prev => ({ ...prev, page: p }));
+              setSearchParams(prev => ({ ...prev, page: p }))
             },
           }}
           renderItem={(item: Job) => (
@@ -90,7 +90,9 @@ export const JobListPage = () => {
                     <div className="hidden gap-2 md:flex">
                       <Button
                         className="w-fit"
-                        onClick={() => navigate(RouteConfig.JobDetailPage.path.replace(':id', item._id || ''))}
+                        onClick={() =>
+                          navigate(RouteConfig.JobDetailPage.path.replace(':id', item.id || ''))
+                        }
                       >
                         Xem chi tiết
                       </Button>
@@ -129,7 +131,12 @@ export const JobListPage = () => {
                     <span>Hạn nộp: {new Date(item.expiresAt).toLocaleDateString('vi-VN')}</span>
                   </div>
                   <div className="mt-2 flex flex-col gap-2 md:hidden">
-                    <Button block onClick={() => navigate(RouteConfig.JobDetailPage.path.replace(':id', item._id || ''))}>
+                    <Button
+                      block
+                      onClick={() =>
+                        navigate(RouteConfig.JobDetailPage.path.replace(':id', item.id || ''))
+                      }
+                    >
                       Xem chi tiết
                     </Button>
                     <Button type="primary" block onClick={() => setSelectedJob(item)}>
@@ -144,18 +151,22 @@ export const JobListPage = () => {
       </Space>
       <Modal
         open={!!selectedJob}
-        title={<div className="text-primary-8 pb-10 text-center text-xl font-bold">{selectedJob?.title}</div>}
+        title={
+          <div className="text-primary-8 pb-10 text-center text-xl font-bold">
+            {selectedJob?.title}
+          </div>
+        }
         footer={null}
         onCancel={() => setSelectedJob(null)}
         width={700}
       >
         <FormRegistration
           onSubmit={data => {
-            console.log('Đã nộp đơn ứng tuyển cho công việc:', data);
+            console.log('Đã nộp đơn ứng tuyển cho công việc:', data)
           }}
           onSuccess={() => setSelectedJob(null)}
         />
       </Modal>
     </>
-  );
-};
+  )
+}

@@ -1,4 +1,5 @@
 import axiosInstance from '@/lib/axios'
+import type { Course } from '@/models/Course'
 import type { CourseApiItem } from '@/types/course-api'
 
 import { getEnrolledCourses, isEnrolled } from './mockEnrollments'

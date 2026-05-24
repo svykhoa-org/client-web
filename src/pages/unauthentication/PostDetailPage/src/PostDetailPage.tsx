@@ -1,59 +1,61 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import React, { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 
-import { Breadcrumb } from 'antd';
+import { Breadcrumb } from 'antd'
 
-import { AsyncLoading } from '@/components/ui/AsyncLoading';
-import Card from '@/components/ui/Card';
-import MarkdownRenderer from '@/components/ui/MarkdownRenderer';
-import { useAsyncState } from '@/hooks/useAsyncState';
-import { useLayout } from '@/hooks/useLayout';
-import type { Category } from '@/models/Category';
-import type { Post } from '@/models/Post';
-import { getCategories } from '@/services/category/mockCategoryService';
-import { getPostById } from '@/services/post/mockGetPosts';
+import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import Card from '@/components/ui/Card'
+import MarkdownRenderer from '@/components/ui/MarkdownRenderer'
+import { useAsyncState } from '@/hooks/useAsyncState'
+import { useLayout } from '@/hooks/useLayout'
+import type { Category } from '@/models/Category'
+import type { Post } from '@/models/Post'
+import { getCategories } from '@/services/category/mockCategoryService'
+import { getPostById } from '@/services/post/mockGetPosts'
 
-import CategorySidebar from '../../ForumPage/components/CategorySidebar';
-import CommentSection from './components/CommentSection';
+import CategorySidebar from '../../ForumPage/components/CategorySidebar'
+import CommentSection from './components/CommentSection'
 
 const PostDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { setLeftSidebar, setRightSidebar, setBanner } = useLayout();
-  const [showFullContent, setShowFullContent] = useState(false);
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { setLeftSidebar, setRightSidebar, setBanner } = useLayout()
+  const [showFullContent, setShowFullContent] = useState(false)
 
-  const postState = useAsyncState<Post>();
-  const categoriesState = useAsyncState<Category[]>();
+  const postState = useAsyncState<Post>()
+  const categoriesState = useAsyncState<Category[]>()
 
   // Scroll to top when the page loads
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   // Load post by ID
   useEffect(() => {
-    if (!id) return;
+    if (!id) return
 
-    postState.execute(() => getPostById(id).then(response => response.data as Post));
+    postState.execute(() => getPostById(id).then(response => response.data as Post))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id])
 
   // Load categories
   useEffect(() => {
-    categoriesState.execute(() => getCategories().then(response => response.data?.hits as Category[]));
+    categoriesState.execute(() =>
+      getCategories().then(response => response.data?.hits as Category[]),
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const handleCategorySelect = useCallback(
     (categoryId: string) => {
       if (categoryId) {
-        navigate(`/forum?category=${categoryId}`);
+        navigate(`/forum?category=${categoryId}`)
       } else {
-        navigate('/forum');
+        navigate('/forum')
       }
     },
-    [navigate]
-  );
+    [navigate],
+  )
 
   // Set sidebars and banner
   useEffect(() => {
@@ -64,17 +66,17 @@ const PostDetailPage: React.FC = () => {
           selectedCategory={postState.state.data?.categoryId || ''}
           onCategorySelect={handleCategorySelect}
         />
-      </AsyncLoading>
-    );
+      </AsyncLoading>,
+    )
 
-    setRightSidebar(null);
-    setBanner(null);
+    setRightSidebar(null)
+    setBanner(null)
 
     return () => {
-      setLeftSidebar(null);
-      setRightSidebar(null);
-      setBanner(null);
-    };
+      setLeftSidebar(null)
+      setRightSidebar(null)
+      setBanner(null)
+    }
   }, [
     categoriesState.state.data,
     categoriesState.state.loading,
@@ -83,18 +85,22 @@ const PostDetailPage: React.FC = () => {
     setRightSidebar,
     setBanner,
     handleCategorySelect,
-  ]);
+  ])
 
   if (postState.state.loading) {
     return (
       <div className="bg-neutral-2 py-8">
         <div className="container mx-auto px-4">
-          <AsyncLoading loading={true} type="skeleton" skeleton={{ rows: 5, avatar: true, title: true }}>
+          <AsyncLoading
+            loading={true}
+            type="skeleton"
+            skeleton={{ rows: 5, avatar: true, title: true }}
+          >
             <div />
           </AsyncLoading>
         </div>
       </div>
-    );
+    )
   }
 
   if (postState.state.error || !postState.state.data) {
@@ -102,18 +108,23 @@ const PostDetailPage: React.FC = () => {
       <div className="bg-neutral-2 py-8">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="headline-2 text-neutral-9 mb-4">{postState.state.error || 'Bài viết không tồn tại'}</h1>
-            <button onClick={() => navigate('/forum')} className="link text-primary-6 hover:text-primary-7">
+            <h1 className="headline-2 text-neutral-9 mb-4">
+              {postState.state.error || 'Bài viết không tồn tại'}
+            </h1>
+            <button
+              onClick={() => navigate('/forum')}
+              className="link text-primary-6 hover:text-primary-7"
+            >
               Quay về diễn đàn
             </button>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
-  const post = postState.state.data;
-  const category = categoriesState.state.data?.find(c => c._id === post.categoryId);
+  const post = postState.state.data
+  const category = categoriesState.state.data?.find(c => c.id === post.categoryId)
 
   return (
     <div className="bg-neutral-2">
@@ -123,7 +134,7 @@ const PostDetailPage: React.FC = () => {
             { title: 'Diễn đàn', onClick: () => navigate('/forum') },
             {
               title: category?.name,
-              onClick: () => navigate(`/forum?category=${category?._id}`),
+              onClick: () => navigate(`/forum?category=${category?.id}`),
             },
             { title: post.title },
           ]}
@@ -138,7 +149,7 @@ const PostDetailPage: React.FC = () => {
                 {category && (
                   <span
                     className="bg-primary-1 text-primary-8 caption hover:bg-primary-2 inline-flex cursor-pointer items-center rounded-full px-3 py-1 font-semibold transition-colors"
-                    onClick={() => handleCategorySelect(category._id || '')}
+                    onClick={() => handleCategorySelect(category.id || '')}
                   >
                     {category.name}
                   </span>
@@ -221,10 +232,10 @@ const PostDetailPage: React.FC = () => {
           </div>
         </Card>
 
-        <CommentSection postId={post._id || ''} />
+        <CommentSection postId={post.id || ''} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PostDetailPage;
+export default PostDetailPage

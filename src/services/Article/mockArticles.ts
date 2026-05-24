@@ -1,8 +1,7 @@
-import type { Article } from '@/models/Article';
+import type { Article } from '@/models/Article'
 
 export const mockArticles: Article[] = [
   {
-    _id: 'art_001',
     id: 'art_001',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -28,7 +27,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=1',
     author: {
-      _id: 'user_001',
       id: 'user_001',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -37,7 +35,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=1',
     },
     category: {
-      _id: 'cat_001',
       id: 'cat_001',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -50,7 +47,6 @@ export const mockArticles: Article[] = [
     viewCount: 1500,
   },
   {
-    _id: 'art_002',
     id: 'art_002',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -75,7 +71,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=2',
     author: {
-      _id: 'user_002',
       id: 'user_002',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -84,7 +79,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=2',
     },
     category: {
-      _id: 'cat_002',
       id: 'cat_002',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -97,7 +91,6 @@ export const mockArticles: Article[] = [
     viewCount: 1200,
   },
   {
-    _id: 'art_003',
     id: 'art_003',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -122,7 +115,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=3',
     author: {
-      _id: 'user_003',
       id: 'user_003',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -131,7 +123,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=3',
     },
     category: {
-      _id: 'cat_003',
       id: 'cat_003',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -144,7 +135,6 @@ export const mockArticles: Article[] = [
     viewCount: 980,
   },
   {
-    _id: 'art_004',
     id: 'art_004',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -169,7 +159,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=4',
     author: {
-      _id: 'user_004',
       id: 'user_004',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -178,7 +167,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=4',
     },
     category: {
-      _id: 'cat_004',
       id: 'cat_004',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -191,7 +179,6 @@ export const mockArticles: Article[] = [
     viewCount: 2100,
   },
   {
-    _id: 'art_005',
     id: 'art_005',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -216,7 +203,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=5',
     author: {
-      _id: 'user_005',
       id: 'user_005',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -225,7 +211,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=5',
     },
     category: {
-      _id: 'cat_005',
       id: 'cat_005',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -238,7 +223,6 @@ export const mockArticles: Article[] = [
     viewCount: 800,
   },
   {
-    _id: 'art_006',
     id: 'art_006',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -263,7 +247,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=6',
     author: {
-      _id: 'user_006',
       id: 'user_006',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -272,7 +255,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=6',
     },
     category: {
-      _id: 'cat_006',
       id: 'cat_006',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -285,13 +267,13 @@ export const mockArticles: Article[] = [
     viewCount: 670,
   },
   {
-    _id: 'art_007',
     id: 'art_007',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Cập nhật điều trị tăng huyết áp theo khuyến cáo ESC/ESH 2023',
     slug: 'cap-nhat-dieu-tri-tang-huyet-ap-esc-esh-2023',
-    summary: 'Bài viết cập nhật các điểm mới trong điều trị tăng huyết áp theo khuyến cáo của ESC/ESH năm 2023.',
+    summary:
+      'Bài viết cập nhật các điểm mới trong điều trị tăng huyết áp theo khuyến cáo của ESC/ESH năm 2023.',
     content: `
             <h2>1. Tổng quan về tăng huyết áp</h2>
             <p>Tăng huyết áp là yếu tố nguy cơ hàng đầu gây bệnh tim mạch và đột quỵ. Theo thống kê, khoảng 25% người trưởng thành Việt Nam mắc tăng huyết áp.</p>
@@ -309,7 +291,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=7',
     author: {
-      _id: 'user_007',
       id: 'user_007',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -318,7 +299,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=7',
     },
     category: {
-      _id: 'cat_007',
       id: 'cat_007',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -331,7 +311,6 @@ export const mockArticles: Article[] = [
     viewCount: 1100,
   },
   {
-    _id: 'art_008',
     id: 'art_008',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -356,7 +335,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=8',
     author: {
-      _id: 'user_008',
       id: 'user_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -365,7 +343,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=8',
     },
     category: {
-      _id: 'cat_008',
       id: 'cat_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -378,7 +355,6 @@ export const mockArticles: Article[] = [
     viewCount: 900,
   },
   {
-    _id: 'art_009',
     id: 'art_009',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -404,7 +380,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=1',
     author: {
-      _id: 'user_001',
       id: 'user_001',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -413,7 +388,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=1',
     },
     category: {
-      _id: 'cat_001',
       id: 'cat_001',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -426,7 +400,6 @@ export const mockArticles: Article[] = [
     viewCount: 1500,
   },
   {
-    _id: 'art_010',
     id: 'art_010',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -451,7 +424,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=2',
     author: {
-      _id: 'user_002',
       id: 'user_002',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -460,7 +432,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=2',
     },
     category: {
-      _id: 'cat_002',
       id: 'cat_002',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -473,7 +444,6 @@ export const mockArticles: Article[] = [
     viewCount: 1200,
   },
   {
-    _id: 'art_011',
     id: 'art_011',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -498,7 +468,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=3',
     author: {
-      _id: 'user_003',
       id: 'user_003',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -507,7 +476,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=3',
     },
     category: {
-      _id: 'cat_003',
       id: 'cat_003',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -520,7 +488,6 @@ export const mockArticles: Article[] = [
     viewCount: 980,
   },
   {
-    _id: 'art_012',
     id: 'art_012',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -545,7 +512,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=4',
     author: {
-      _id: 'user_004',
       id: 'user_004',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -554,7 +520,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=4',
     },
     category: {
-      _id: 'cat_004',
       id: 'cat_004',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -567,7 +532,6 @@ export const mockArticles: Article[] = [
     viewCount: 2100,
   },
   {
-    _id: 'art_013',
     id: 'art_013',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -592,7 +556,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=5',
     author: {
-      _id: 'user_005',
       id: 'user_005',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -601,7 +564,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=5',
     },
     category: {
-      _id: 'cat_005',
       id: 'cat_005',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -614,7 +576,6 @@ export const mockArticles: Article[] = [
     viewCount: 800,
   },
   {
-    _id: 'art_014',
     id: 'art_014',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -639,7 +600,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=6',
     author: {
-      _id: 'user_006',
       id: 'user_006',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -648,7 +608,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=6',
     },
     category: {
-      _id: 'cat_006',
       id: 'cat_006',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -661,13 +620,13 @@ export const mockArticles: Article[] = [
     viewCount: 670,
   },
   {
-    _id: 'art_015',
     id: 'art_015',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Cập nhật điều trị tăng huyết áp theo khuyến cáo ESC/ESH 2023',
     slug: 'cap-nhat-dieu-tri-tang-huyet-ap-esc-esh-2023',
-    summary: 'Bài viết cập nhật các điểm mới trong điều trị tăng huyết áp theo khuyến cáo của ESC/ESH năm 2023.',
+    summary:
+      'Bài viết cập nhật các điểm mới trong điều trị tăng huyết áp theo khuyến cáo của ESC/ESH năm 2023.',
     content: `
             <h2>1. Tổng quan về tăng huyết áp</h2>
             <p>Tăng huyết áp là yếu tố nguy cơ hàng đầu gây bệnh tim mạch và đột quỵ. Theo thống kê, khoảng 25% người trưởng thành Việt Nam mắc tăng huyết áp.</p>
@@ -685,7 +644,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=7',
     author: {
-      _id: 'user_007',
       id: 'user_007',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -694,7 +652,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=7',
     },
     category: {
-      _id: 'cat_007',
       id: 'cat_007',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -707,7 +664,6 @@ export const mockArticles: Article[] = [
     viewCount: 1100,
   },
   {
-    _id: 'art_016',
     id: 'art_016',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -732,7 +688,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=8',
     author: {
-      _id: 'user_008',
       id: 'user_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -741,7 +696,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=8',
     },
     category: {
-      _id: 'cat_008',
       id: 'cat_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -754,7 +708,6 @@ export const mockArticles: Article[] = [
     viewCount: 900,
   },
   {
-    _id: 'art_017',
     id: 'art_017',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -779,7 +732,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=6',
     author: {
-      _id: 'user_006',
       id: 'user_006',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -788,7 +740,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=6',
     },
     category: {
-      _id: 'cat_006',
       id: 'cat_006',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -801,13 +752,13 @@ export const mockArticles: Article[] = [
     viewCount: 670,
   },
   {
-    _id: 'art_018',
     id: 'art_018',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     title: 'Cập nhật điều trị tăng huyết áp theo khuyến cáo ESC/ESH 2023',
     slug: 'cap-nhat-dieu-tri-tang-huyet-ap-esc-esh-2023',
-    summary: 'Bài viết cập nhật các điểm mới trong điều trị tăng huyết áp theo khuyến cáo của ESC/ESH năm 2023.',
+    summary:
+      'Bài viết cập nhật các điểm mới trong điều trị tăng huyết áp theo khuyến cáo của ESC/ESH năm 2023.',
     content: `
             <h2>1. Tổng quan về tăng huyết áp</h2>
             <p>Tăng huyết áp là yếu tố nguy cơ hàng đầu gây bệnh tim mạch và đột quỵ. Theo thống kê, khoảng 25% người trưởng thành Việt Nam mắc tăng huyết áp.</p>
@@ -825,7 +776,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=7',
     author: {
-      _id: 'user_007',
       id: 'user_007',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -834,7 +784,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=7',
     },
     category: {
-      _id: 'cat_007',
       id: 'cat_007',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -847,7 +796,6 @@ export const mockArticles: Article[] = [
     viewCount: 1100,
   },
   {
-    _id: 'art_019',
     id: 'art_019',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -872,7 +820,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=8',
     author: {
-      _id: 'user_008',
       id: 'user_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -881,7 +828,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=8',
     },
     category: {
-      _id: 'cat_008',
       id: 'cat_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -894,7 +840,6 @@ export const mockArticles: Article[] = [
     viewCount: 900,
   },
   {
-    _id: 'art_020',
     id: 'art_020',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -919,7 +864,6 @@ export const mockArticles: Article[] = [
         `,
     thumbnail: 'https://picsum.photos/500/500?random=8',
     author: {
-      _id: 'user_008',
       id: 'user_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -928,7 +872,6 @@ export const mockArticles: Article[] = [
       avatarUrl: 'https://picsum.photos/200/200?random=8',
     },
     category: {
-      _id: 'cat_008',
       id: 'cat_008',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -940,4 +883,4 @@ export const mockArticles: Article[] = [
     },
     viewCount: 900,
   },
-];
+]

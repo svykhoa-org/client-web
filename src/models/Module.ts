@@ -27,4 +27,4 @@ export interface CourseModule extends BaseModel {
 
 /** @deprecated Dùng CourseModule thay thế */
 export type Module = CourseModule
-export default CourseModule
+export type { CourseModule as default }

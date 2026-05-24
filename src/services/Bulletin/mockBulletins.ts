@@ -1,10 +1,10 @@
-import type { Bulletin } from '@/models/Bulletin';
+import type { Bulletin } from '@/models/Bulletin'
 
 export const mockBulletins: Bulletin[] = [
   {
-    _id: '1',
     id: '1',
-    title: 'Thông báo về việc cập nhật chính sách bảo mật dữ liệu người dùng trên hệ thống diễn đàn y tế',
+    title:
+      'Thông báo về việc cập nhật chính sách bảo mật dữ liệu người dùng trên hệ thống diễn đàn y tế',
     slug: 'cap-nhat-chinh-sach-bao-mat-du-lieu-nguoi-dung',
     content: 'Nội dung thông báo về việc cập nhật chính sách bảo mật dữ liệu người dùng.',
     thumbnail: 'https://example.com/thumbnail1.jpg',
@@ -13,9 +13,9 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '2',
     id: '2',
-    title: 'Hướng dẫn chi tiết cách sử dụng chức năng tìm kiếm nâng cao trên diễn đàn y tế trực tuyến',
+    title:
+      'Hướng dẫn chi tiết cách sử dụng chức năng tìm kiếm nâng cao trên diễn đàn y tế trực tuyến',
     slug: 'huong-dan-su-dung-tim-kiem-nang-cao',
     content: 'Nội dung hướng dẫn sử dụng chức năng tìm kiếm nâng cao.',
     thumbnail: 'https://example.com/thumbnail2.jpg',
@@ -24,7 +24,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '3',
     id: '3',
     title: 'Thông báo về lịch bảo trì hệ thống diễn đàn và các lưu ý dành cho người dùng',
     slug: 'lich-bao-tri-he-thong-dien-dan',
@@ -35,7 +34,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '4',
     id: '4',
     title: 'Cập nhật mới nhất về các chuyên mục thảo luận dành cho bác sĩ và chuyên gia y tế',
     slug: 'cap-nhat-chuyen-muc-thao-luan-bac-si',
@@ -46,7 +44,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '5',
     id: '5',
     title: 'Thông báo về việc tổ chức hội thảo trực tuyến chuyên đề sức khỏe cộng đồng',
     slug: 'to-chuc-hoi-thao-truc-tuyen-suc-khoe',
@@ -57,7 +54,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '6',
     id: '6',
     title: 'Hướng dẫn đăng ký tài khoản và xác thực thông tin cá nhân trên diễn đàn',
     slug: 'huong-dan-dang-ky-tai-khoan-va-xac-thuc',
@@ -68,7 +64,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '7',
     id: '7',
     title: 'Thông báo về việc nâng cấp giao diện người dùng và trải nghiệm mới trên diễn đàn',
     slug: 'nang-cap-giao-dien-nguoi-dung',
@@ -79,7 +74,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '8',
     id: '8',
     title: 'Cảnh báo về các hành vi vi phạm quy định và hướng dẫn xử lý khi gặp sự cố',
     slug: 'canh-bao-vi-pham-quy-dinh',
@@ -90,7 +84,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '9',
     id: '9',
     title: 'Thông báo về việc bổ sung chức năng đăng tải tài liệu tham khảo cho thành viên',
     slug: 'bo-sung-chuc-nang-dang-tai-tai-lieu',
@@ -101,7 +94,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '10',
     id: '10',
     title: 'Hướng dẫn chi tiết về cách bảo mật tài khoản cá nhân trên diễn đàn y tế',
     slug: 'huong-dan-bao-mat-tai-khoan-ca-nhan',
@@ -112,7 +104,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '11',
     id: '11',
     title: 'Thông báo về việc cập nhật danh sách các chuyên gia tư vấn trực tuyến',
     slug: 'cap-nhat-danh-sach-chuyen-gia-tu-van',
@@ -123,7 +114,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '12',
     id: '12',
     title: 'Cập nhật các quy định mới về đăng bài và bình luận trên diễn đàn y tế',
     slug: 'cap-nhat-quy-dinh-dang-bai-binh-luan',
@@ -134,7 +124,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '13',
     id: '13',
     title: 'Thông báo về việc triển khai chương trình tri ân thành viên tích cực',
     slug: 'trien-khai-chuong-trinh-tri-an-thanh-vien',
@@ -145,7 +134,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '14',
     id: '14',
     title: 'Hướng dẫn sử dụng chức năng nhắn tin riêng tư giữa các thành viên diễn đàn',
     slug: 'huong-dan-su-dung-nhan-tin-rieng-tu',
@@ -156,7 +144,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '15',
     id: '15',
     title: 'Thông báo về việc hợp tác với các tổ chức y tế uy tín trong và ngoài nước',
     slug: 'hop-tac-voi-to-chuc-y-te-uy-tin',
@@ -167,7 +154,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '16',
     id: '16',
     title: 'Cập nhật các tính năng mới hỗ trợ người dùng tra cứu thông tin y khoa nhanh chóng',
     slug: 'cap-nhat-tinh-nang-tra-cuu-thong-tin-y-khoa',
@@ -178,7 +164,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '17',
     id: '17',
     title: 'Thông báo về việc tổ chức cuộc thi viết bài chia sẻ kinh nghiệm chăm sóc sức khỏe',
     slug: 'to-chuc-cuoc-thi-viet-bai-chia-se-kinh-nghiem',
@@ -189,7 +174,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '18',
     id: '18',
     title: 'Hướng dẫn sử dụng chức năng báo cáo bài viết vi phạm nội quy diễn đàn',
     slug: 'huong-dan-bao-cao-bai-viet-vi-pham',
@@ -200,7 +184,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '19',
     id: '19',
     title: 'Thông báo về việc nâng cấp hệ thống bảo mật và phòng chống tấn công mạng',
     slug: 'nang-cap-he-thong-bao-mat-phong-chong-tan-cong',
@@ -211,7 +194,6 @@ export const mockBulletins: Bulletin[] = [
     attachment: [],
   },
   {
-    _id: '20',
     id: '20',
     title: 'Cập nhật danh sách các chủ đề thảo luận nổi bật trong tháng trên diễn đàn y tế',
     slug: 'cap-nhat-chu-de-thao-luan-noi-bat-trong-thang',
@@ -221,4 +203,4 @@ export const mockBulletins: Bulletin[] = [
     updatedAt: new Date().toISOString(),
     attachment: [],
   },
-];
+]

@@ -6,11 +6,11 @@ import {
   BookOutlined,
   CloseOutlined,
   DownOutlined,
+  FileTextOutlined,
+  HomeOutlined,
   LogoutOutlined,
   MenuOutlined,
   MessageOutlined,
-  FileTextOutlined,
-  HomeOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import { Avatar, Button, Drawer, Dropdown, Menu } from 'antd'
@@ -97,6 +97,7 @@ const HeaderNavMenu = ({ mode = 'horizontal', onItemClick }: HeaderNavMenuProps)
 
 interface HeaderUserMenuProps {
   isAuthenticated: boolean
+  user?: { fullName?: string; email?: string; role?: string } | null
   userName?: string
   onLogin: () => void
   onRegister: () => void
@@ -107,6 +108,7 @@ interface HeaderUserMenuProps {
 
 const HeaderUserMenu = ({
   isAuthenticated,
+  user,
   userName,
   onLogin,
   onRegister,
@@ -115,35 +117,13 @@ const HeaderUserMenu = ({
   isMobile = false,
 }: HeaderUserMenuProps) => {
   const navigate = useNavigate()
-  const displayName = userName?.trim() || 'Tài khoản'
-
-  const menuItems: MenuProps['items'] = [
-    {
-      key: 'profile',
-      label: 'Thông tin cá nhân',
-      icon: <UserOutlined className="text-blue-600" />,
-      onClick: onProfile,
-    },
-    {
-      key: 'my-courses',
-      label: 'Khóa học của tôi',
-      icon: <BookOutlined className="text-emerald-600" />,
-      onClick: () => navigate(RouteConfig.MyCoursesPage.path),
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'logout',
-      label: 'Đăng xuất',
-      icon: <LogoutOutlined className="text-red-600" />,
-      onClick: onLogout,
-    },
-  ]
+  const displayName = user?.fullName || user?.email || userName?.trim() || 'Tài khoản'
 
   if (!isAuthenticated) {
     return (
-      <div className={cn('flex', isMobile ? 'flex-col space-y-3' : 'flex-row items-center space-x-2')}>
+      <div
+        className={cn('flex', isMobile ? 'flex-col space-y-3' : 'flex-row items-center space-x-2')}
+      >
         <Button
           type="text"
           size={isMobile ? 'large' : 'middle'}
@@ -207,7 +187,46 @@ const HeaderUserMenu = ({
   }
 
   return (
-    <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
+    <Dropdown
+      placement="bottomRight"
+      trigger={['click']}
+      dropdownRender={() => (
+        <div className="w-56 overflow-hidden rounded-lg border border-slate-100 bg-white shadow-md">
+          {/* User info */}
+          <div className="border-b border-slate-100 px-4 py-3">
+            <div className="truncate text-sm font-semibold text-slate-900">{displayName}</div>
+            <div className="truncate text-xs text-slate-400">{user?.email || ''}</div>
+          </div>
+
+          {/* Menu items */}
+          <div className="p-1">
+            {[
+              { label: 'Hồ sơ cá nhân', onClick: onProfile },
+              { label: 'Khoá học của tôi', onClick: () => navigate('/profile?tab=courses') },
+              { label: 'Chứng chỉ của tôi', onClick: () => navigate('/profile?tab=certs') },
+              { label: 'Lịch sử đơn hàng', onClick: () => navigate('/profile?tab=orders') },
+            ].map(item => (
+              <button
+                key={item.label}
+                onClick={item.onClick}
+                className="w-full rounded-md px-3 py-2 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900"
+              >
+                {item.label}
+              </button>
+            ))}
+
+            <div className="my-1 border-t border-slate-100" />
+
+            <button
+              onClick={onLogout}
+              className="w-full rounded-md px-3 py-2 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
+            >
+              Đăng xuất
+            </button>
+          </div>
+        </div>
+      )}
+    >
       <button
         type="button"
         className="sv-user-btn flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white pl-1 pr-3 transition-all"
@@ -301,6 +320,8 @@ const Header = () => {
           <div className="hidden items-center space-x-4 md:flex">
             <HeaderUserMenu
               isAuthenticated={isAuthenticated}
+              user={user}
+              userName={userName}
               onLogin={handleLogin}
               onRegister={handleRegister}
               onLogout={handleLogout}
@@ -338,6 +359,7 @@ const Header = () => {
           <div className="border-t border-gray-100 bg-gray-50 p-4">
             <HeaderUserMenu
               isAuthenticated={isAuthenticated}
+              user={user}
               userName={userName}
               onLogin={handleLogin}
               onRegister={handleRegister}

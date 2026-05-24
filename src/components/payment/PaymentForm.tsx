@@ -1,49 +1,49 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react'
 
-import { Button, Card, Spin, message } from 'antd';
+import { Button, Card, Spin, message } from 'antd'
 
-import type { PaymentCheckoutData } from '@/models/Payment';
-import { type CreatePaymentCheckoutParams, paymentService } from '@/services/payment';
+import type { PaymentCheckoutData } from '@/models/Payment'
+import { type CreatePaymentCheckoutParams, paymentService } from '@/services/payment'
 
 interface PaymentFormProps {
-  params?: CreatePaymentCheckoutParams;
-  onSuccess?: () => void;
-  onError?: (error: Error) => void;
+  params?: CreatePaymentCheckoutParams
+  onSuccess?: () => void
+  onError?: (error: Error) => void
 }
 
 export const PaymentForm: React.FC<PaymentFormProps> = ({ params, onSuccess, onError }) => {
-  const [loading, setLoading] = useState(false);
-  const [checkoutData, setCheckoutData] = useState<PaymentCheckoutData | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [loading, setLoading] = useState(false)
+  const [checkoutData, setCheckoutData] = useState<PaymentCheckoutData | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleInitCheckout = async () => {
     try {
-      setLoading(true);
-      const response = await paymentService.createCheckout(params);
+      setLoading(true)
+      const response = await paymentService.createCheckout(params)
 
       if (response.data) {
-        setCheckoutData(response.data);
-        message.success('Đã khởi tạo thanh toán thành công!');
+        setCheckoutData(response.data)
+        message.success('Đã khởi tạo thanh toán thành công!')
       }
     } catch (error) {
-      message.error('Không thể khởi tạo thanh toán. Vui lòng thử lại!');
-      onError?.(error as Error);
+      message.error('Không thể khởi tạo thanh toán. Vui lòng thử lại!')
+      onError?.(error as Error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleSubmitPayment = () => {
     if (formRef.current) {
-      formRef.current.submit();
-      onSuccess?.();
+      formRef.current.submit()
+      onSuccess?.()
     }
-  };
+  }
 
   useEffect(() => {
     // Tự động khởi tạo checkout khi component mount
-    handleInitCheckout();
-  }, []);
+    handleInitCheckout()
+  }, [])
 
   if (loading) {
     return (
@@ -51,7 +51,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({ params, onSuccess, onE
         <Spin size="large" />
         <p className="mt-4">Đang khởi tạo thanh toán...</p>
       </Card>
-    );
+    )
   }
 
   if (!checkoutData) {
@@ -62,7 +62,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({ params, onSuccess, onE
           Thử lại
         </Button>
       </Card>
-    );
+    )
   }
 
   return (
@@ -79,7 +79,12 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({ params, onSuccess, onE
         </p>
       </div>
 
-      <form ref={formRef} action={checkoutData.checkoutUrl} method="POST" style={{ display: 'none' }}>
+      <form
+        ref={formRef}
+        action={checkoutData.checkoutUrl}
+        method="POST"
+        style={{ display: 'none' }}
+      >
         {Object.entries(checkoutData.fields).map(([fieldName, fieldValue]) => (
           <input key={fieldName} type="hidden" name={fieldName} value={String(fieldValue)} />
         ))}
@@ -89,5 +94,5 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({ params, onSuccess, onE
         Thanh toán ngay
       </Button>
     </Card>
-  );
-};
+  )
+}

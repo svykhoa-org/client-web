@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { getAccessToken } from '@/lib/axios'
-import { getMyEnrollment } from '@/services/Enrollment/getMyEnrollment'
+import { getMyEnrollment } from '@/services/enrollment/getMyEnrollment'
 import { getMyCourses } from '@/services/enrollment'
 
 const queryKeys = {

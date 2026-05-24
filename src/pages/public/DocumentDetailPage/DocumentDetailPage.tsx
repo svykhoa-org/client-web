@@ -12,16 +12,15 @@ import type { Document } from '@/models/Document'
 import { DocumentLicenseStatus } from '@/models/DocumentLicense'
 import { FileSize } from '@/models/enum/FileSize'
 import { RoutePath } from '@/routes'
+import { CheckoutModalContent, type CheckoutData } from '@/components/payment'
 import {
   checkoutDocumentOrder,
-  type DocumentCheckoutOutput,
   getDocumentDetail,
   getDocumentDownloadUrl,
 } from '@/services/Document'
 import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
-import { DocumentCheckoutModalContent } from './components/DocumentCheckoutModalContent'
 
 const { Title, Text } = Typography
 
@@ -50,7 +49,7 @@ export const DocumentDetailPage = () => {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false)
-  const [checkoutData, setCheckoutData] = useState<DocumentCheckoutOutput | null>(null)
+  const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null)
 
   const requestDocumentDetail = useCallback(async (documentId: string) => {
     return getDocumentDetail({ id: documentId })
@@ -325,9 +324,7 @@ export const DocumentDetailPage = () => {
         width={960}
         destroyOnClose
       >
-        {checkoutData ? (
-          <DocumentCheckoutModalContent checkoutData={checkoutData} title={document.title} />
-        ) : null}
+        {checkoutData ? <CheckoutModalContent checkoutData={checkoutData} /> : null}
       </Modal>
     </div>
   )
