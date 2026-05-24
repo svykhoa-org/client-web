@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router'
 
-import { AutoComplete, Input, type InputProps } from 'antd';
+import { AutoComplete, Input, type InputProps } from 'antd'
 
-import RouteConfig from '@/constants/RouteConfig';
+import RouteConfig from '@/constants/RouteConfig'
 
 interface SearchSuggestion {
-  value: string;
-  category: string;
-  description?: string;
+  value: string
+  category: string
+  description?: string
 }
 
 interface EnhancedSearchBarProps {
-  onSearch?: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-  size: InputProps['size'];
+  onSearch?: (value: string) => void
+  placeholder?: string
+  className?: string
+  size: InputProps['size']
 }
 
 const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
@@ -24,10 +24,10 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   className = '',
   size,
 }) => {
-  const [searchValue, setSearchValue] = useState('');
-  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState('')
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([])
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   // Mock suggestions - sẽ được thay thế bằng API call thực
   const mockSuggestions = useMemo(
@@ -42,19 +42,19 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       { value: 'phụ sản', category: 'Chuyên khoa', description: 'Khoa phụ sản' },
       { value: 'tim mạch', category: 'Chuyên khoa', description: 'Khoa tim mạch' },
     ],
-    []
-  );
+    [],
+  )
 
   // Debounced search function
   const debouncedSearch = useCallback(
     (value: string) => {
       if (!value.trim()) {
-        setSuggestions([]);
-        setLoading(false);
-        return;
+        setSuggestions([])
+        setLoading(false)
+        return
       }
 
-      setLoading(true);
+      setLoading(true)
 
       // Simulate API delay
       const timeoutId = setTimeout(() => {
@@ -65,49 +65,49 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
           const filteredSuggestions = mockSuggestions.filter(
             suggestion =>
               suggestion.value.toLowerCase().includes(value.toLowerCase()) ||
-              suggestion.category.toLowerCase().includes(value.toLowerCase())
-          );
+              suggestion.category.toLowerCase().includes(value.toLowerCase()),
+          )
 
-          setSuggestions(filteredSuggestions);
+          setSuggestions(filteredSuggestions)
         } catch (error) {
-          console.error('Error fetching suggestions:', error);
-          setSuggestions([]);
+          console.error('Error fetching suggestions:', error)
+          setSuggestions([])
         } finally {
-          setLoading(false);
+          setLoading(false)
         }
-      }, 300);
+      }, 300)
 
-      return () => clearTimeout(timeoutId);
+      return () => clearTimeout(timeoutId)
     },
-    [mockSuggestions]
-  );
+    [mockSuggestions],
+  )
 
   useEffect(() => {
-    const cleanup = debouncedSearch(searchValue);
-    return cleanup;
-  }, [searchValue, debouncedSearch]);
+    const cleanup = debouncedSearch(searchValue)
+    return cleanup
+  }, [searchValue, debouncedSearch])
 
   const handleSearch = (value: string) => {
-    if (!value.trim()) return;
+    if (!value.trim()) return
 
     // Navigate to search results page
-    navigate(`${RouteConfig.MedicalSearchPage.path}?q=${encodeURIComponent(value.trim())}`);
+    navigate(`${RouteConfig.MedicalSearchPage.path}?q=${encodeURIComponent(value.trim())}`)
 
     // Clear suggestions
-    setSuggestions([]);
+    setSuggestions([])
 
     // Call parent onSearch if provided
-    onSearch?.(value);
-  };
+    onSearch?.(value)
+  }
 
   const handleSelect = (value: string) => {
-    setSearchValue(value);
-    handleSearch(value);
-  };
+    setSearchValue(value)
+    handleSearch(value)
+  }
 
   const handleInputChange = (value: string) => {
-    setSearchValue(value);
-  };
+    setSearchValue(value)
+  }
 
   // Format options for AutoComplete
   const options = suggestions.map(suggestion => ({
@@ -116,7 +116,9 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <div style={{ fontWeight: 500 }}>{suggestion.value}</div>
-          {suggestion.description && <div style={{ fontSize: '12px', color: '#666' }}>{suggestion.description}</div>}
+          {suggestion.description && (
+            <div style={{ fontSize: '12px', color: '#666' }}>{suggestion.description}</div>
+          )}
         </div>
         <span
           style={{
@@ -131,7 +133,7 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
         </span>
       </div>
     ),
-  }));
+  }))
 
   return (
     <div className={className}>
@@ -145,10 +147,15 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
         style={{ width: '100%' }}
         size={size}
       >
-        <Input.Search size={size} enterButton="Tìm kiếm" onSearch={handleSearch} loading={loading} />
+        <Input.Search
+          size={size}
+          enterButton="Tìm kiếm"
+          onSearch={handleSearch}
+          loading={loading}
+        />
       </AutoComplete>
     </div>
-  );
-};
+  )
+}
 
-export default EnhancedSearchBar;
+export default EnhancedSearchBar

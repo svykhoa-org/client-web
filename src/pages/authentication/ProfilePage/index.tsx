@@ -1,3 +1,3 @@
-import ProfilePage from './src/ProfilePage';
+import ProfilePage from './src/ProfilePage'
 
-export default ProfilePage;
+export default ProfilePage

@@ -1,1 +1,1 @@
-export const PostDetailLocales = {};
+export const PostDetailLocales = {}

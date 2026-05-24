@@ -3,6 +3,6 @@ const en = {
     title: 'Page Not Found',
     message: 'Sorry, the page you are looking for does not exist.',
   },
-};
+}
 
-export default en;
+export default en

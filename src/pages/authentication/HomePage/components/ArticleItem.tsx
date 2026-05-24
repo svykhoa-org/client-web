@@ -1,23 +1,23 @@
-import type { FC } from 'react';
-import { useNavigate } from 'react-router';
+import type { FC } from 'react'
+import { useNavigate } from 'react-router'
 
-import { Button } from 'antd';
-import dayjs from 'dayjs';
-import { User2 } from 'lucide-react';
+import { Button } from 'antd'
+import dayjs from 'dayjs'
+import { User2 } from 'lucide-react'
 
-import RouteConfig from '@/constants/RouteConfig';
-import type { Article } from '@/models/Article';
+import RouteConfig from '@/constants/RouteConfig'
+import type { Article } from '@/models/Article'
 
 type Props = {
-  article: Article;
-};
+  article: Article
+}
 
 const ArticleItem: FC<Props> = ({ article }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleViewDetail = () => {
-    navigate(RouteConfig.ArticleDetailPage.path.replace(':slug', article.slug));
-  };
+    navigate(RouteConfig.ArticleDetailPage.path.replace(':slug', article.slug))
+  }
 
   return (
     <div className="overflow-hidden rounded-sm bg-white shadow-md">
@@ -44,7 +44,7 @@ const ArticleItem: FC<Props> = ({ article }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ArticleItem;
+export default ArticleItem

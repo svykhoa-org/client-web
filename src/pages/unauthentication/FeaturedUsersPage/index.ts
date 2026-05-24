@@ -1,3 +1,3 @@
-import FeaturedUsersPage from './src/FeaturedUsersPage';
+import FeaturedUsersPage from './src/FeaturedUsersPage'
 
-export default FeaturedUsersPage;
+export default FeaturedUsersPage

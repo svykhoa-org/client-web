@@ -1,5 +1,5 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -10,7 +10,7 @@ const queryClient = new QueryClient({
       gcTime: 1000 * 60 * 10, // Giữ trong cache 10 phút trước khi xóa hẳn
     },
   },
-});
+})
 
 export const TanstackProvider = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -18,5 +18,5 @@ export const TanstackProvider = ({ children }: { children: React.ReactNode }) =>
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  );
-};
+  )
+}

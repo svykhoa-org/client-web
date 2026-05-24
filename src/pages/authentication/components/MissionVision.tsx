@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import {
   BookOutlined,
@@ -9,10 +9,10 @@ import {
   SafetyOutlined,
   TeamOutlined,
   TrophyOutlined,
-} from '@ant-design/icons';
-import { Col, Row, Typography } from 'antd';
+} from '@ant-design/icons'
+import { Col, Row, Typography } from 'antd'
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph } = Typography
 
 export const MissionVision: React.FC = () => {
   return (
@@ -23,7 +23,8 @@ export const MissionVision: React.FC = () => {
             Sứ mệnh và Tầm nhìn
           </Title>
           <Paragraph className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-600">
-            Định hướng phát triển của SVYKHOA trong việc hỗ trợ sinh viên y khoa học tập và phát triển
+            Định hướng phát triển của SVYKHOA trong việc hỗ trợ sinh viên y khoa học tập và phát
+            triển
           </Paragraph>
         </div>
 
@@ -58,12 +59,16 @@ export const MissionVision: React.FC = () => {
                         <BookOutlined className="text-sm" style={{ color: '#ffffff' }} />
                       </div>
                       <div className="flex-1">
-                        <Title level={5} className="mb-1 text-base font-semibold" style={{ color: '#1e40af' }}>
+                        <Title
+                          level={5}
+                          className="mb-1 text-base font-semibold"
+                          style={{ color: '#1e40af' }}
+                        >
                           Hỗ trợ học tập hiệu quả
                         </Title>
                         <Paragraph className="mb-0 text-sm leading-relaxed text-gray-700">
-                          Cung cấp tài liệu, bài giảng và nguồn học liệu chất lượng cao, giúp sinh viên y khoa tiếp cận
-                          kiến thức một cách dễ dàng và hiệu quả.
+                          Cung cấp tài liệu, bài giảng và nguồn học liệu chất lượng cao, giúp sinh
+                          viên y khoa tiếp cận kiến thức một cách dễ dàng và hiệu quả.
                         </Paragraph>
                       </div>
                     </div>
@@ -78,12 +83,16 @@ export const MissionVision: React.FC = () => {
                         <TeamOutlined className="text-sm" style={{ color: '#ffffff' }} />
                       </div>
                       <div className="flex-1">
-                        <Title level={5} className="mb-1 text-base font-semibold" style={{ color: '#1e40af' }}>
+                        <Title
+                          level={5}
+                          className="mb-1 text-base font-semibold"
+                          style={{ color: '#1e40af' }}
+                        >
                           Kết nối cộng đồng y khoa
                         </Title>
                         <Paragraph className="mb-0 text-sm leading-relaxed text-gray-700">
-                          Tạo cầu nối giữa sinh viên y khoa trên toàn quốc, chia sẻ kinh nghiệm và hỗ trợ nhau trong học
-                          tập cũng như phát triển nghề nghiệp.
+                          Tạo cầu nối giữa sinh viên y khoa trên toàn quốc, chia sẻ kinh nghiệm và
+                          hỗ trợ nhau trong học tập cũng như phát triển nghề nghiệp.
                         </Paragraph>
                       </div>
                     </div>
@@ -98,12 +107,16 @@ export const MissionVision: React.FC = () => {
                         <RocketOutlined className="text-sm" style={{ color: '#ffffff' }} />
                       </div>
                       <div className="flex-1">
-                        <Title level={5} className="mb-1 text-base font-semibold" style={{ color: '#1e40af' }}>
+                        <Title
+                          level={5}
+                          className="mb-1 text-base font-semibold"
+                          style={{ color: '#1e40af' }}
+                        >
                           Phát triển kỹ năng tương lai
                         </Title>
                         <Paragraph className="mb-0 text-sm leading-relaxed text-gray-700">
-                          Hỗ trợ sinh viên phát triển kỹ năng chuyên môn và soft skills, chuẩn bị tốt nhất cho sự nghiệp
-                          y tế trong tương lai.
+                          Hỗ trợ sinh viên phát triển kỹ năng chuyên môn và soft skills, chuẩn bị
+                          tốt nhất cho sự nghiệp y tế trong tương lai.
                         </Paragraph>
                       </div>
                     </div>
@@ -140,12 +153,16 @@ export const MissionVision: React.FC = () => {
                         <TrophyOutlined className="text-sm" style={{ color: '#ffffff' }} />
                       </div>
                       <div className="flex-1">
-                        <Title level={5} className="mb-1 text-base font-semibold" style={{ color: '#047857' }}>
+                        <Title
+                          level={5}
+                          className="mb-1 text-base font-semibold"
+                          style={{ color: '#047857' }}
+                        >
                           Nền tảng hàng đầu Việt Nam
                         </Title>
                         <Paragraph className="mb-0 text-sm leading-relaxed text-gray-700">
-                          Trở thành nền tảng học tập trực tuyến số 1 cho sinh viên y khoa tại Việt Nam, được tin tưởng
-                          và sử dụng rộng rãi.
+                          Trở thành nền tảng học tập trực tuyến số 1 cho sinh viên y khoa tại Việt
+                          Nam, được tin tưởng và sử dụng rộng rãi.
                         </Paragraph>
                       </div>
                     </div>
@@ -160,12 +177,16 @@ export const MissionVision: React.FC = () => {
                         <GlobalOutlined className="text-sm" style={{ color: '#ffffff' }} />
                       </div>
                       <div className="flex-1">
-                        <Title level={5} className="mb-1 text-base font-semibold" style={{ color: '#047857' }}>
+                        <Title
+                          level={5}
+                          className="mb-1 text-base font-semibold"
+                          style={{ color: '#047857' }}
+                        >
                           Cộng đồng toàn diện và gắn kết
                         </Title>
                         <Paragraph className="mb-0 text-sm leading-relaxed text-gray-700">
-                          Xây dựng một hệ sinh thái học tập hoàn chỉnh, nơi sinh viên y khoa có thể học hỏi, chia sẻ và
-                          phát triển cùng nhau.
+                          Xây dựng một hệ sinh thái học tập hoàn chỉnh, nơi sinh viên y khoa có thể
+                          học hỏi, chia sẻ và phát triển cùng nhau.
                         </Paragraph>
                       </div>
                     </div>
@@ -180,12 +201,16 @@ export const MissionVision: React.FC = () => {
                         <BulbOutlined className="text-sm" style={{ color: '#ffffff' }} />
                       </div>
                       <div className="flex-1">
-                        <Title level={5} className="mb-1 text-base font-semibold" style={{ color: '#047857' }}>
+                        <Title
+                          level={5}
+                          className="mb-1 text-base font-semibold"
+                          style={{ color: '#047857' }}
+                        >
                           Đổi mới giáo dục y khoa
                         </Title>
                         <Paragraph className="mb-0 text-sm leading-relaxed text-gray-700">
-                          Tiên phong ứng dụng công nghệ hiện đại trong giáo dục y khoa, tạo ra những trải nghiệm học tập
-                          tương tác và hiệu quả.
+                          Tiên phong ứng dụng công nghệ hiện đại trong giáo dục y khoa, tạo ra những
+                          trải nghiệm học tập tương tác và hiệu quả.
                         </Paragraph>
                       </div>
                     </div>
@@ -214,7 +239,8 @@ export const MissionVision: React.FC = () => {
                   Đáng tin cậy
                 </Title>
                 <Paragraph className="leading-relaxed text-gray-600">
-                  Cam kết cung cấp thông tin chính xác, được kiểm chứng bởi các chuyên gia y tế và giảng viên.
+                  Cam kết cung cấp thông tin chính xác, được kiểm chứng bởi các chuyên gia y tế và
+                  giảng viên.
                 </Paragraph>
               </div>
             </Col>
@@ -230,7 +256,8 @@ export const MissionVision: React.FC = () => {
                   Đổi mới
                 </Title>
                 <Paragraph className="leading-relaxed text-gray-600">
-                  Không ngừng cải tiến và áp dụng công nghệ mới để nâng cao trải nghiệm học tập của sinh viên.
+                  Không ngừng cải tiến và áp dụng công nghệ mới để nâng cao trải nghiệm học tập của
+                  sinh viên.
                 </Paragraph>
               </div>
             </Col>
@@ -254,5 +281,5 @@ export const MissionVision: React.FC = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

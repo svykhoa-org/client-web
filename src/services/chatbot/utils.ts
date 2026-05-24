@@ -17,8 +17,8 @@ export const formatChatbotResponse = (rawText: string): string => {
     .replace(/^# (.*$)/gm, '<h1 class="text-xl font-bold mb-2">$1</h1>')
     .replace(/^## (.*$)/gm, '<h2 class="text-lg font-semibold mb-1">$2</h2>')
     .replace(/\n- (.*)/g, '\n<li class="ml-4">$1</li>')
-    .replace(/\n\d\. (.*)/g, '\n<li class="ml-4 list-decimal">$1</li>');
-};
+    .replace(/\n\d\. (.*)/g, '\n<li class="ml-4 list-decimal">$1</li>')
+}
 
 /**
  * Returns a debug-friendly version of the chatbot response
@@ -27,12 +27,12 @@ export const formatChatbotResponse = (rawText: string): string => {
  * @returns Object with parsed parts of the response
  */
 export const debugChatbotResponse = (rawResponse: string) => {
-  const expertMatch = rawResponse.match(/<experting>([\s\S]*?)<\/experting>/);
-  const answerMatch = rawResponse.match(/<answer>([\s\S]*?)<\/answer>/);
+  const expertMatch = rawResponse.match(/<experting>([\s\S]*?)<\/experting>/)
+  const answerMatch = rawResponse.match(/<answer>([\s\S]*?)<\/answer>/)
 
   return {
     expert: expertMatch ? expertMatch[1].trim() : 'No expert information found',
     answer: answerMatch ? answerMatch[1].trim() : 'No answer found',
     raw: rawResponse,
-  };
-};
+  }
+}

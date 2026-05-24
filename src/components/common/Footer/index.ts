@@ -1,2 +1,2 @@
-export { default } from './src/Footer';
-export * from './src/Footer';
+export { default } from './src/Footer'
+export * from './src/Footer'

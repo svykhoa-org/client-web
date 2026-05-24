@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 
 import {
   BookOutlined,
@@ -10,97 +10,98 @@ import {
   SafetyOutlined,
   SearchOutlined,
   UserOutlined,
-} from '@ant-design/icons';
-import { Card, Col, Empty, Row, Spin, Tabs, Tag, Typography } from 'antd';
+} from '@ant-design/icons'
+import { Card, Col, Empty, Row, Spin, Tabs, Tag, Typography } from 'antd'
 
-import { EnhancedSearchBar } from '@/components/common/Header';
+import { EnhancedSearchBar } from '@/components/common/Header'
 
-const { Title, Text, Paragraph } = Typography;
-const { TabPane } = Tabs;
+const { Title, Text, Paragraph } = Typography
+const { TabPane } = Tabs
 
 // Interfaces
 interface MedicalCondition {
-  id: string;
-  name: string;
-  description: string;
-  specialty: string;
-  confidence: number;
-  symptoms: string[];
+  id: string
+  name: string
+  description: string
+  specialty: string
+  confidence: number
+  symptoms: string[]
 }
 
 interface SearchResultTab {
-  guidelines: GuidelineResult[];
-  references: ReferenceResult[];
-  courses: CourseResult[];
+  guidelines: GuidelineResult[]
+  references: ReferenceResult[]
+  courses: CourseResult[]
 }
 
 interface GuidelineResult {
-  id: string;
-  title: string;
-  summary: string;
-  source: string;
-  relevance: number;
+  id: string
+  title: string
+  summary: string
+  source: string
+  relevance: number
 }
 
 interface ReferenceResult {
-  id: string;
-  title: string;
-  authors: string[];
-  journal: string;
-  year: number;
-  abstract: string;
-  keywords: string[];
+  id: string
+  title: string
+  authors: string[]
+  journal: string
+  year: number
+  abstract: string
+  keywords: string[]
 }
 
 interface CourseResult {
-  id: string;
-  title: string;
-  description: string;
-  instructor: string;
-  duration: string;
-  cmePoints: number;
-  level: string;
+  id: string
+  title: string
+  description: string
+  instructor: string
+  duration: string
+  cmePoints: number
+  level: string
 }
 
 const MedicalSearchPage: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
 
-  const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [medicalConditions, setMedicalConditions] = useState<MedicalCondition[]>([]);
+  const [loading, setLoading] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [medicalConditions, setMedicalConditions] = useState<MedicalCondition[]>([])
   const [searchResults, setSearchResults] = useState<SearchResultTab>({
     guidelines: [],
     references: [],
     courses: [],
-  });
+  })
 
   // Extract search query from URL
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const query = params.get('q');
+    const params = new URLSearchParams(location.search)
+    const query = params.get('q')
     if (query) {
-      setSearchQuery(query);
-      performSearch(query);
+      setSearchQuery(query)
+      performSearch(query)
     }
-  }, [location.search]);
+  }, [location.search])
 
   const performSearch = async (_query: string) => {
-    setLoading(true);
+    setLoading(true)
     try {
       // TODO: Replace with actual API calls to LLM backend
       // const medicalAnalysis = await medicalSearchService.analyzeMedicalQuery(query);
       // const searchResults = await medicalSearchService.getSearchResults(query);
 
       // Mock data
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1500))
 
       // Mock medical conditions
       const mockConditions: MedicalCondition[] = [
         {
           id: '1',
           name: 'Căng thẳng đầu',
-          description: 'Đau đầu do căng thẳng là loại đau đầu phổ biến nhất, thường do stress và căng cơ.',
+          description:
+            'Đau đầu do căng thẳng là loại đau đầu phổ biến nhất, thường do stress và căng cơ.',
           specialty: 'Thần kinh',
           confidence: 85,
           symptoms: ['đau đầu', 'căng cơ cổ', 'mệt mỏi'],
@@ -121,7 +122,7 @@ const MedicalSearchPage: React.FC = () => {
           confidence: 60,
           symptoms: ['đau đầu', 'nghẹt mũi', 'áp lực mặt'],
         },
-      ];
+      ]
 
       // Mock search results
       const mockResults: SearchResultTab = {
@@ -175,27 +176,28 @@ const MedicalSearchPage: React.FC = () => {
           {
             id: '2',
             title: 'Migraine: Từ cơ chế bệnh sinh đến điều trị hiện đại',
-            description: 'Cập nhật kiến thức mới nhất về migraine và các phương pháp điều trị tiên tiến.',
+            description:
+              'Cập nhật kiến thức mới nhất về migraine và các phương pháp điều trị tiên tiến.',
             instructor: 'PGS.TS Trần Thị Bình',
             duration: '6 giờ',
             cmePoints: 6,
             level: 'Cao cấp',
           },
         ],
-      };
+      }
 
-      setMedicalConditions(mockConditions);
-      setSearchResults(mockResults);
+      setMedicalConditions(mockConditions)
+      setSearchResults(mockResults)
     } catch (error) {
-      console.error('Search error:', error);
+      console.error('Search error:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleNewSearch = (query: string) => {
-    navigate(`/search?q=${encodeURIComponent(query)}`);
-  };
+    navigate(`/search?q=${encodeURIComponent(query)}`)
+  }
 
   const getSpecialtyIcon = (specialty: string) => {
     const icons: Record<string, React.ReactNode> = {
@@ -204,15 +206,15 @@ const MedicalSearchPage: React.FC = () => {
       'Tai Mũi Họng': <MedicineBoxOutlined className="text-blue-500" />,
       'Phụ sản': <UserOutlined className="text-pink-500" />,
       'Nhi khoa': <SafetyOutlined className="text-blue-500" />,
-    };
-    return icons[specialty] || <MedicineBoxOutlined className="text-gray-500" />;
-  };
+    }
+    return icons[specialty] || <MedicineBoxOutlined className="text-gray-500" />
+  }
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'blue';
-    if (confidence >= 60) return 'orange';
-    return 'red';
-  };
+    if (confidence >= 80) return 'blue'
+    if (confidence >= 60) return 'orange'
+    return 'red'
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -275,7 +277,9 @@ const MedicalSearchPage: React.FC = () => {
                             <Title level={5} className="mb-1">
                               {condition.name}
                             </Title>
-                            <Text className="mb-2 block text-sm text-gray-600">{condition.description}</Text>
+                            <Text className="mb-2 block text-sm text-gray-600">
+                              {condition.description}
+                            </Text>
                             <div className="mb-2 flex items-center">
                               {getSpecialtyIcon(condition.specialty)}
                               <span className="ml-1 text-sm">{condition.specialty}</span>
@@ -291,7 +295,9 @@ const MedicalSearchPage: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-500">Độ tin cậy:</span>
-                          <Tag color={getConfidenceColor(condition.confidence)}>{condition.confidence}%</Tag>
+                          <Tag color={getConfidenceColor(condition.confidence)}>
+                            {condition.confidence}%
+                          </Tag>
                         </div>
                       </div>
                     ))}
@@ -332,7 +338,9 @@ const MedicalSearchPage: React.FC = () => {
                                   {guideline.summary}
                                 </Paragraph>
                                 <div className="flex items-center justify-between">
-                                  <Text className="text-sm text-gray-500">🏥 Nguồn: {guideline.source}</Text>
+                                  <Text className="text-sm text-gray-500">
+                                    🏥 Nguồn: {guideline.source}
+                                  </Text>
                                   <Tag color="blue" className="px-3 py-1">
                                     ✅ Liên quan: {guideline.relevance}%
                                   </Tag>
@@ -369,10 +377,13 @@ const MedicalSearchPage: React.FC = () => {
                             </Title>
                             <div className="mb-3">
                               <Text className="text-sm text-gray-600">
-                                👥 {reference.authors.join(', ')} - 📖 {reference.journal} ({reference.year})
+                                👥 {reference.authors.join(', ')} - 📖 {reference.journal} (
+                                {reference.year})
                               </Text>
                             </div>
-                            <Paragraph className="mb-4 leading-relaxed text-gray-600">{reference.abstract}</Paragraph>
+                            <Paragraph className="mb-4 leading-relaxed text-gray-600">
+                              {reference.abstract}
+                            </Paragraph>
                             <div className="flex flex-wrap gap-2">
                               {reference.keywords.map(keyword => (
                                 <Tag key={keyword} color="blue" className="px-2 py-1">
@@ -474,7 +485,9 @@ const MedicalSearchPage: React.FC = () => {
                   <Title level={4} className="text-gray-500">
                     Không tìm thấy kết quả cho "{searchQuery}"
                   </Title>
-                  <Text className="text-gray-400">Vui lòng thử lại với từ khóa khác hoặc kiểm tra chính tả</Text>
+                  <Text className="text-gray-400">
+                    Vui lòng thử lại với từ khóa khác hoặc kiểm tra chính tả
+                  </Text>
                 </div>
               }
             />
@@ -482,7 +495,7 @@ const MedicalSearchPage: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MedicalSearchPage;
+export default MedicalSearchPage

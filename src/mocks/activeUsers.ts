@@ -1,22 +1,22 @@
-import type { User } from '@/models/User';
-import { UserRole, UserStatus } from '@/models/User';
+import type { User } from '@/models/User'
+import { UserRole, UserStatus } from '@/models/User'
 
 export interface ActiveUser extends User {
   activity?: {
-    postCount: number;
-    commentCount: number;
-    likeCount: number;
-    lastActive: string;
-    responseRate?: number;
-    helpfulVotes?: number;
-    streak?: number;
-    badgeCount?: number;
-  };
+    postCount: number
+    commentCount: number
+    likeCount: number
+    lastActive: string
+    responseRate?: number
+    helpfulVotes?: number
+    streak?: number
+    badgeCount?: number
+  }
 }
 
 export const activeUsers: ActiveUser[] = [
   {
-    _id: 'user1',
+    id: 'user1',
     fullName: 'Nguyễn Thanh Hà',
     email: 'thanh.ha@example.com',
     role: UserRole.User,
@@ -37,7 +37,7 @@ export const activeUsers: ActiveUser[] = [
     },
   },
   {
-    _id: 'user2',
+    id: 'user2',
     fullName: 'Trần Minh Tuấn',
     email: 'tuan.tm@example.com',
     role: UserRole.User,
@@ -58,7 +58,7 @@ export const activeUsers: ActiveUser[] = [
     },
   },
   {
-    _id: 'user3',
+    id: 'user3',
     fullName: 'Lê Thị Hương',
     email: 'huong.lt@example.com',
     role: UserRole.User,
@@ -79,7 +79,7 @@ export const activeUsers: ActiveUser[] = [
     },
   },
   {
-    _id: 'user4',
+    id: 'user4',
     fullName: 'Phạm Văn Nam',
     email: 'nam.pv@example.com',
     role: UserRole.User,
@@ -100,7 +100,7 @@ export const activeUsers: ActiveUser[] = [
     },
   },
   {
-    _id: 'user5',
+    id: 'user5',
     fullName: 'Hoàng Thị Lan',
     email: 'lan.ht@example.com',
     role: UserRole.User,
@@ -121,7 +121,7 @@ export const activeUsers: ActiveUser[] = [
     },
   },
   {
-    _id: 'user6',
+    id: 'user6',
     fullName: 'Vũ Đình Thành',
     email: 'thanh.vd@example.com',
     role: UserRole.User,
@@ -141,4 +141,4 @@ export const activeUsers: ActiveUser[] = [
       badgeCount: 7,
     },
   },
-];
+]

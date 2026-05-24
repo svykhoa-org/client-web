@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-import { MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Row, Typography } from 'antd';
+import { MailOutlined, PhoneOutlined } from '@ant-design/icons'
+import { Avatar, Card, Col, Row, Typography } from 'antd'
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography
 
 // Mock data cho đội ngũ chuyên gia
 const experts = [
@@ -14,7 +14,8 @@ const experts = [
     hospital: 'Bệnh viện Chợ Rẫy',
     specialization: 'Tim mạch can thiệp',
     experience: '20+ năm kinh nghiệm',
-    avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face',
     email: 'nva@choray.vn',
     phone: '0902-xxx-xxx',
     achievements: ['Tiến sĩ Y khoa - Đại học Y Hà Nội', 'Chứng chỉ Tim mạch can thiệp - Pháp'],
@@ -26,7 +27,8 @@ const experts = [
     hospital: 'Bệnh viện Bạch Mai',
     specialization: 'Nội tiết - Đái tháo đường',
     experience: '15+ năm kinh nghiệm',
-    avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face',
     email: 'ttb@bachmai.vn',
     phone: '0903-xxx-xxx',
     achievements: ['Tiến sĩ Y khoa - Đại học Y TP.HCM', 'Chuyên khoa II Nội tiết'],
@@ -38,7 +40,8 @@ const experts = [
     hospital: 'Bệnh viện Việt Đức',
     specialization: 'Ngoại thần kinh',
     experience: '25+ năm kinh nghiệm',
-    avatar: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face',
     email: 'lmc@vietduc.vn',
     phone: '0904-xxx-xxx',
     achievements: ['Phó Giáo sư - Đại học Y Hà Nội', 'Fellowship Ngoại thần kinh - Nhật Bản'],
@@ -50,7 +53,8 @@ const experts = [
     hospital: 'Bệnh viện Nhi Trung ương',
     specialization: 'Tim mạch nhi khoa',
     experience: '18+ năm kinh nghiệm',
-    avatar: 'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=150&h=150&fit=crop&crop=face',
     email: 'phn@nhitrunguong.vn',
     phone: '0905-xxx-xxx',
     achievements: ['Tiến sĩ Y khoa - Đại học Y Hà Nội', 'Chuyên khoa II Tim mạch nhi'],
@@ -62,7 +66,8 @@ const experts = [
     hospital: 'Bệnh viện Từ Dũ',
     specialization: 'Sản phụ khoa',
     experience: '12+ năm kinh nghiệm',
-    avatar: 'https://images.unsplash.com/photo-1594824388531-2ad9b5d59cf9?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1594824388531-2ad9b5d59cf9?w=150&h=150&fit=crop&crop=face',
     email: 'vtm@tudu.vn',
     phone: '0906-xxx-xxx',
     achievements: ['Tiến sĩ Y khoa - Đại học Y TP.HCM', 'Chuyên khoa I Sản phụ khoa'],
@@ -74,12 +79,13 @@ const experts = [
     hospital: 'Trung tâm Ung bướu K',
     specialization: 'Ung thư học',
     experience: '22+ năm kinh nghiệm',
-    avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&h=150&fit=crop&crop=face',
+    avatar:
+      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&h=150&fit=crop&crop=face',
     email: 'dqt@benhvienk.vn',
     phone: '0907-xxx-xxx',
     achievements: ['Phó Giáo sư - Đại học Y Hà Nội', 'Fellowship Ung thư học - Mỹ'],
   },
-];
+]
 
 export const ExpertTeam: React.FC = () => {
   return (
@@ -90,7 +96,8 @@ export const ExpertTeam: React.FC = () => {
             Đội ngũ chuyên gia
           </Title>
           <Paragraph className="mx-auto max-w-3xl text-base text-gray-600">
-            Các chuyên gia y tế hàng đầu Việt Nam với nhiều năm kinh nghiệm và chuyên môn sâu trong từng lĩnh vực y khoa
+            Các chuyên gia y tế hàng đầu Việt Nam với nhiều năm kinh nghiệm và chuyên môn sâu trong
+            từng lĩnh vực y khoa
           </Paragraph>
         </div>
 
@@ -163,5 +170,5 @@ export const ExpertTeam: React.FC = () => {
         </Row>
       </div>
     </section>
-  );
-};
+  )
+}

@@ -1,2 +1,2 @@
-export * from './useLessonQueries';
-export * from './useCourseQueries';
+export * from './useLessonQueries'
+export * from './useCourseQueries'

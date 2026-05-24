@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from 'react'
+import { Link } from 'react-router'
 
 import {
   BookOutlined,
@@ -8,19 +8,23 @@ import {
   StarFilled,
   TeamOutlined,
   UserOutlined,
-} from '@ant-design/icons';
-import { Avatar, Card, Tag, Tooltip } from 'antd';
+} from '@ant-design/icons'
+import { Avatar, Card, Tag, Tooltip } from 'antd'
 
-import type { User } from '@/models/User';
+import type { User } from '@/models/User'
 
 interface FeaturedUserCardProps {
-  user: User;
+  user: User
 }
 
 const FeaturedUserCard: React.FC<FeaturedUserCardProps> = ({ user }) => {
   return (
-    <Link to={`/featured-user/${user._id}`}>
-      <Card hoverable className="h-full transition-all duration-300 hover:shadow-lg" bodyStyle={{ padding: '16px' }}>
+    <Link to={`/featured-user/${user.id}`}>
+      <Card
+        hoverable
+        className="h-full transition-all duration-300 hover:shadow-lg"
+        bodyStyle={{ padding: '16px' }}
+      >
         <div className="flex flex-col items-center">
           {/* Avatar and Verification */}
           <div className="relative mb-4">
@@ -84,7 +88,7 @@ const FeaturedUserCard: React.FC<FeaturedUserCardProps> = ({ user }) => {
         </div>
       </Card>
     </Link>
-  );
-};
+  )
+}
 
-export default FeaturedUserCard;
+export default FeaturedUserCard

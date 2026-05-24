@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import { Carousel } from 'antd';
+import { Carousel } from 'antd'
 
 // Mock data cho các đối tác - bạn có thể thay thế bằng dữ liệu thực
 const partners = [
@@ -52,7 +52,7 @@ const partners = [
     logo: 'https://i.pinimg.com/1200x/f5/64/d1/f564d158b6142dd54fdec75567f4bdce.jpg',
     alt: 'Roche Việt Nam',
   },
-];
+]
 
 export const PartnersCarousel: React.FC = () => {
   return (
@@ -107,5 +107,5 @@ export const PartnersCarousel: React.FC = () => {
         </Carousel>
       </div>
     </section>
-  );
-};
+  )
+}

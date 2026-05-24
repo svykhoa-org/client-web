@@ -1,14 +1,19 @@
-import { Card, Typography } from 'antd';
+import { Card, Typography } from 'antd'
 
-import { getMockUsers } from '@/mocks/auth';
+import { getMockUsers } from '@/mocks/auth'
 
-const { Text } = Typography;
+const { Text } = Typography
 
 export const DemoAccountsInfo = () => {
-  const mockUsers = getMockUsers();
+  const mockUsers = getMockUsers()
 
   return (
-    <Card title="Tài khoản demo" size="small" style={{ marginBottom: 16 }} className="border-blue-200 bg-blue-50">
+    <Card
+      title="Tài khoản demo"
+      size="small"
+      style={{ marginBottom: 16 }}
+      className="border-blue-200 bg-blue-50"
+    >
       <div className="space-y-2">
         <Text className="block text-sm text-gray-600">Sử dụng các tài khoản sau để test:</Text>
         {mockUsers.map((user, index) => (
@@ -20,5 +25,5 @@ export const DemoAccountsInfo = () => {
         ))}
       </div>
     </Card>
-  );
-};
+  )
+}

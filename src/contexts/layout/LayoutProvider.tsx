@@ -1,11 +1,11 @@
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react'
 
-import { LayoutContext } from './LayoutContext';
+import { LayoutContext } from './LayoutContext'
 
 export const LayoutProvider = ({ children }: { children: ReactNode }) => {
-  const [leftSidebar, setLeftSidebar] = useState<ReactNode>(null);
-  const [rightSidebar, setRightSidebar] = useState<ReactNode>(null);
-  const [banner, setBanner] = useState<ReactNode>(null);
+  const [leftSidebar, setLeftSidebar] = useState<ReactNode>(null)
+  const [rightSidebar, setRightSidebar] = useState<ReactNode>(null)
+  const [banner, setBanner] = useState<ReactNode>(null)
 
   return (
     <LayoutContext.Provider
@@ -20,5 +20,5 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </LayoutContext.Provider>
-  );
-};
+  )
+}

@@ -1,3 +1,3 @@
-import ActiveUserItem from './src/ActiveUserItem';
+import ActiveUserItem from './src/ActiveUserItem'
 
-export default ActiveUserItem;
+export default ActiveUserItem

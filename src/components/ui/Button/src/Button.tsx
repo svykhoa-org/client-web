@@ -1,10 +1,10 @@
-import { Button as AntdButton } from 'antd';
-import type { ButtonProps as AntdButtonProps } from 'antd';
+import { Button as AntdButton } from 'antd'
+import type { ButtonProps as AntdButtonProps } from 'antd'
 
-type CustomButtonProps = AntdButtonProps;
+type CustomButtonProps = AntdButtonProps
 
 const Button = (props: CustomButtonProps) => {
-  return <AntdButton {...props} />;
-};
+  return <AntdButton {...props} />
+}
 
-export default Button;
+export default Button

@@ -81,12 +81,14 @@ export interface CourseModuleWithLessons extends CourseModule {
 
 export interface CoursePaginationMeta {
   page: number
-  limit: number
+  pageSize: number
   totalItems: number
   totalPages: number
+  hasNext: boolean
+  hasPrevious: boolean
 }
 
 export interface CourseListData {
-  result: CourseApiItem[]
-  meta: CoursePaginationMeta
+  items: CourseApiItem[]
+  pagination: CoursePaginationMeta
 }

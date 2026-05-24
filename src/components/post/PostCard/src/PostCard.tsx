@@ -1,26 +1,30 @@
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
-import Card from '@/components/ui/Card';
-import type { Post } from '@/models/Post';
+import Card from '@/components/ui/Card'
+import type { Post } from '@/models/Post'
 
 type PostCardProps = {
-  post: Post;
-  onViewMore?: (post: Post) => void;
-};
+  post: Post
+  onViewMore?: (post: Post) => void
+}
 
 const PostCard = (props: PostCardProps) => {
-  const { post, onViewMore } = props;
+  const { post, onViewMore } = props
 
   const formatDate = (dateString: string) => {
-    return dayjs(dateString).locale('vi').format('HH:mm DD/MM/YYYY [GMT]Z');
-  };
+    return dayjs(dateString).locale('vi').format('HH:mm DD/MM/YYYY [GMT]Z')
+  }
 
   const handleCardClick = () => {
-    onViewMore?.(post);
-  };
+    onViewMore?.(post)
+  }
 
   return (
-    <Card title={post.title} className="cursor-pointer bg-white hover:border-green-100" onClick={handleCardClick}>
+    <Card
+      title={post.title}
+      className="cursor-pointer bg-white hover:border-green-100"
+      onClick={handleCardClick}
+    >
       <div className="space-y-2">
         {/* Author and Category Info */}
         <div className="text-neutral-6 flex items-center justify-between text-sm">
@@ -28,7 +32,11 @@ const PostCard = (props: PostCardProps) => {
             {post.author ? (
               <>
                 {post.author.avatarUrl ? (
-                  <img src={post.author.avatarUrl} alt={post.author.fullName} className="h-6 w-6 rounded-full" />
+                  <img
+                    src={post.author.avatarUrl}
+                    alt={post.author.fullName}
+                    className="h-6 w-6 rounded-full"
+                  />
                 ) : (
                   <div className="bg-neutral-3 flex h-6 w-6 items-center justify-center rounded-full">
                     <span className="text-neutral-9 text-xs font-medium">
@@ -57,7 +65,10 @@ const PostCard = (props: PostCardProps) => {
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag, index) => (
-              <span key={index} className="bg-primary-1 text-primary-8 rounded-full px-2 py-1 text-xs font-medium">
+              <span
+                key={index}
+                className="bg-primary-1 text-primary-8 rounded-full px-2 py-1 text-xs font-medium"
+              >
                 #{tag}
               </span>
             ))}
@@ -123,7 +134,7 @@ const PostCard = (props: PostCardProps) => {
         )}
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default PostCard;
+export default PostCard

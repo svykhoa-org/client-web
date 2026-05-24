@@ -1,2 +1,2 @@
-export * from './getPosts';
-export * from './postService';
+export * from './getPosts'
+export * from './postService'

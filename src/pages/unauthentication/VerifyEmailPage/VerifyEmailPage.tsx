@@ -108,9 +108,7 @@ export const VerifyEmailPage = () => {
                 <Title level={2} className="mb-1">
                   Xác thực Email
                 </Title>
-                <Text className="text-gray-500">
-                  Chúng tôi đã gửi mã xác thực đến
-                </Text>
+                <Text className="text-gray-500">Chúng tôi đã gửi mã xác thực đến</Text>
                 {email && (
                   <Text strong className="block text-gray-700">
                     {email}
@@ -126,11 +124,7 @@ export const VerifyEmailPage = () => {
                   className="mb-4"
                   action={
                     errorCode === 'OTP_EXPIRED' ? (
-                      <Button
-                        size="small"
-                        loading={resendLoading}
-                        onClick={handleResend}
-                      >
+                      <Button size="small" loading={resendLoading} onClick={handleResend}>
                         Gửi lại mã
                       </Button>
                     ) : undefined

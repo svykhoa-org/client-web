@@ -1,2 +1,2 @@
-export * from './getChatbotResponse';
-export * from './utils';
+export * from './getChatbotResponse'
+export * from './utils'

@@ -1,2 +1,2 @@
-export { default } from './src/ChatBot';
-export * from './src/ChatBot';
+export { default } from './src/ChatBot'
+export * from './src/ChatBot'

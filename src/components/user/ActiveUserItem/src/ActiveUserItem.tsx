@@ -1,28 +1,34 @@
-import React from 'react';
+import React from 'react'
 
-import { CheckCircleFilled, CommentOutlined, FireFilled, HeartOutlined, TrophyOutlined } from '@ant-design/icons';
-import { Avatar, Tooltip } from 'antd';
+import {
+  CheckCircleFilled,
+  CommentOutlined,
+  FireFilled,
+  HeartOutlined,
+  TrophyOutlined,
+} from '@ant-design/icons'
+import { Avatar, Tooltip } from 'antd'
 
-import type { ActiveUser } from '@/mocks/activeUsers';
+import type { ActiveUser } from '@/mocks/activeUsers'
 
 interface ActiveUserItemProps {
-  user: ActiveUser;
+  user: ActiveUser
 }
 
 const ActiveUserItem: React.FC<ActiveUserItemProps> = ({ user }) => {
   const getLastActiveTime = (lastActiveDate: string) => {
-    const lastActive = new Date(lastActiveDate);
-    const now = new Date();
-    const diffMinutes = Math.floor((now.getTime() - lastActive.getTime()) / (1000 * 60));
+    const lastActive = new Date(lastActiveDate)
+    const now = new Date()
+    const diffMinutes = Math.floor((now.getTime() - lastActive.getTime()) / (1000 * 60))
 
     if (diffMinutes < 60) {
-      return `${diffMinutes} phút trước`;
+      return `${diffMinutes} phút trước`
     } else if (diffMinutes < 24 * 60) {
-      return `${Math.floor(diffMinutes / 60)} giờ trước`;
+      return `${Math.floor(diffMinutes / 60)} giờ trước`
     } else {
-      return `${Math.floor(diffMinutes / (60 * 24))} ngày trước`;
+      return `${Math.floor(diffMinutes / (60 * 24))} ngày trước`
     }
-  };
+  }
 
   return (
     <div className="shadow-neutral-4 mb-3 flex items-center rounded-md p-1 shadow transition-all hover:bg-gray-50">
@@ -80,7 +86,7 @@ const ActiveUserItem: React.FC<ActiveUserItemProps> = ({ user }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ActiveUserItem;
+export default ActiveUserItem

@@ -1,25 +1,25 @@
-import { jobs } from './mockJobs';
+import { jobs } from './mockJobs'
 
 export type GetJobList = {
-  page?: number;
-  limit?: number;
-  search?: string;
-};
+  page?: number
+  limit?: number
+  search?: string
+}
 
 export type GetJobDetail = {
-  id: string;
-};
+  id: string
+}
 
 export const getJobList = async ({ page = 1, limit = 10, search }: GetJobList) => {
-  let filteredJobs = jobs;
+  let filteredJobs = jobs
 
   if (search) {
     filteredJobs = jobs.filter(
       job =>
         job.title?.toLowerCase().includes(search.toLowerCase()) ||
         job.company?.toLowerCase().includes(search.toLowerCase()) ||
-        job.description?.toLowerCase().includes(search.toLowerCase())
-    );
+        job.description?.toLowerCase().includes(search.toLowerCase()),
+    )
   }
 
   return {
@@ -33,12 +33,12 @@ export const getJobList = async ({ page = 1, limit = 10, search }: GetJobList) =
         itemsPerPage: limit,
       },
     },
-  };
-};
+  }
+}
 
 export const getJobDetail = async ({ id }: GetJobDetail) => {
-  const job = jobs.find(job => job._id === id);
-  console.log('Job detail fetched:', job);
+  const job = jobs.find(job => job.id === id)
+  console.log('Job detail fetched:', job)
 
-  return job;
-};
+  return job
+}

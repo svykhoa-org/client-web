@@ -1,12 +1,12 @@
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router'
 
-import Footer from '@/components/common/Footer';
-import Header from '@/components/common/Header';
-import ChatBot from '@/components/ui/ChatBot';
-import { useLayout } from '@/hooks/useLayout';
+import Footer from '@/components/common/Footer'
+import Header from '@/components/common/Header'
+import ChatBot from '@/components/ui/ChatBot'
+import { useLayout } from '@/hooks/useLayout'
 
 const MainLayout = () => {
-  const { leftSidebar, rightSidebar, banner } = useLayout();
+  const { leftSidebar, rightSidebar, banner } = useLayout()
 
   return (
     <div className="relative flex min-h-dvh flex-col">
@@ -34,7 +34,7 @@ const MainLayout = () => {
 
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default MainLayout;
+export default MainLayout

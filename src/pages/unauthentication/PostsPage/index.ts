@@ -1,3 +1,3 @@
-import PostsPage from './src/PostsPage';
+import PostsPage from './src/PostsPage'
 
-export default PostsPage;
+export default PostsPage

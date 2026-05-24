@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import ReactPlayer from 'react-player';
+import { useState } from 'react'
+import ReactPlayer from 'react-player'
 
-import { Spin } from 'antd';
+import { Spin } from 'antd'
 import {
   MediaControlBar,
   MediaController,
@@ -14,27 +14,27 @@ import {
   MediaTimeDisplay,
   MediaTimeRange,
   MediaVolumeRange,
-} from 'media-chrome/react';
+} from 'media-chrome/react'
 
-import { useLessonDetail } from '@/lib/tanstack-query';
+import { useLessonDetail } from '@/lib/tanstack-query'
 
 interface VideoPlayerProps {
-  courseId: string;
-  lessonId: string;
-  onProgress?: (progress: { played: number; playedSeconds: number }) => void;
-  onEnded?: () => void;
+  courseId: string
+  lessonId: string
+  onProgress?: (progress: { played: number; playedSeconds: number }) => void
+  onEnded?: () => void
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const [hasVideoError, setHasVideoError] = useState(false);
+  const [hasVideoError, setHasVideoError] = useState(false)
 
   const { data, isLoading, isError } = useLessonDetail({
     courseId: props.courseId,
     lessonId: props.lessonId,
     enabled: !!props.courseId && !!props.lessonId,
-  });
+  })
 
-  const showError = isError || hasVideoError;
+  const showError = isError || hasVideoError
 
   return (
     <MediaController className="relative aspect-video w-full">
@@ -48,7 +48,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
           height: '100%',
         }}
         onError={() => {
-          setHasVideoError(true);
+          setHasVideoError(true)
         }}
       />
       {isLoading && (
@@ -73,5 +73,5 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         <MediaFullscreenButton className="aspect-square" />
       </MediaControlBar>
     </MediaController>
-  );
-};
+  )
+}

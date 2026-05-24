@@ -1,15 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import { BookOutlined, BulbOutlined, GlobalOutlined, RocketOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Typography } from 'antd';
+import { BookOutlined, BulbOutlined, GlobalOutlined, RocketOutlined } from '@ant-design/icons'
+import { Card, Col, Row, Typography } from 'antd'
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph } = Typography
 
 const features = [
   {
     icon: <BookOutlined style={{ fontSize: '2.5rem', color: '#3b82f6' }} />,
     title: 'Tài liệu học tập',
-    description: 'Kho tài liệu y khoa phong phú với slide bài giảng, bài tập và tài liệu tham khảo cập nhật.',
+    description:
+      'Kho tài liệu y khoa phong phú với slide bài giảng, bài tập và tài liệu tham khảo cập nhật.',
   },
   {
     icon: <GlobalOutlined style={{ fontSize: '2.5rem', color: '#10b981' }} />,
@@ -26,7 +27,7 @@ const features = [
     title: 'Phát triển sự nghiệp',
     description: 'Chuẩn bị cho tương lai với thông tin thực tập, nghiên cứu và cơ hội việc làm.',
   },
-];
+]
 
 export const AboutUs: React.FC = () => {
   return (
@@ -38,14 +39,14 @@ export const AboutUs: React.FC = () => {
           </Title>
           <div className="mx-auto max-w-4xl">
             <Paragraph className="mb-6 text-lg leading-relaxed text-gray-700">
-              <strong>SVYKHOA</strong> là nền tảng học tập trực tuyến dành riêng cho sinh viên y khoa, được tạo ra với
-              mục tiêu giúp các bạn sinh viên có thể tìm kiếm thông tin, tài liệu và kiến thức y khoa một cách dễ dàng
-              và hiệu quả.
+              <strong>SVYKHOA</strong> là nền tảng học tập trực tuyến dành riêng cho sinh viên y
+              khoa, được tạo ra với mục tiêu giúp các bạn sinh viên có thể tìm kiếm thông tin, tài
+              liệu và kiến thức y khoa một cách dễ dàng và hiệu quả.
             </Paragraph>
             <Paragraph className="text-lg leading-relaxed text-gray-700">
-              Chúng tôi hiểu rằng việc học y khoa đòi hỏi sự chính xác, cập nhật và tiếp cận với nguồn tài liệu chất
-              lượng. Vì vậy, SVYKHOA cam kết cung cấp một môi trường học tập toàn diện, hỗ trợ sinh viên trong suốt hành
-              trình theo đuổi sự nghiệp y tế.
+              Chúng tôi hiểu rằng việc học y khoa đòi hỏi sự chính xác, cập nhật và tiếp cận với
+              nguồn tài liệu chất lượng. Vì vậy, SVYKHOA cam kết cung cấp một môi trường học tập
+              toàn diện, hỗ trợ sinh viên trong suốt hành trình theo đuổi sự nghiệp y tế.
             </Paragraph>
           </div>
         </div>
@@ -62,10 +63,15 @@ export const AboutUs: React.FC = () => {
                   <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-gray-100 to-gray-50 transition-all duration-300 group-hover:from-blue-50 group-hover:to-indigo-50">
                     {feature.icon}
                   </div>
-                  <Title level={5} className="mb-3 text-gray-800 transition-colors group-hover:text-blue-600">
+                  <Title
+                    level={5}
+                    className="mb-3 text-gray-800 transition-colors group-hover:text-blue-600"
+                  >
                     {feature.title}
                   </Title>
-                  <Paragraph className="text-sm leading-relaxed text-gray-600">{feature.description}</Paragraph>
+                  <Paragraph className="text-sm leading-relaxed text-gray-600">
+                    {feature.description}
+                  </Paragraph>
                 </div>
               </Card>
             </Col>
@@ -73,5 +79,5 @@ export const AboutUs: React.FC = () => {
         </Row>
       </div>
     </section>
-  );
-};
+  )
+}

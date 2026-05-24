@@ -1,16 +1,16 @@
-import type { Bulletin } from '@/models/Bulletin';
+import type { Bulletin } from '@/models/Bulletin'
 
-import { mockBulletins } from './mockBulletins';
+import { mockBulletins } from './mockBulletins'
 
-export type GetBulletinsResponseData = Bulletin;
+export type GetBulletinsResponseData = Bulletin
 
 export interface GetBulletins {
-  page?: number;
-  limit?: number;
+  page?: number
+  limit?: number
 }
 
 export const getBulletins = async ({ page = 1, limit = 10 }: GetBulletins) => {
-  await Promise.resolve(new Promise(resolve => setTimeout(resolve, 2000)));
+  await Promise.resolve(new Promise(resolve => setTimeout(resolve, 2000)))
   return {
     code: 200,
     message: 'Bulletins fetched successfully',
@@ -23,5 +23,5 @@ export const getBulletins = async ({ page = 1, limit = 10 }: GetBulletins) => {
         limit: limit || 10,
       },
     },
-  };
-};
+  }
+}

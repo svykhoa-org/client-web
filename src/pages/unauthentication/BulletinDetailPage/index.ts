@@ -1,1 +1,1 @@
-export { default } from './BulletinDetailPage';
+export { default } from './BulletinDetailPage'

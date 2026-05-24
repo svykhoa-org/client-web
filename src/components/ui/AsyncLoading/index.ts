@@ -1,1 +1,1 @@
-export { AsyncLoading } from './src/AsyncLoading';
+export { AsyncLoading } from './src/AsyncLoading'

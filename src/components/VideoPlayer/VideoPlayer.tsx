@@ -1,17 +1,17 @@
-import { useRef } from 'react';
+import { useRef } from 'react'
 
-import { MediaPlayer, type MediaPlayerInstance, MediaProvider } from '@vidstack/react';
-import { DefaultVideoLayout, defaultLayoutIcons } from '@vidstack/react/player/layouts/default';
-import '@vidstack/react/player/styles/base.css';
-import '@vidstack/react/player/styles/default/layouts/video.css';
-import '@vidstack/react/player/styles/default/theme.css';
+import { MediaPlayer, type MediaPlayerInstance, MediaProvider } from '@vidstack/react'
+import { DefaultVideoLayout, defaultLayoutIcons } from '@vidstack/react/player/layouts/default'
+import '@vidstack/react/player/styles/base.css'
+import '@vidstack/react/player/styles/default/layouts/video.css'
+import '@vidstack/react/player/styles/default/theme.css'
 
 export interface VideoPlayerProps {
-  url: string;
+  url: string
 }
 
 export function VideoPlayer({ url }: VideoPlayerProps) {
-  const player = useRef<MediaPlayerInstance>(null);
+  const player = useRef<MediaPlayerInstance>(null)
 
   return (
     <div className="w-full">
@@ -26,12 +26,12 @@ export function VideoPlayer({ url }: VideoPlayerProps) {
         src={{ src: url, type: 'video/mp4' }}
         onError={e => {
           // @ts-expect-error Checking
-          console.error('Vidstack error:', e?.detail ?? e);
+          console.error('Vidstack error:', e?.detail ?? e)
         }}
       >
         <MediaProvider />
         <DefaultVideoLayout icons={defaultLayoutIcons} />
       </MediaPlayer>
     </div>
-  );
+  )
 }

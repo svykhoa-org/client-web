@@ -1,3 +1,3 @@
-import FeaturedUserCard from './src/FeaturedUserCard';
+import FeaturedUserCard from './src/FeaturedUserCard'
 
-export default FeaturedUserCard;
+export default FeaturedUserCard

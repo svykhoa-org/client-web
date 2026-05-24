@@ -1,8 +1,8 @@
-import type { Category } from '@/models/Category';
+import type { Category } from '@/models/Category'
 
 export const mockCategories: Category[] = [
   {
-    _id: 'cat1',
+    id: 'cat1',
     name: 'Tim mạch',
     description: 'Các bệnh lý về tim mạch, điều trị và phòng ngừa',
     slug: 'tim-mach',
@@ -10,7 +10,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat2',
+    id: 'cat2',
     name: 'Nội tiết',
     description: 'Bệnh lý nội tiết, tiểu đường, tuyến giáp',
     slug: 'noi-tiet',
@@ -18,7 +18,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat3',
+    id: 'cat3',
     name: 'Hô hấp',
     description: 'Các bệnh lý về đường hô hấp, phổi, phế quản',
     slug: 'ho-hap',
@@ -26,7 +26,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat4',
+    id: 'cat4',
     name: 'Tiêu hóa',
     description: 'Bệnh lý về đường tiêu hóa, gan, mật, tụy',
     slug: 'tieu-hoa',
@@ -34,7 +34,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat5',
+    id: 'cat5',
     name: 'Thần kinh',
     description: 'Các bệnh lý thần kinh, đột quỵ, động kinh',
     slug: 'than-kinh',
@@ -42,7 +42,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat6',
+    id: 'cat6',
     name: 'Ung thư',
     description: 'Nghiên cứu và điều trị các bệnh ung thư',
     slug: 'ung-thu',
@@ -50,7 +50,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat7',
+    id: 'cat7',
     name: 'Nhi khoa',
     description: 'Chăm sóc sức khỏe trẻ em và sơ sinh',
     slug: 'nhi-khoa',
@@ -58,7 +58,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat8',
+    id: 'cat8',
     name: 'Sản phụ khoa',
     description: 'Sức khỏe phụ nữ, thai sản, và chăm sóc sản khoa',
     slug: 'san-phu-khoa',
@@ -66,7 +66,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat9',
+    id: 'cat9',
     name: 'Da liễu',
     description: 'Các bệnh lý về da, tóc, móng',
     slug: 'da-lieu',
@@ -74,7 +74,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat10',
+    id: 'cat10',
     name: 'Mắt',
     description: 'Các bệnh lý về mắt và thị lực',
     slug: 'mat',
@@ -82,7 +82,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat11',
+    id: 'cat11',
     name: 'Tai mũi họng',
     description: 'Bệnh lý tai, mũi, họng và cổ',
     slug: 'tai-mui-hong',
@@ -90,7 +90,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat12',
+    id: 'cat12',
     name: 'Cơ xương khớp',
     description: 'Các bệnh lý về xương, khớp, cơ và dây chằng',
     slug: 'co-xuong-khop',
@@ -98,7 +98,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat13',
+    id: 'cat13',
     name: 'Thận - Tiết niệu',
     description: 'Các bệnh lý về thận và đường tiết niệu',
     slug: 'than-tiet-nieu',
@@ -106,7 +106,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat14',
+    id: 'cat14',
     name: 'Y học cổ truyền',
     description: 'Đông y, châm cứu, và các phương pháp điều trị truyền thống',
     slug: 'y-hoc-co-truyen',
@@ -114,7 +114,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat15',
+    id: 'cat15',
     name: 'Dược học',
     description: 'Nghiên cứu và phát triển thuốc, tương tác thuốc',
     slug: 'duoc-hoc',
@@ -122,7 +122,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat16',
+    id: 'cat16',
     name: 'Y tế công cộng',
     description: 'Dịch tễ học, phòng chống dịch bệnh, chính sách y tế',
     slug: 'y-te-cong-cong',
@@ -130,7 +130,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat17',
+    id: 'cat17',
     name: 'Công nghệ y sinh',
     description: 'Ứng dụng công nghệ trong y học, AI, telemedicine',
     slug: 'cong-nghe-y-sinh',
@@ -138,7 +138,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat18',
+    id: 'cat18',
     name: 'Dinh dưỡng',
     description: 'Dinh dưỡng lâm sàng và dinh dưỡng cộng đồng',
     slug: 'dinh-duong',
@@ -146,7 +146,7 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat19',
+    id: 'cat19',
     name: 'Tâm thần',
     description: 'Sức khỏe tâm thần, trầm cảm, lo âu',
     slug: 'tam-than',
@@ -154,11 +154,11 @@ export const mockCategories: Category[] = [
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
   {
-    _id: 'cat20',
+    id: 'cat20',
     name: 'Chẩn đoán hình ảnh',
     description: 'X-quang, CT, MRI, siêu âm và các kỹ thuật chẩn đoán',
     slug: 'chan-doan-hinh-anh',
     createdAt: '2025-01-01T00:00:00.000Z',
     updatedAt: '2025-01-01T00:00:00.000Z',
   },
-];
+]

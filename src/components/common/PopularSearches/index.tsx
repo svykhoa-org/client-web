@@ -1,19 +1,19 @@
-import React from 'react';
-import { useNavigate } from 'react-router';
+import React from 'react'
+import { useNavigate } from 'react-router'
 
-import { FireOutlined, MedicineBoxOutlined, SearchOutlined } from '@ant-design/icons';
-import { Card, Tag, Typography } from 'antd';
+import { FireOutlined, MedicineBoxOutlined, SearchOutlined } from '@ant-design/icons'
+import { Card, Tag, Typography } from 'antd'
 
-import RouteConfig from '@/constants/RouteConfig';
+import RouteConfig from '@/constants/RouteConfig'
 
-const { Text } = Typography;
+const { Text } = Typography
 
 interface PopularSearchesProps {
-  className?: string;
+  className?: string
 }
 
 const PopularSearches: React.FC<PopularSearchesProps> = ({ className = '' }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const popularSearches = [
     { term: 'đau đầu', category: 'Triệu chứng', count: 1250 },
@@ -24,11 +24,11 @@ const PopularSearches: React.FC<PopularSearchesProps> = ({ className = '' }) => 
     { term: 'tiểu đường', category: 'Bệnh lý', count: 423 },
     { term: 'amoxicillin', category: 'Thuốc', count: 398 },
     { term: 'phụ sản', category: 'Chuyên khoa', count: 367 },
-  ];
+  ]
 
   const handleSearchClick = (term: string) => {
-    navigate(`${RouteConfig.MedicalSearchPage.path}?q=${encodeURIComponent(term)}`);
-  };
+    navigate(`${RouteConfig.MedicalSearchPage.path}?q=${encodeURIComponent(term)}`)
+  }
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
@@ -36,9 +36,9 @@ const PopularSearches: React.FC<PopularSearchesProps> = ({ className = '' }) => 
       'Bệnh lý': 'orange',
       Thuốc: 'green',
       'Chuyên khoa': 'blue',
-    };
-    return colors[category] || 'default';
-  };
+    }
+    return colors[category] || 'default'
+  }
 
   return (
     <Card
@@ -93,7 +93,7 @@ const PopularSearches: React.FC<PopularSearchesProps> = ({ className = '' }) => 
         </button>
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default PopularSearches;
+export default PopularSearches

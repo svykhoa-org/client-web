@@ -1,23 +1,23 @@
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router'
 
-import { Carousel, Typography } from 'antd';
+import { Carousel, Typography } from 'antd'
 
-import SearchBar from '@/components/common/Header/src/SearchBar';
-import RouteConfig from '@/constants/RouteConfig';
+import SearchBar from '@/components/common/Header/src/SearchBar'
+import RouteConfig from '@/constants/RouteConfig'
 
-import { AboutUs, ExpertTeam, MissionVision, PartnersCarousel } from '../components';
+import { AboutUs, ExpertTeam, MissionVision, PartnersCarousel } from '../components'
 // import { HotCoursesList } from './components';
-import { ListArticles } from './components/ListArticles';
-import { ListBulletins } from './components/ListBulletins';
+import { ListArticles } from './components/ListArticles'
+import { ListBulletins } from './components/ListBulletins'
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
 export const HomePage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSearch = (value: string) => {
-    navigate(RouteConfig.MedicalSearchPage.path, { state: { searchQuery: value } });
-  };
+    navigate(RouteConfig.MedicalSearchPage.path, { state: { searchQuery: value } })
+  }
 
   return (
     <div className="space-y-8">
@@ -88,5 +88,5 @@ export const HomePage = () => {
         <ExpertTeam />
       </div>
     </div>
-  );
-};
+  )
+}

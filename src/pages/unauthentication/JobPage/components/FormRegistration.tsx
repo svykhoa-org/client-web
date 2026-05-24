@@ -1,24 +1,28 @@
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 
-import { UploadOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Col, DatePicker, Form, Input, Row, Select, Upload, message } from 'antd';
-import { type UploadFile } from 'antd/es/upload/interface';
-import dayjs from 'dayjs';
+import { UploadOutlined } from '@ant-design/icons'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Col, DatePicker, Form, Input, Row, Select, Upload, message } from 'antd'
+import { type UploadFile } from 'antd/es/upload/interface'
+import dayjs from 'dayjs'
 
-import { type JobApplicationFormData, educationLevelOptions, jobApplicationSchema } from '../schema/jobSchema';
+import {
+  type JobApplicationFormData,
+  educationLevelOptions,
+  jobApplicationSchema,
+} from '../schema/jobSchema'
 
-const { TextArea } = Input;
+const { TextArea } = Input
 
 interface FormRegistrationProps {
-  onSubmit?: (data: JobApplicationFormData) => void;
-  initialValues?: Partial<JobApplicationFormData>;
-  onSuccess?: () => void;
+  onSubmit?: (data: JobApplicationFormData) => void
+  initialValues?: Partial<JobApplicationFormData>
+  onSuccess?: () => void
 }
 
 export const FormRegistration = ({ onSubmit, initialValues, onSuccess }: FormRegistrationProps) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   const {
     control,
     handleSubmit,
@@ -40,58 +44,58 @@ export const FormRegistration = ({ onSubmit, initialValues, onSuccess }: FormReg
       introduction: '',
       ...initialValues,
     },
-  });
+  })
 
   const handleFormSubmit = async (data: JobApplicationFormData) => {
     if (onSubmit) {
       try {
-        setLoading(true);
-        await onSubmit(data);
+        setLoading(true)
+        await onSubmit(data)
         if (onSuccess) {
-          onSuccess();
+          onSuccess()
         }
       } catch (error) {
-        console.log('Error submitting form:', error);
-        message.error('Đăng ký ứng tuyển thất bại!');
+        console.log('Error submitting form:', error)
+        message.error('Đăng ký ứng tuyển thất bại!')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     } else {
       // Default behavior: log form data
-      console.log('Form data:', data);
-      message.success('Đăng ký ứng tuyển thành công!');
+      console.log('Form data:', data)
+      message.success('Đăng ký ứng tuyển thành công!')
     }
-  };
+  }
 
   const handleReset = () => {
-    reset();
-  };
+    reset()
+  }
 
   const handleCVUpload = (info: { fileList: UploadFile[] }) => {
-    const { fileList } = info;
-    setValue('cvFile', fileList);
-  };
+    const { fileList } = info
+    setValue('cvFile', fileList)
+  }
 
   const beforeUpload = (file: File) => {
     const isValidType = [
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ].includes(file.type);
+    ].includes(file.type)
 
     if (!isValidType) {
-      message.error('Chỉ được upload file PDF, DOC hoặc DOCX!');
-      return false;
+      message.error('Chỉ được upload file PDF, DOC hoặc DOCX!')
+      return false
     }
 
-    const isValidSize = file.size / 1024 / 1024 < 5;
+    const isValidSize = file.size / 1024 / 1024 < 5
     if (!isValidSize) {
-      message.error('File không được vượt quá 5MB!');
-      return false;
+      message.error('File không được vượt quá 5MB!')
+      return false
     }
 
-    return false; // Prevent automatic upload
-  };
+    return false // Prevent automatic upload
+  }
 
   return (
     <Form layout="vertical" onFinish={handleSubmit(handleFormSubmit)}>
@@ -136,7 +140,12 @@ export const FormRegistration = ({ onSubmit, initialValues, onSuccess }: FormReg
         </Col>
       </Row>
 
-      <Form.Item label="Địa chỉ" validateStatus={errors.address ? 'error' : ''} help={errors.address?.message} required>
+      <Form.Item
+        label="Địa chỉ"
+        validateStatus={errors.address ? 'error' : ''}
+        help={errors.address?.message}
+        required
+      >
         <Controller
           name="address"
           control={control}
@@ -156,18 +165,29 @@ export const FormRegistration = ({ onSubmit, initialValues, onSuccess }: FormReg
               name="educationLevel"
               control={control}
               render={({ field }) => (
-                <Select {...field} placeholder="Chọn trình độ học vấn" options={educationLevelOptions} />
+                <Select
+                  {...field}
+                  placeholder="Chọn trình độ học vấn"
+                  options={educationLevelOptions}
+                />
               )}
             />
           </Form.Item>
         </Col>
 
         <Col xs={24} md={12}>
-          <Form.Item label="Email" validateStatus={errors.email ? 'error' : ''} help={errors.email?.message} required>
+          <Form.Item
+            label="Email"
+            validateStatus={errors.email ? 'error' : ''}
+            help={errors.email?.message}
+            required
+          >
             <Controller
               name="email"
               control={control}
-              render={({ field }) => <Input {...field} type="email" placeholder="Nhập email của bạn" />}
+              render={({ field }) => (
+                <Input {...field} type="email" placeholder="Nhập email của bạn" />
+              )}
             />
           </Form.Item>
         </Col>
@@ -264,5 +284,5 @@ export const FormRegistration = ({ onSubmit, initialValues, onSuccess }: FormReg
         </Row>
       </Form.Item>
     </Form>
-  );
-};
+  )
+}

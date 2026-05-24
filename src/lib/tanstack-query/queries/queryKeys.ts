@@ -11,8 +11,10 @@ export const queryKeys = {
     list: (filters: Record<string, unknown>) => [...queryKeys.courses.lists(), filters] as const,
     details: () => [...queryKeys.courses.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.courses.details(), id] as const,
-    available: (filters: Record<string, unknown>) => [...queryKeys.courses.all, 'available', filters] as const,
-    upcoming: (filters: Record<string, unknown>) => [...queryKeys.courses.all, 'upcoming', filters] as const,
+    available: (filters: Record<string, unknown>) =>
+      [...queryKeys.courses.all, 'available', filters] as const,
+    upcoming: (filters: Record<string, unknown>) =>
+      [...queryKeys.courses.all, 'upcoming', filters] as const,
     hot: () => [...queryKeys.courses.all, 'hot'] as const,
   },
 
@@ -20,7 +22,8 @@ export const queryKeys = {
   lessons: {
     all: ['lessons'] as const,
     details: () => [...queryKeys.lessons.all, 'detail'] as const,
-    detail: (courseId: string, lessonId: string) => [...queryKeys.lessons.details(), courseId, lessonId] as const,
+    detail: (courseId: string, lessonId: string) =>
+      [...queryKeys.lessons.details(), courseId, lessonId] as const,
   },
 
   // // Posts
@@ -70,4 +73,4 @@ export const queryKeys = {
   //   lists: () => [...queryKeys.comments.all, 'list'] as const,
   //   list: (postId: string) => [...queryKeys.comments.lists(), postId] as const,
   // },
-} as const;
+} as const

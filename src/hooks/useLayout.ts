@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import { useContext } from 'react'
 
-import { LayoutContext, type LayoutContextType } from '@/contexts';
+import { LayoutContext, type LayoutContextType } from '@/contexts'
 
 export const useLayout = (): LayoutContextType => {
-  const context = useContext(LayoutContext);
+  const context = useContext(LayoutContext)
   if (!context) {
-    throw new Error('useLayout must be used within a LayoutProvider');
+    throw new Error('useLayout must be used within a LayoutProvider')
   }
-  return context;
-};
+  return context
+}

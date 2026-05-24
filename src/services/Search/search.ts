@@ -1,25 +1,25 @@
 export const search = async (query: string) => {
-  const apiUrl = import.meta.env.VITE_API_CHATBOX_URL;
+  const apiUrl = import.meta.env.VITE_API_CHATBOX_URL
 
-  console.log('apiUrl:', apiUrl);
-  console.log('requestBody:', { prompt: query });
+  console.log('apiUrl:', apiUrl)
+  console.log('requestBody:', { prompt: query })
 
   // Fallback to mock data if no API URL configured
   if (!apiUrl || apiUrl === 'https://your-chatbot-api-url.com/chat') {
-    console.log('Sử dụng mock data cho tìm kiếm...');
+    console.log('Sử dụng mock data cho tìm kiếm...')
 
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 1500))
 
-    return generateMockResponse(query);
+    return generateMockResponse(query)
   }
 
   const requestBody = {
     prompt: query,
-  };
+  }
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 seconds timeout
 
   try {
     const response = await fetch(apiUrl, {
@@ -29,30 +29,30 @@ export const search = async (query: string) => {
       },
       body: JSON.stringify(requestBody),
       signal: controller.signal,
-    });
+    })
 
-    clearTimeout(timeoutId);
-    console.log('Response:', response);
+    clearTimeout(timeoutId)
+    console.log('Response:', response)
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    const rawResponse = await response.text();
+    const rawResponse = await response.text()
 
-    return rawResponse;
+    return rawResponse
   } catch (error) {
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId)
     if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Yêu cầu bị timeout (quá 30 giây)');
+      throw new Error('Yêu cầu bị timeout (quá 30 giây)')
     }
-    throw error;
+    throw error
   }
-};
+}
 
 // Mock response generator
 const generateMockResponse = (query: string): string => {
-  const lowerQuery = query.toLowerCase();
+  const lowerQuery = query.toLowerCase()
 
   if (lowerQuery.includes('đau đầu') || lowerQuery.includes('dau dau')) {
     return `# Hướng dẫn chuẩn đoán: Đau đầu
@@ -89,7 +89,7 @@ const generateMockResponse = (query: string): string => {
 - Thuốc giảm đau không kê đơn (paracetamol, ibuprofen)
 - Thuốc chuyên biệt cho migraine (theo chỉ định bác sĩ)
 
-**Lưu ý:** Nếu đau đầu kéo dài hoặc có dấu hiệu bất thường, hãy thăm khám bác sĩ để được chẩn đoán và điều trị chính xác.`;
+**Lưu ý:** Nếu đau đầu kéo dài hoặc có dấu hiệu bất thường, hãy thăm khám bác sĩ để được chẩn đoán và điều trị chính xác.`
   }
 
   if (lowerQuery.includes('ho') || lowerQuery.includes('cough')) {
@@ -141,7 +141,7 @@ const generateMockResponse = (query: string): string => {
 - Thuốc giảm ho (theo chỉ định)
 - Kháng sinh (nếu do vi khuẩn)
 
-**Khuyến cáo:** Nếu ho không thuyên giảm sau 1-2 tuần hoặc có dấu hiệu nặng, hãy đến khám bác sĩ.`;
+**Khuyến cáo:** Nếu ho không thuyên giảm sau 1-2 tuần hoặc có dấu hiệu nặng, hãy đến khám bác sĩ.`
   }
 
   // Default response
@@ -174,5 +174,5 @@ Dựa trên từ khóa tìm kiếm của bạn, đây có thể là một tình 
 ## Tài nguyên hữu ích
 - Liên hệ bác sĩ gia đình
 - Đường dây tư vấn sức khỏe: 19003
-- Cấp cứu: 115`;
-};
+- Cấp cứu: 115`
+}

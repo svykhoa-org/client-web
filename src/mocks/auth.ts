@@ -1,17 +1,18 @@
-import type { User } from '@/models/User';
-import { UserRole, UserStatus } from '@/models/User';
+import type { User } from '@/models/User'
+import { UserRole, UserStatus } from '@/models/User'
 
 // Mock users database
 const mockUsers: Record<string, { password: string; user: User }> = {
   'admin@medical-forum.com': {
     password: 'admin123',
     user: {
-      _id: '1',
+      id: '1',
       fullName: 'Bác sĩ Nguyễn Văn Admin',
       email: 'admin@medical-forum.com',
       role: UserRole.Admin,
       status: UserStatus.Active,
-      avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face',
       bio: 'Quản trị viên hệ thống SVYKHOA',
       specialization: 'Quản lý Y tế',
       certificates: ['Chứng chỉ Quản lý Bệnh viện', 'Thạc sĩ Y tế Công cộng'],
@@ -29,12 +30,13 @@ const mockUsers: Record<string, { password: string; user: User }> = {
   'doctor@medical-forum.com': {
     password: 'doctor123',
     user: {
-      _id: '2',
+      id: '2',
       fullName: 'Bác sĩ Trần Thị Lan',
       email: 'doctor@medical-forum.com',
       role: UserRole.User,
       status: UserStatus.Active,
-      avatarUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face',
       bio: 'Bác sĩ chuyên khoa Nội tim mạch với 10 năm kinh nghiệm',
       specialization: 'Tim mạch',
       certificates: ['Chứng chỉ chuyên khoa Tim mạch cấp I', 'Chứng chỉ siêu âm tim'],
@@ -52,12 +54,13 @@ const mockUsers: Record<string, { password: string; user: User }> = {
   'user@medical-forum.com': {
     password: 'user123',
     user: {
-      _id: '3',
+      id: '3',
       fullName: 'Nguyễn Văn User',
       email: 'user@medical-forum.com',
       role: UserRole.User,
       status: UserStatus.Active,
-      avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+      avatarUrl:
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
       bio: 'Sinh viên Y khoa năm cuối, đam mê nghiên cứu y học',
       specialization: 'Y học cơ sở',
       certificates: [],
@@ -72,37 +75,44 @@ const mockUsers: Record<string, { password: string; user: User }> = {
       updatedAt: new Date().toISOString(),
     },
   },
-};
+}
 
 // Mock authentication functions
-export const mockLogin = async (email: string, password: string): Promise<{ user: User; accessToken: string }> => {
+export const mockLogin = async (
+  email: string,
+  password: string,
+): Promise<{ user: User; accessToken: string }> => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
-  const userRecord = mockUsers[email];
+  const userRecord = mockUsers[email]
 
   if (!userRecord || userRecord.password !== password) {
-    throw new Error('Email hoặc mật khẩu không đúng');
+    throw new Error('Email hoặc mật khẩu không đúng')
   }
 
   return {
     user: userRecord.user,
-    accessToken: `mock-token-${userRecord.user._id}-${Date.now()}`,
-  };
-};
+    accessToken: `mock-token-${userRecord.user.id}-${Date.now()}`,
+  }
+}
 
-export const mockRegister = async (userData: { name: string; email: string; password: string }): Promise<User> => {
+export const mockRegister = async (userData: {
+  name: string
+  email: string
+  password: string
+}): Promise<User> => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  await new Promise(resolve => setTimeout(resolve, 1500))
 
   // Check if user already exists
   if (mockUsers[userData.email]) {
-    throw new Error('Email đã được sử dụng');
+    throw new Error('Email đã được sử dụng')
   }
 
   // Create new user
   const newUser: User = {
-    _id: `user-${Date.now()}`,
+    id: `user-${Date.now()}`,
     fullName: userData.name,
     email: userData.email,
     role: UserRole.User,
@@ -120,22 +130,22 @@ export const mockRegister = async (userData: { name: string; email: string; pass
     },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  };
+  }
 
   // Add to mock database
   mockUsers[userData.email] = {
     password: userData.password,
     user: newUser,
-  };
+  }
 
-  return newUser;
-};
+  return newUser
+}
 
 export const mockLogout = async (): Promise<void> => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 500))
   // In real app, this would invalidate tokens on server
-};
+}
 
 // Helper function to get mock users for testing
 export const getMockUsers = () => {
@@ -149,5 +159,5 @@ export const getMockUsers = () => {
       '123',
     role: record.user.role,
     fullName: record.user.fullName,
-  }));
-};
+  }))
+}

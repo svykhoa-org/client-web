@@ -16,53 +16,53 @@
 //   />
 // );
 // export default Editor;
-import React, { useMemo, useRef } from 'react';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import React, { useMemo, useRef } from 'react'
+import ReactQuill from 'react-quill-new'
+import 'react-quill-new/dist/quill.snow.css'
 
 // Định nghĩa type cho Quill
 interface QuillInstance {
-  getSelection(): { index: number; length: number } | null;
-  insertEmbed(index: number, type: string, value: string): void;
+  getSelection(): { index: number; length: number } | null
+  insertEmbed(index: number, type: string, value: string): void
 }
 
 interface EditorProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  onImageUpload?: (file: File) => Promise<string>; // Callback để upload ảnh
+  value?: string
+  onChange?: (value: string) => void
+  placeholder?: string
+  onImageUpload?: (file: File) => Promise<string> // Callback để upload ảnh
 }
 
 const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUpload }) => {
-  const quillRef = useRef<ReactQuill>(null);
+  const quillRef = useRef<ReactQuill>(null)
 
   // Xử lý upload ảnh
   const imageHandler = () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
+    const input = document.createElement('input')
+    input.setAttribute('type', 'file')
+    input.setAttribute('accept', 'image/*')
+    input.click()
 
     input.onchange = async () => {
-      const file = input.files?.[0];
+      const file = input.files?.[0]
       if (file && onImageUpload && quillRef.current) {
         try {
           // Upload ảnh và nhận URL
-          const imageUrl = await onImageUpload(file);
+          const imageUrl = await onImageUpload(file)
 
           // Chèn ảnh vào editor
-          const quill = quillRef.current.getEditor() as QuillInstance;
-          const range = quill.getSelection();
+          const quill = quillRef.current.getEditor() as QuillInstance
+          const range = quill.getSelection()
           if (range) {
-            quill.insertEmbed(range.index, 'image', imageUrl);
+            quill.insertEmbed(range.index, 'image', imageUrl)
           }
         } catch (error) {
-          console.error('Error uploading image:', error);
-          alert('Lỗi upload ảnh!');
+          console.error('Error uploading image:', error)
+          alert('Lỗi upload ảnh!')
         }
       }
-    };
-  };
+    }
+  }
 
   // Cấu hình modules
   const modules = useMemo(
@@ -86,8 +86,8 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
         },
       },
     }),
-    [onImageUpload]
-  );
+    [onImageUpload],
+  )
 
   // Cấu hình formats
   const formats = [
@@ -110,7 +110,7 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
     'link',
     'image',
     'video',
-  ];
+  ]
 
   return (
     <ReactQuill
@@ -122,7 +122,7 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
       modules={modules}
       formats={formats}
     />
-  );
-};
+  )
+}
 
-export default Editor;
+export default Editor

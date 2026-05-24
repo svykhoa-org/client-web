@@ -42,9 +42,7 @@ const RegisterPage = () => {
       await register(registerData)
 
       // Redirect to verify-email page after successful registration
-      navigate(
-        `${RouteConfig.VerifyEmailPage.path}?email=${encodeURIComponent(values.email)}`,
-      )
+      navigate(`${RouteConfig.VerifyEmailPage.path}?email=${encodeURIComponent(values.email)}`)
     } catch (error) {
       console.error('Registration failed:', error)
       setError(error instanceof Error ? error.message : 'Đăng ký thất bại')
@@ -67,9 +65,7 @@ const RegisterPage = () => {
             <Title level={2} className="mb-1">
               Đăng ký tài khoản
             </Title>
-            <Text className="text-gray-500">
-              Tạo tài khoản để tham gia vào cộng đồng SVYKHOA
-            </Text>
+            <Text className="text-gray-500">Tạo tài khoản để tham gia vào cộng đồng SVYKHOA</Text>
           </div>
 
           {error && (

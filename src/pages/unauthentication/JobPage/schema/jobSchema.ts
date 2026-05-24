@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // Schema validation cho form đăng ký ứng tuyển
 export const jobApplicationSchema = z.object({
@@ -12,10 +12,10 @@ export const jobApplicationSchema = z.object({
     .string()
     .min(1, 'Ngày sinh là bắt buộc')
     .refine(date => {
-      const birthDate = new Date(date);
-      const today = new Date();
-      const age = today.getFullYear() - birthDate.getFullYear();
-      return age >= 18 && age <= 65;
+      const birthDate = new Date(date)
+      const today = new Date()
+      const age = today.getFullYear() - birthDate.getFullYear()
+      return age >= 18 && age <= 65
     }, 'Tuổi phải từ 18 đến 65'),
 
   address: z
@@ -45,7 +45,7 @@ export const jobApplicationSchema = z.object({
     .refine(files => files?.length > 0, 'File CV là bắt buộc')
     .refine(
       files => files?.[0]?.size <= 5000000, // 5MB
-      'Kích thước file CV không được vượt quá 5MB'
+      'Kích thước file CV không được vượt quá 5MB',
     )
     .refine(
       files =>
@@ -54,7 +54,7 @@ export const jobApplicationSchema = z.object({
           'application/msword',
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ].includes(files?.[0]?.type),
-      'File CV phải có định dạng PDF, DOC hoặc DOCX'
+      'File CV phải có định dạng PDF, DOC hoặc DOCX',
     ),
 
   introduction: z
@@ -62,10 +62,10 @@ export const jobApplicationSchema = z.object({
     .min(1, 'Giới thiệu bản thân là bắt buộc')
     .min(50, 'Giới thiệu bản thân phải có ít nhất 50 ký tự')
     .max(1000, 'Giới thiệu bản thân không được vượt quá 1000 ký tự'),
-});
+})
 
 // Type cho form data
-export type JobApplicationFormData = z.infer<typeof jobApplicationSchema>;
+export type JobApplicationFormData = z.infer<typeof jobApplicationSchema>
 
 // Options cho trình độ học vấn
 export const educationLevelOptions = [
@@ -75,4 +75,4 @@ export const educationLevelOptions = [
   { value: 'master', label: 'Thạc sĩ' },
   { value: 'phd', label: 'Tiến sĩ' },
   { value: 'other', label: 'Khác' },
-];
+]

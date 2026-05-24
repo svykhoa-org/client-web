@@ -1,7 +1,7 @@
-import { PostDetailLocales } from './PostDetailLocales';
+import { PostDetailLocales } from './PostDetailLocales'
 
 const vi = {
   PostDetailLocales,
-};
+}
 
-export default vi;
+export default vi

@@ -1,3 +1,3 @@
-import FeaturedUserDetailPage from './src/FeaturedUserDetailPage';
+import FeaturedUserDetailPage from './src/FeaturedUserDetailPage'
 
-export default FeaturedUserDetailPage;
+export default FeaturedUserDetailPage

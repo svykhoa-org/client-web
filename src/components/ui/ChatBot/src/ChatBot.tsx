@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import { IconChat } from '../../Icons/IconChatBot';
-import ChatWindow from './components/ChatWindow';
+import { IconChat } from '../../Icons/IconChatBot'
+import ChatWindow from './components/ChatWindow'
 
 const ChatBot = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false)
 
   const toggleChat = () => {
-    setIsChatOpen(prev => !prev);
-  };
+    setIsChatOpen(prev => !prev)
+  }
 
   return (
     <>
@@ -21,7 +21,7 @@ const ChatBot = () => {
 
       <ChatWindow isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
-  );
-};
+  )
+}
 
-export default ChatBot;
+export default ChatBot

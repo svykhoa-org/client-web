@@ -1,4 +1,5 @@
 <!-- gitnexus:start -->
+
 # GitNexus — Code Intelligence
 
 This project is indexed by GitNexus as **svykhoa-client** (1143 symbols, 2078 relationships, 26 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
@@ -35,35 +36,36 @@ This project is indexed by GitNexus as **svykhoa-client** (1143 symbols, 2078 re
 
 ## Tools Quick Reference
 
-| Tool | When to use | Command |
-|------|-------------|---------|
-| `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
-| `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
-| `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
-| `detect_changes` | Pre-commit scope check | `gitnexus_detect_changes({scope: "staged"})` |
-| `rename` | Safe multi-file rename | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
-| `cypher` | Custom graph queries | `gitnexus_cypher({query: "MATCH ..."})` |
+| Tool             | When to use                   | Command                                                                 |
+| ---------------- | ----------------------------- | ----------------------------------------------------------------------- |
+| `query`          | Find code by concept          | `gitnexus_query({query: "auth validation"})`                            |
+| `context`        | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})`                              |
+| `impact`         | Blast radius before editing   | `gitnexus_impact({target: "X", direction: "upstream"})`                 |
+| `detect_changes` | Pre-commit scope check        | `gitnexus_detect_changes({scope: "staged"})`                            |
+| `rename`         | Safe multi-file rename        | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
+| `cypher`         | Custom graph queries          | `gitnexus_cypher({query: "MATCH ..."})`                                 |
 
 ## Impact Risk Levels
 
-| Depth | Meaning | Action |
-|-------|---------|--------|
-| d=1 | WILL BREAK — direct callers/importers | MUST update these |
-| d=2 | LIKELY AFFECTED — indirect deps | Should test |
-| d=3 | MAY NEED TESTING — transitive | Test if critical path |
+| Depth | Meaning                               | Action                |
+| ----- | ------------------------------------- | --------------------- |
+| d=1   | WILL BREAK — direct callers/importers | MUST update these     |
+| d=2   | LIKELY AFFECTED — indirect deps       | Should test           |
+| d=3   | MAY NEED TESTING — transitive         | Test if critical path |
 
 ## Resources
 
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/svykhoa-client/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/svykhoa-client/clusters` | All functional areas |
-| `gitnexus://repo/svykhoa-client/processes` | All execution flows |
-| `gitnexus://repo/svykhoa-client/process/{name}` | Step-by-step execution trace |
+| Resource                                        | Use for                                  |
+| ----------------------------------------------- | ---------------------------------------- |
+| `gitnexus://repo/svykhoa-client/context`        | Codebase overview, check index freshness |
+| `gitnexus://repo/svykhoa-client/clusters`       | All functional areas                     |
+| `gitnexus://repo/svykhoa-client/processes`      | All execution flows                      |
+| `gitnexus://repo/svykhoa-client/process/{name}` | Step-by-step execution trace             |
 
 ## Self-Check Before Finishing
 
 Before completing any code modification task, verify:
+
 1. `gitnexus_impact` was run for all modified symbols
 2. No HIGH/CRITICAL risk warnings were ignored
 3. `gitnexus_detect_changes()` confirms changes match expected scope
@@ -89,33 +91,33 @@ To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.
 
 ## CLI
 
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
-| Work in the Components area (33 symbols) | `.claude/skills/generated/components/SKILL.md` |
-| Work in the ResourcePage area (17 symbols) | `.claude/skills/generated/resourcepage/SKILL.md` |
-| Work in the Services area (9 symbols) | `.claude/skills/generated/services/SKILL.md` |
-| Work in the MedicalSearchPage area (8 symbols) | `.claude/skills/generated/medicalsearchpage/SKILL.md` |
-| Work in the DocumentListPage area (7 symbols) | `.claude/skills/generated/documentlistpage/SKILL.md` |
-| Work in the Auth area (6 symbols) | `.claude/skills/generated/auth/SKILL.md` |
-| Work in the Cluster_14 area (6 symbols) | `.claude/skills/generated/cluster-14/SKILL.md` |
-| Work in the DocumentClassify area (5 symbols) | `.claude/skills/generated/documentclassify/SKILL.md` |
-| Work in the ForumPage area (5 symbols) | `.claude/skills/generated/forumpage/SKILL.md` |
-| Work in the Document area (5 symbols) | `.claude/skills/generated/document/SKILL.md` |
-| Work in the DocumentDetailPage area (5 symbols) | `.claude/skills/generated/documentdetailpage/SKILL.md` |
-| Work in the Request area (5 symbols) | `.claude/skills/generated/request/SKILL.md` |
-| Work in the BulletinDetailPage area (5 symbols) | `.claude/skills/generated/bulletindetailpage/SKILL.md` |
-| Work in the CreatePostPage area (5 symbols) | `.claude/skills/generated/createpostpage/SKILL.md` |
-| Work in the Order area (4 symbols) | `.claude/skills/generated/order/SKILL.md` |
-| Work in the Cluster_36 area (4 symbols) | `.claude/skills/generated/cluster-36/SKILL.md` |
-| Work in the JobPage area (3 symbols) | `.claude/skills/generated/jobpage/SKILL.md` |
-| Work in the PopularSearches area (3 symbols) | `.claude/skills/generated/popularsearches/SKILL.md` |
-| Work in the Cluster_47 area (3 symbols) | `.claude/skills/generated/cluster-47/SKILL.md` |
-| Work in the Cluster_49 area (3 symbols) | `.claude/skills/generated/cluster-49/SKILL.md` |
+| Task                                            | Read this skill file                                        |
+| ----------------------------------------------- | ----------------------------------------------------------- |
+| Understand architecture / "How does X work?"    | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
+| Blast radius / "What breaks if I change X?"     | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?"                | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
+| Rename / extract / split / refactor             | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
+| Tools, resources, schema reference              | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
+| Index, status, clean, wiki CLI commands         | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
+| Work in the Components area (33 symbols)        | `.claude/skills/generated/components/SKILL.md`              |
+| Work in the ResourcePage area (17 symbols)      | `.claude/skills/generated/resourcepage/SKILL.md`            |
+| Work in the Services area (9 symbols)           | `.claude/skills/generated/services/SKILL.md`                |
+| Work in the MedicalSearchPage area (8 symbols)  | `.claude/skills/generated/medicalsearchpage/SKILL.md`       |
+| Work in the DocumentListPage area (7 symbols)   | `.claude/skills/generated/documentlistpage/SKILL.md`        |
+| Work in the Auth area (6 symbols)               | `.claude/skills/generated/auth/SKILL.md`                    |
+| Work in the Cluster_14 area (6 symbols)         | `.claude/skills/generated/cluster-14/SKILL.md`              |
+| Work in the DocumentClassify area (5 symbols)   | `.claude/skills/generated/documentclassify/SKILL.md`        |
+| Work in the ForumPage area (5 symbols)          | `.claude/skills/generated/forumpage/SKILL.md`               |
+| Work in the Document area (5 symbols)           | `.claude/skills/generated/document/SKILL.md`                |
+| Work in the DocumentDetailPage area (5 symbols) | `.claude/skills/generated/documentdetailpage/SKILL.md`      |
+| Work in the Request area (5 symbols)            | `.claude/skills/generated/request/SKILL.md`                 |
+| Work in the BulletinDetailPage area (5 symbols) | `.claude/skills/generated/bulletindetailpage/SKILL.md`      |
+| Work in the CreatePostPage area (5 symbols)     | `.claude/skills/generated/createpostpage/SKILL.md`          |
+| Work in the Order area (4 symbols)              | `.claude/skills/generated/order/SKILL.md`                   |
+| Work in the Cluster_36 area (4 symbols)         | `.claude/skills/generated/cluster-36/SKILL.md`              |
+| Work in the JobPage area (3 symbols)            | `.claude/skills/generated/jobpage/SKILL.md`                 |
+| Work in the PopularSearches area (3 symbols)    | `.claude/skills/generated/popularsearches/SKILL.md`         |
+| Work in the Cluster_47 area (3 symbols)         | `.claude/skills/generated/cluster-47/SKILL.md`              |
+| Work in the Cluster_49 area (3 symbols)         | `.claude/skills/generated/cluster-49/SKILL.md`              |
 
 <!-- gitnexus:end -->

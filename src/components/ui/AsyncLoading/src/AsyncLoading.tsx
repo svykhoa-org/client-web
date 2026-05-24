@@ -1,33 +1,33 @@
-import React from 'react';
+import React from 'react'
 
-import { LoadingOutlined } from '@ant-design/icons';
-import { Skeleton, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons'
+import { Skeleton, Spin } from 'antd'
 
 export interface AsyncLoadingProps {
   /** Loading state */
-  loading: boolean;
+  loading: boolean
   /** Children to render when not loading */
-  children: React.ReactNode;
+  children: React.ReactNode
   /** Type of loading indicator */
-  type?: 'spinner' | 'skeleton';
+  type?: 'spinner' | 'skeleton'
   /** Custom loading message */
-  message?: string;
+  message?: string
   /** Size of the loading indicator */
-  size?: 'small' | 'default' | 'large';
+  size?: 'small' | 'default' | 'large'
   /** Whether to show the loading overlay */
-  overlay?: boolean;
+  overlay?: boolean
   /** Skeleton configuration when type is 'skeleton' */
   skeleton?: {
     /** Number of skeleton lines */
-    rows?: number;
+    rows?: number
     /** Whether to show avatar */
-    avatar?: boolean;
+    avatar?: boolean
     /** Whether to show title */
-    title?: boolean;
-  };
+    title?: boolean
+  }
 }
 
-const customIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const customIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
 
 export const AsyncLoading: React.FC<AsyncLoadingProps> = ({
   loading,
@@ -39,7 +39,7 @@ export const AsyncLoading: React.FC<AsyncLoadingProps> = ({
   skeleton = { rows: 3, avatar: false, title: true },
 }) => {
   if (!loading) {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
   if (type === 'skeleton') {
@@ -53,7 +53,7 @@ export const AsyncLoading: React.FC<AsyncLoadingProps> = ({
       >
         {children}
       </Skeleton>
-    );
+    )
   }
 
   const spinContent = (
@@ -61,7 +61,7 @@ export const AsyncLoading: React.FC<AsyncLoadingProps> = ({
       <Spin indicator={customIcon} size={size} />
       {message && <p className="text-sm text-gray-600">{message}</p>}
     </div>
-  );
+  )
 
   if (overlay) {
     return (
@@ -71,8 +71,8 @@ export const AsyncLoading: React.FC<AsyncLoadingProps> = ({
           <Spin indicator={customIcon} size={size} tip={message} />
         </div>
       </div>
-    );
+    )
   }
 
-  return spinContent;
-};
+  return spinContent
+}

@@ -89,14 +89,7 @@ export const ForgotPasswordPage = () => {
                 </Text>
               </div>
 
-              {error && (
-                <Alert
-                  message={error}
-                  type="error"
-                  showIcon
-                  className="mb-4"
-                />
-              )}
+              {error && <Alert message={error} type="error" showIcon className="mb-4" />}
 
               <Form name="forgot-password" onFinish={handleSubmit} layout="vertical">
                 <Form.Item

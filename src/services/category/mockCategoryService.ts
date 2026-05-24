@@ -1,13 +1,13 @@
-import type { ListResponseData, SuccessResponse } from '@/common/interface/ServiceResponse';
-import { mockCategories } from '@/mocks/categories';
-import type { Category } from '@/models/Category';
+import type { ListResponseData, SuccessResponse } from '@/common/interface/ServiceResponse'
+import { mockCategories } from '@/mocks/categories'
+import type { Category } from '@/models/Category'
 
-export type GetCategoriesResponse = ListResponseData<Category>;
+export type GetCategoriesResponse = ListResponseData<Category>
 
 // Mock implementation thay thế cho real API
 export const getCategories = async (): Promise<SuccessResponse<GetCategoriesResponse>> => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 500))
 
   const response: SuccessResponse<GetCategoriesResponse> = {
     statusCode: 200,
@@ -22,18 +22,18 @@ export const getCategories = async (): Promise<SuccessResponse<GetCategoriesResp
       },
     },
     timestamp: new Date().toISOString(),
-  };
+  }
 
-  return response;
-};
+  return response
+}
 
 export const getCategoryById = async (id: string): Promise<SuccessResponse<Category>> => {
-  await new Promise(resolve => setTimeout(resolve, 200));
+  await new Promise(resolve => setTimeout(resolve, 200))
 
-  const category = mockCategories.find(cat => cat._id === id);
+  const category = mockCategories.find(cat => cat.id === id)
 
   if (!category) {
-    throw new Error('Category not found');
+    throw new Error('Category not found')
   }
 
   return {
@@ -41,5 +41,5 @@ export const getCategoryById = async (id: string): Promise<SuccessResponse<Categ
     message: 'Category retrieved successfully',
     data: category,
     timestamp: new Date().toISOString(),
-  };
-};
+  }
+}

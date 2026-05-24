@@ -46,7 +46,7 @@ class HttpClient {
         }
 
         // Thêm user ID vào x-client-id header nếu có
-        const userId = authState.user?.id || authState.user?._id
+        const userId = authState.user?.id || authState.user?.id
         if (userId) {
           config.headers['x-client-id'] = userId
         }

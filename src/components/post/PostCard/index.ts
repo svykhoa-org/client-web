@@ -1,2 +1,2 @@
-export { default } from './src/PostCard';
-export * from './src/PostCard';
+export { default } from './src/PostCard'
+export * from './src/PostCard'

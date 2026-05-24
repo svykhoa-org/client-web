@@ -1,3 +1,3 @@
-import RegisterPage from './src/RegisterPage';
+import RegisterPage from './src/RegisterPage'
 
-export default RegisterPage;
+export default RegisterPage

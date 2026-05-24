@@ -1,3 +1,3 @@
-import type { Course } from '@/models/Course';
+import type { Course } from '@/models/Course'
 
-export const mockCourses: Course[] = [];
+export const mockCourses: Course[] = []

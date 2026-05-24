@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { useEffect } from 'react'
+import { useNavigate, useParams, useSearchParams } from 'react-router'
 
-import { CheckCircleOutlined, CloseCircleOutlined, StopOutlined } from '@ant-design/icons';
-import { Button, Card, Result } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined, StopOutlined } from '@ant-design/icons'
+import { Button, Card, Result } from 'antd'
 
 export const PaymentResultPage = () => {
-  const navigate = useNavigate();
-  const { orderId } = useParams<{ orderId: string }>();
-  const [searchParams] = useSearchParams();
-  const paymentStatus = searchParams.get('payment');
+  const navigate = useNavigate()
+  const { orderId } = useParams<{ orderId: string }>()
+  const [searchParams] = useSearchParams()
+  const paymentStatus = searchParams.get('payment')
 
   useEffect(() => {
     // Log thông tin callback từ Sepay
@@ -16,8 +16,8 @@ export const PaymentResultPage = () => {
       orderId,
       status: paymentStatus,
       allParams: Object.fromEntries(searchParams.entries()),
-    });
-  }, [orderId, paymentStatus, searchParams]);
+    })
+  }, [orderId, paymentStatus, searchParams])
 
   const getResultConfig = () => {
     switch (paymentStatus) {
@@ -35,7 +35,7 @@ export const PaymentResultPage = () => {
               Test lại
             </Button>,
           ],
-        };
+        }
       case 'error':
         return {
           status: 'error' as const,
@@ -50,7 +50,7 @@ export const PaymentResultPage = () => {
               Về trang chủ
             </Button>,
           ],
-        };
+        }
       case 'cancel':
         return {
           status: 'warning' as const,
@@ -65,7 +65,7 @@ export const PaymentResultPage = () => {
               Về trang chủ
             </Button>,
           ],
-        };
+        }
       default:
         return {
           status: 'info' as const,
@@ -76,11 +76,11 @@ export const PaymentResultPage = () => {
               Về trang chủ
             </Button>,
           ],
-        };
+        }
     }
-  };
+  }
 
-  const config = getResultConfig();
+  const config = getResultConfig()
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -108,5 +108,5 @@ export const PaymentResultPage = () => {
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}

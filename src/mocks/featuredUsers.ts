@@ -1,9 +1,9 @@
-import { UserRole, UserStatus } from '@/models/User';
-import type { User } from '@/models/User';
+import { UserRole, UserStatus } from '@/models/User'
+import type { User } from '@/models/User'
 
 export const featuredUsers: User[] = [
   {
-    _id: '1',
+    id: '1',
     fullName: 'Bác sĩ Nguyễn Văn A',
     email: 'bs.nguyenvana@gmail.com',
     role: UserRole.User,
@@ -23,7 +23,7 @@ export const featuredUsers: User[] = [
     workplaces: ['Bệnh viện Chợ Rẫy', 'Phòng khám Đa khoa Medic'],
   },
   {
-    _id: '2',
+    id: '2',
     fullName: 'Dược sĩ Trần Thị B',
     email: 'ds.tranthib@gmail.com',
     role: UserRole.User,
@@ -43,7 +43,7 @@ export const featuredUsers: User[] = [
     workplaces: ['Viện Dược liệu Trung ương', 'Đại học Dược Hà Nội'],
   },
   {
-    _id: '3',
+    id: '3',
     fullName: 'PGS.TS Lê Văn C',
     email: 'pgsts.levanc@gmail.com',
     role: UserRole.User,
@@ -63,7 +63,7 @@ export const featuredUsers: User[] = [
     workplaces: ['Bệnh viện Bạch Mai', 'Đại học Y Hà Nội'],
   },
   {
-    _id: '4',
+    id: '4',
     fullName: 'Bác sĩ Phạm Thị D',
     email: 'bs.phamthid@gmail.com',
     role: UserRole.User,
@@ -83,7 +83,7 @@ export const featuredUsers: User[] = [
     workplaces: ['Bệnh viện Nhi Trung ương', 'Phòng khám Nhi Đồng'],
   },
   {
-    _id: '5',
+    id: '5',
     fullName: 'TS.BS Hoàng Văn E',
     email: 'tsbs.hoangvane@gmail.com',
     role: UserRole.User,
@@ -103,7 +103,7 @@ export const featuredUsers: User[] = [
     workplaces: ['Bệnh viện Da liễu Trung ương', 'Phòng khám Da liễu Dr.Hoang'],
   },
   {
-    _id: '6',
+    id: '6',
     fullName: 'ThS.BS Vũ Thị F',
     email: 'thsbs.vuthif@gmail.com',
     role: UserRole.User,
@@ -122,4 +122,4 @@ export const featuredUsers: User[] = [
     certificates: ['Thạc sĩ Y học', 'Bác sĩ Chuyên khoa I', 'Chứng chỉ Thính học'],
     workplaces: ['Bệnh viện Tai Mũi Họng Trung ương', 'Phòng khám Tai Mũi Họng 108'],
   },
-];
+]

@@ -1,2 +1,2 @@
-export { ThemeContext, type ThemeContextType } from './ThemeContext';
-export { ThemeProvider } from './ThemeProvider';
+export { ThemeContext, type ThemeContextType } from './ThemeContext'
+export { ThemeProvider } from './ThemeProvider'
