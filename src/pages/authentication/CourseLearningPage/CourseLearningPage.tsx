@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
@@ -18,7 +18,7 @@ export const CourseLearningPage = () => {
   const courseId = params[RouteConfig.CourseLearningPage.paramKey.courseId]
   const lessonId = params[RouteConfig.CourseLearningPage.paramKey.lessonId]
 
-  const [currentTime, setCurrentTime] = useState(0)
+  const currentTimeRef = useRef(0)
   const playerRef = useRef<VideoPlayerHandle>(null)
 
   const { data: curriculumData } = useCourseWithCurriculum(courseId ?? '')
@@ -57,7 +57,7 @@ export const CourseLearningPage = () => {
           ref={playerRef}
           courseId={courseId}
           lessonId={lessonId}
-          onProgress={({ playedSeconds }) => setCurrentTime(playedSeconds)}
+          onProgress={({ playedSeconds }) => { currentTimeRef.current = playedSeconds }}
           onEnded={() => {
             if (nextLesson) goToLesson(nextLesson.id)
           }}
@@ -120,7 +120,7 @@ export const CourseLearningPage = () => {
                 children: (
                   <LessonNotesTab
                     lessonId={lessonId}
-                    currentTime={currentTime}
+                    getCurrentTime={() => currentTimeRef.current}
                     onSeek={seconds => playerRef.current?.seekTo(seconds)}
                   />
                 ),

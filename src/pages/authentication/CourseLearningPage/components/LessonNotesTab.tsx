@@ -24,11 +24,11 @@ function formatTimestamp(seconds: number): string {
 
 interface LessonNotesTabProps {
   lessonId: string
-  currentTime: number
+  getCurrentTime: () => number
   onSeek: (seconds: number) => void
 }
 
-export function LessonNotesTab({ lessonId, currentTime, onSeek }: LessonNotesTabProps) {
+export function LessonNotesTab({ lessonId, getCurrentTime, onSeek }: LessonNotesTabProps) {
   const [isAdding, setIsAdding] = useState(false)
   const [draftContent, setDraftContent] = useState('')
   const [draftTimestamp, setDraftTimestamp] = useState(0)
@@ -44,11 +44,11 @@ export function LessonNotesTab({ lessonId, currentTime, onSeek }: LessonNotesTab
   }, [lessonId])
 
   const handleStartAdding = useCallback(() => {
-    setDraftTimestamp(currentTime)
+    setDraftTimestamp(getCurrentTime())
     setDraftContent('')
     setIsAdding(true)
     setTimeout(() => textareaRef.current?.focus(), 50)
-  }, [currentTime])
+  }, [getCurrentTime])
 
   const handleSave = useCallback(() => {
     const trimmed = draftContent.trim()
@@ -104,7 +104,7 @@ export function LessonNotesTab({ lessonId, currentTime, onSeek }: LessonNotesTab
           >
             Thêm ghi chú tại{' '}
             <span className="ml-1 font-mono font-semibold text-blue-600">
-              {formatTimestamp(currentTime)}
+              {formatTimestamp(getCurrentTime())}
             </span>
           </Button>
         </div>

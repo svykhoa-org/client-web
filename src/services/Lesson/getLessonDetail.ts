@@ -21,6 +21,7 @@ export async function getLessonDetail(params: GetLessonDetailParams): Promise<{
   if (response.statusCode !== 200) {
     throw new Error(response.message || 'Failed to fetch lesson stream URL')
   }
+  if (!response.data) throw new Error('No lesson data returned')
   return {
     statusCode: response.statusCode,
     message: response.message,
