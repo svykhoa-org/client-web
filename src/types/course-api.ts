@@ -111,6 +111,11 @@ export interface LessonProgressApi {
   updatedAt: string
 }
 
+export interface WatchTimeResponse {
+  progress: LessonProgressApi
+  unlockedLessonId: string | null
+}
+
 // ── LessonLearning ────────────────────────────────────────────────────────────
 
 export interface LessonPrerequisite {

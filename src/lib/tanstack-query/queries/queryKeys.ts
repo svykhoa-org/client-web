@@ -31,13 +31,14 @@ export const queryKeys = {
     all: ['lesson-progress'] as const,
     learning: (lessonId: string) =>
       [...queryKeys.lessonProgress.all, 'learning', lessonId] as const,
+    progressMap: (enrollmentId: string) =>
+      [...queryKeys.lessonProgress.all, 'progressMap', enrollmentId] as const,
   },
 
   // LessonNotes
   lessonNotes: {
     all: ['lesson-notes'] as const,
-    list: (lessonId: string) =>
-      [...queryKeys.lessonNotes.all, 'list', lessonId] as const,
+    list: (lessonId: string) => [...queryKeys.lessonNotes.all, 'list', lessonId] as const,
   },
 
   // // Posts
