@@ -92,3 +92,52 @@ export interface CourseListData {
   items: CourseApiItem[]
   pagination: CoursePaginationMeta
 }
+
+// ── LessonProgress API ────────────────────────────────────────────────────────
+
+export interface LessonProgressApi {
+  id: string
+  enrollmentId: string
+  userId: string
+  lessonId: string
+  moduleId: string
+  courseId: string
+  status: 'not_started' | 'in_progress' | 'completed'
+  watchedSeconds: number
+  startedAt: string | null
+  completedAt: string | null
+  progressData: Record<string, unknown> | null
+  createdAt: string
+  updatedAt: string
+}
+
+// ── LessonLearning ────────────────────────────────────────────────────────────
+
+export interface LessonPrerequisite {
+  lessonId: string
+  watchedPercent: number
+}
+
+export interface LessonLearningResponse {
+  lesson: CourseLesson & {
+    content?: Record<string, unknown> | null
+    contentId?: string | null
+  }
+  progress: LessonProgressApi | null
+  isAccessible: boolean
+  prerequisite: LessonPrerequisite | null
+}
+
+// ── LessonNote ────────────────────────────────────────────────────────────────
+
+export interface LessonNoteApi {
+  id: string
+  lessonId: string
+  userId: string
+  timestampSeconds: number | null
+  contents: string[]
+  isPinned: boolean
+  pinnedAt: string | null
+  createdAt: string
+  updatedAt: string
+}

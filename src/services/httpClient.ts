@@ -118,6 +118,15 @@ class HttpClient {
     }
   }
 
+  async patch<T>(url: string, data?: unknown): Promise<SuccessResponse<T>> {
+    try {
+      const response = await this.client.patch<SuccessResponse<T>>(url, data)
+      return response.data
+    } catch (error) {
+      throw this.handleError(error as AxiosError<ErrorResponse>)
+    }
+  }
+
   async delete<T>(url: string): Promise<SuccessResponse<T>> {
     try {
       const response = await this.client.delete<SuccessResponse<T>>(url)
