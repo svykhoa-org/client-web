@@ -28,6 +28,7 @@ interface VideoPlayerProps {
   lessonId: string
   onProgress?: (progress: { played: number; playedSeconds: number }) => void
   onEnded?: () => void
+  onUnlock?: (unlockedLessonId: string) => void
 }
 
 const HEARTBEAT_INTERVAL_MS = 30_000
@@ -44,8 +45,11 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
     },
   }))
 
-  const { data: learningData, isLoading: isLearningLoading, isError: isLearningError } =
-    useLessonLearning(props.lessonId, !!props.lessonId)
+  const {
+    data: learningData,
+    isLoading: isLearningLoading,
+    isError: isLearningError,
+  } = useLessonLearning(props.lessonId, !!props.lessonId)
 
   const { data: streamData } = useLessonDetail({
     courseId: props.courseId,
@@ -53,7 +57,9 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
     enabled: !!learningData?.isAccessible,
   })
 
-  const { mutate: sendWatchTime } = useUpdateWatchTime(props.lessonId)
+  const { mutate: sendWatchTime } = useUpdateWatchTime(props.lessonId, {
+    onUnlock: props.onUnlock,
+  })
 
   const startHeartbeat = () => {
     if (heartbeatRef.current) return
@@ -146,7 +152,9 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
             props.onEnded?.()
           }}
           onTimeUpdate={handleTimeUpdate}
-          onError={() => {/* handled by streamData being undefined */}}
+          onError={() => {
+            /* handled by streamData being undefined */
+          }}
         />
         <MediaControlBar>
           <MediaPlayButton className="aspect-square" />
