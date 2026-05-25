@@ -3,11 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Empty, Input, Spin, Tooltip } from 'antd'
 
-import {
-  useAppendLessonNote,
-  useLessonNotes,
-  useRemoveLessonNoteItem,
-} from '@/lib/tanstack-query'
+import { useAppendLessonNote, useLessonNotes, useRemoveLessonNoteItem } from '@/lib/tanstack-query'
 
 const { TextArea } = Input
 
@@ -32,7 +28,14 @@ export function LessonNotesTab({ lessonId, getCurrentTime, onSeek }: LessonNotes
   const [isAdding, setIsAdding] = useState(false)
   const [draftContent, setDraftContent] = useState('')
   const [draftTimestamp, setDraftTimestamp] = useState(0)
+  const [liveTime, setLiveTime] = useState(() => getCurrentTime())
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    if (isAdding) return
+    const id = setInterval(() => setLiveTime(getCurrentTime()), 500)
+    return () => clearInterval(id)
+  }, [isAdding, getCurrentTime])
 
   const { data: noteRows = [], isLoading } = useLessonNotes(lessonId, !!lessonId)
   const { mutate: appendNote, isPending: isSaving } = useAppendLessonNote(lessonId)
@@ -104,7 +107,7 @@ export function LessonNotesTab({ lessonId, getCurrentTime, onSeek }: LessonNotes
           >
             Thêm ghi chú tại{' '}
             <span className="ml-1 font-mono font-semibold text-blue-600">
-              {formatTimestamp(getCurrentTime())}
+              {formatTimestamp(liveTime)}
             </span>
           </Button>
         </div>

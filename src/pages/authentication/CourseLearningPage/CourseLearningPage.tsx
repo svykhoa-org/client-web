@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
@@ -20,6 +20,7 @@ export const CourseLearningPage = () => {
 
   const currentTimeRef = useRef(0)
   const playerRef = useRef<VideoPlayerHandle>(null)
+  const [latestUnlockedId, setLatestUnlockedId] = useState<string | null>(null)
 
   const { data: curriculumData } = useCourseWithCurriculum(courseId ?? '')
 
@@ -57,10 +58,13 @@ export const CourseLearningPage = () => {
           ref={playerRef}
           courseId={courseId}
           lessonId={lessonId}
-          onProgress={({ playedSeconds }) => { currentTimeRef.current = playedSeconds }}
+          onProgress={({ playedSeconds }) => {
+            currentTimeRef.current = playedSeconds
+          }}
           onEnded={() => {
             if (nextLesson) goToLesson(nextLesson.id)
           }}
+          onUnlock={setLatestUnlockedId}
         />
 
         {/* Prev / Next navigation */}
@@ -133,7 +137,7 @@ export const CourseLearningPage = () => {
       {/* Sidebar */}
       <div className="shrink-0 border-t border-gray-200 md:w-80 md:border-t-0 md:border-l">
         <div className="sticky top-0 h-[calc(100vh-64px)] overflow-hidden">
-          <ListModuleSidebar />
+          <ListModuleSidebar latestUnlockedId={latestUnlockedId} />
         </div>
       </div>
     </div>
