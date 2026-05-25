@@ -26,6 +26,20 @@ export const queryKeys = {
       [...queryKeys.lessons.details(), courseId, lessonId] as const,
   },
 
+  // LessonProgress
+  lessonProgress: {
+    all: ['lesson-progress'] as const,
+    learning: (lessonId: string) =>
+      [...queryKeys.lessonProgress.all, 'learning', lessonId] as const,
+  },
+
+  // LessonNotes
+  lessonNotes: {
+    all: ['lesson-notes'] as const,
+    list: (lessonId: string) =>
+      [...queryKeys.lessonNotes.all, 'list', lessonId] as const,
+  },
+
   // // Posts
   // posts: {
   //   all: ['posts'] as const,
