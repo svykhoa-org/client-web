@@ -9,6 +9,9 @@ interface QuizQuestionItemProps {
   onChange: (answer: SubmitAnswerPayload) => void
 }
 
+const isSingleSelect = (type: QuestionType) =>
+  type === 'single_choice' || type === 'true_false'
+
 export const QuizQuestionItem = ({ question, index, answer, onChange }: QuizQuestionItemProps) => {
   const sortedOptions = [...question.options].sort((a, b) => a.order - b.order)
 
@@ -25,9 +28,6 @@ export const QuizQuestionItem = ({ question, index, answer, onChange }: QuizQues
   const handleTextChange = (text: string) => {
     onChange({ questionId: question.id, textAnswer: text })
   }
-
-  const isSingleSelect = (type: QuestionType) =>
-    type === 'single_choice' || type === 'true_false'
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6">

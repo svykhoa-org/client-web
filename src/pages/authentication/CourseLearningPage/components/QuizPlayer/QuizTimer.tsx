@@ -10,20 +10,26 @@ interface QuizTimerProps {
 export const QuizTimer = ({ expiresAt, onExpire }: QuizTimerProps) => {
   const expiry = new Date(expiresAt).getTime()
 
-  const calcRemaining = () => Math.max(0, Math.floor((expiry - Date.now()) / 1000))
-
-  const [remaining, setRemaining] = useState(calcRemaining)
+  const [remaining, setRemaining] = useState(() =>
+    Math.max(0, Math.floor((expiry - Date.now()) / 1000)),
+  )
   const onExpireRef = useRef(onExpire)
   onExpireRef.current = onExpire
 
   useEffect(() => {
-    if (remaining <= 0) {
+    const expiryMs = new Date(expiresAt).getTime()
+    const calc = () => Math.max(0, Math.floor((expiryMs - Date.now()) / 1000))
+
+    const initial = calc()
+    setRemaining(initial)
+
+    if (initial <= 0) {
       onExpireRef.current()
       return
     }
 
     const id = setInterval(() => {
-      const next = calcRemaining()
+      const next = calc()
       setRemaining(next)
       if (next <= 0) {
         clearInterval(id)
@@ -32,7 +38,6 @@ export const QuizTimer = ({ expiresAt, onExpire }: QuizTimerProps) => {
     }, 1000)
 
     return () => clearInterval(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expiresAt])
 
   const minutes = Math.floor(remaining / 60)
