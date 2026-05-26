@@ -176,9 +176,9 @@ export interface QuizQuestion {
 export interface QuizApi {
   id: string
   title: string
-  passingScore: number       // 0-100 percentage
+  passingScore: number // 0-100 percentage
   maxAttempts: number | null // null = unlimited
-  timeLimit: number | null   // minutes, null = no limit
+  timeLimit: number | null // minutes, null = no limit
   questions: QuizQuestion[]
 }
 
@@ -186,7 +186,7 @@ export interface QuizApi {
 export interface StartQuizResult {
   attemptId: string
   attemptNumber: number
-  startedAt: string       // ISO date string
+  startedAt: string // ISO date string
   expiresAt: string | null // ISO date string, null when no timeLimit
 }
 
@@ -227,7 +227,7 @@ export interface SnapshotAnswerRecord {
 export interface QuizSubmitResult {
   attemptId: string
   attemptNumber: number
-  score: number       // 0-100
+  score: number // 0-100
   isPassed: boolean
   totalPoints: number
   earnedPoints: number

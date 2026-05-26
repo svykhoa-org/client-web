@@ -46,9 +46,16 @@ const ReviewQuestion = ({ record, index }: { record: SnapshotAnswerRecord; index
                     ? 'border-green-200 bg-green-50/50'
                     : 'border-slate-200'
             return (
-              <div key={opt.id} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${highlight}`}>
+              <div
+                key={opt.id}
+                className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${highlight}`}
+              >
                 {isSelected ? (
-                  isCorrect ? <CheckCircleOutlined className="text-green-500" /> : <CloseCircleOutlined className="text-red-500" />
+                  isCorrect ? (
+                    <CheckCircleOutlined className="text-green-500" />
+                  ) : (
+                    <CloseCircleOutlined className="text-red-500" />
+                  )
                 ) : isCorrect ? (
                   <CheckCircleOutlined className="text-green-400" />
                 ) : (
@@ -68,13 +75,7 @@ const ReviewQuestion = ({ record, index }: { record: SnapshotAnswerRecord; index
   )
 }
 
-export const QuizResult = ({
-  quiz,
-  attempt,
-  canRetry,
-  onRetry,
-  isRetrying,
-}: QuizResultProps) => {
+export const QuizResult = ({ quiz, attempt, canRetry, onRetry, isRetrying }: QuizResultProps) => {
   return (
     <div className="flex flex-col gap-6 px-4 py-8">
       {/* Score card */}

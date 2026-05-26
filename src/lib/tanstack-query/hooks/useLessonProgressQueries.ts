@@ -30,9 +30,8 @@ export const useUpdateWatchTime = (
 ) => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (watchedSeconds: number) =>
-      updateWatchTime(lessonId, watchedSeconds),
-    onSuccess: (data) => {
+    mutationFn: (watchedSeconds: number) => updateWatchTime(lessonId, watchedSeconds),
+    onSuccess: data => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.lessonProgress.learning(lessonId),
       })

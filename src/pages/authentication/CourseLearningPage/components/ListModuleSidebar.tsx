@@ -44,8 +44,7 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
   const activeLessonId = params[RouteConfig.CourseLearningPage.paramKey.lessonId]
   const navigate = useNavigate()
 
-  const { data: curriculumData, isLoading: isCurriculumLoading } =
-    useCourseWithCurriculum(courseId)
+  const { data: curriculumData, isLoading: isCurriculumLoading } = useCourseWithCurriculum(courseId)
   const { data: enrollment, isLoading: isEnrollmentLoading } = useMyEnrollment(courseId)
   const { data: progressList } = useProgressMap(enrollment?.id ?? '', !!enrollment?.id)
 
@@ -54,12 +53,12 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
 
   // Build Map<lessonId, LessonProgress> from flat list
   const progressMap = new Map<string, LessonProgressApi>()
-  progressList?.forEach((p) => progressMap.set(p.lessonId, p))
+  progressList?.forEach(p => progressMap.set(p.lessonId, p))
 
   // Flat ordered lesson list: modules sorted by order, lessons within by order
   const flatLessons = [...curriculum]
     .sort((a, b) => a.order - b.order)
-    .flatMap((mod) => [...mod.lessons].sort((a, b) => a.order - b.order))
+    .flatMap(mod => [...mod.lessons].sort((a, b) => a.order - b.order))
 
   // Compute accessibility for each lesson
   const accessibilityMap: Record<string, boolean> = {}
@@ -91,11 +90,11 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
   const flashTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
 
   const triggerFlash = useCallback((lessonId: string) => {
-    setFlashSet((prev) => new Set(prev).add(lessonId))
+    setFlashSet(prev => new Set(prev).add(lessonId))
     const existing = flashTimers.current.get(lessonId)
     if (existing) clearTimeout(existing)
     const timer = setTimeout(() => {
-      setFlashSet((prev) => {
+      setFlashSet(prev => {
         const next = new Set(prev)
         next.delete(lessonId)
         return next
@@ -108,7 +107,7 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
   // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      flashTimers.current.forEach((t) => clearTimeout(t))
+      flashTimers.current.forEach(t => clearTimeout(t))
     }
   }, [])
 
@@ -126,10 +125,10 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
   }
 
   const defaultOpenKeys = curriculum
-    .filter((mod) => mod.lessons.some((l) => l.id === activeLessonId))
-    .map((mod) => mod.id)
+    .filter(mod => mod.lessons.some(l => l.id === activeLessonId))
+    .map(mod => mod.id)
 
-  const collapseItems = curriculum.map((mod) => ({
+  const collapseItems = curriculum.map(mod => ({
     key: mod.id,
     label: (
       <div className="flex flex-col gap-0.5">
@@ -144,7 +143,7 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
       <div className="flex flex-col">
         {[...mod.lessons]
           .sort((a, b) => a.order - b.order)
-          .map((lesson) => {
+          .map(lesson => {
             const isActive = lesson.id === activeLessonId
             const isAccessible = accessibilityMap[lesson.id] ?? true
             const isFlashing = flashSet.has(lesson.id)

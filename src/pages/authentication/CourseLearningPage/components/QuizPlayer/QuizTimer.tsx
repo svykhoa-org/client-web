@@ -52,9 +52,7 @@ export const QuizTimer = ({ expiresAt, onExpire }: QuizTimerProps) => {
   return (
     <div
       className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium tabular-nums ${
-        isWarning
-          ? 'bg-red-50 text-red-600 animate-pulse'
-          : 'bg-slate-100 text-slate-600'
+        isWarning ? 'bg-red-50 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-600'
       }`}
     >
       <ClockCircleOutlined />

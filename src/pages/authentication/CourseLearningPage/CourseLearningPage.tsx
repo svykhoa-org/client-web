@@ -56,11 +56,7 @@ export const CourseLearningPage = () => {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Lesson content — video or quiz */}
         {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
-          <QuizPlayer
-            quizId={currentLesson.contentId}
-            courseId={courseId}
-            lessonId={lessonId}
-          />
+          <QuizPlayer quizId={currentLesson.contentId} courseId={courseId} lessonId={lessonId} />
         ) : (
           <VideoPlayer
             ref={playerRef}

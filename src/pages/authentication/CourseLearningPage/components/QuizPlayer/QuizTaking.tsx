@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { Alert, Button, Modal, Progress } from 'antd'
-import type { QuizApi, QuizAttemptApi, SubmitAnswerPayload, SubmitQuizPayload } from '@/types/course-api'
+import type {
+  QuizApi,
+  QuizAttemptApi,
+  SubmitAnswerPayload,
+  SubmitQuizPayload,
+} from '@/types/course-api'
 import { QuizQuestionItem } from './QuizQuestionItem'
 import { QuizTimer } from './QuizTimer'
 
@@ -68,9 +73,7 @@ export const QuizTaking = ({ quiz, attempt, onSubmit, isSubmitting }: QuizTaking
             format={() => `${answeredCount}/${totalCount}`}
           />
         </div>
-        {expiresAt && !expired && (
-          <QuizTimer expiresAt={expiresAt} onExpire={handleExpire} />
-        )}
+        {expiresAt && !expired && <QuizTimer expiresAt={expiresAt} onExpire={handleExpire} />}
         {expired && (
           <Alert type="error" message="Hết giờ — đang nộp bài..." showIcon className="py-1" />
         )}

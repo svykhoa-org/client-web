@@ -9,8 +9,7 @@ interface QuizQuestionItemProps {
   onChange: (answer: SubmitAnswerPayload) => void
 }
 
-const isSingleSelect = (type: QuestionType) =>
-  type === 'single_choice' || type === 'true_false'
+const isSingleSelect = (type: QuestionType) => type === 'single_choice' || type === 'true_false'
 
 export const QuizQuestionItem = ({ question, index, answer, onChange }: QuizQuestionItemProps) => {
   const sortedOptions = [...question.options].sort((a, b) => a.order - b.order)
@@ -48,7 +47,11 @@ export const QuizQuestionItem = ({ question, index, answer, onChange }: QuizQues
         >
           <Space direction="vertical" className="w-full">
             {sortedOptions.map(opt => (
-              <Radio key={opt.id} value={opt.id} className="w-full rounded-lg p-2 hover:bg-slate-50">
+              <Radio
+                key={opt.id}
+                value={opt.id}
+                className="w-full rounded-lg p-2 hover:bg-slate-50"
+              >
                 {opt.content}
               </Radio>
             ))}
