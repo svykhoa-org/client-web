@@ -11,6 +11,7 @@ import { LessonInfoTab } from './components/LessonInfoTab'
 import { LessonNotesTab } from './components/LessonNotesTab'
 import { ListModuleSidebar } from './components/ListModuleSidebar'
 import { VideoPlayer, type VideoPlayerHandle } from './components/VideoPlayer'
+import { QuizPlayer } from './components/QuizPlayer'
 
 export const CourseLearningPage = () => {
   const params = useParams()
@@ -53,19 +54,27 @@ export const CourseLearningPage = () => {
     <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Video */}
-        <VideoPlayer
-          ref={playerRef}
-          courseId={courseId}
-          lessonId={lessonId}
-          onProgress={({ playedSeconds }) => {
-            currentTimeRef.current = playedSeconds
-          }}
-          onEnded={() => {
-            if (nextLesson) goToLesson(nextLesson.id)
-          }}
-          onUnlock={setLatestUnlockedId}
-        />
+        {/* Lesson content — video or quiz */}
+        {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
+          <QuizPlayer
+            quizId={currentLesson.contentId}
+            courseId={courseId}
+            lessonId={lessonId}
+          />
+        ) : (
+          <VideoPlayer
+            ref={playerRef}
+            courseId={courseId}
+            lessonId={lessonId}
+            onProgress={({ playedSeconds }) => {
+              currentTimeRef.current = playedSeconds
+            }}
+            onEnded={() => {
+              if (nextLesson) goToLesson(nextLesson.id)
+            }}
+            onUnlock={setLatestUnlockedId}
+          />
+        )}
 
         {/* Prev / Next navigation */}
         <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-3">
