@@ -12,8 +12,7 @@ interface QuizIntroProps {
 
 export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: QuizIntroProps) => {
   const attemptsUsed = submittedAttempts.length
-  const attemptsLeft =
-    quiz.maxAttempts !== null ? quiz.maxAttempts - attemptsUsed : null
+  const attemptsLeft = quiz.maxAttempts !== null ? quiz.maxAttempts - attemptsUsed : null
   const isExhausted = attemptsLeft !== null && attemptsLeft <= 0
 
   return (
@@ -43,11 +42,7 @@ export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: Quiz
           />
           <Statistic
             title="Lượt thi"
-            value={
-              quiz.maxAttempts !== null
-                ? `${attemptsUsed}/${quiz.maxAttempts}`
-                : attemptsUsed
-            }
+            value={quiz.maxAttempts !== null ? `${attemptsUsed}/${quiz.maxAttempts}` : attemptsUsed}
             suffix={quiz.maxAttempts === null ? ' (không giới hạn)' : ''}
             valueStyle={{ fontSize: 20, color: '#d97706' }}
           />
@@ -57,7 +52,7 @@ export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: Quiz
           <div className="mb-6">
             <p className="mb-2 text-xs text-slate-400">Kết quả lần thi gần nhất</p>
             {(() => {
-              const last = submittedAttempts.at(-1)!
+              const last = submittedAttempts[submittedAttempts.length - 1]!
               return (
                 <Tag color={last.isPassed ? 'success' : 'error'} className="text-sm px-3 py-1">
                   {last.isPassed ? '✓ Đạt' : '✗ Chưa đạt'} — {last.score}%

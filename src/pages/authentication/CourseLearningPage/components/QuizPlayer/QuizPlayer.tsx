@@ -56,7 +56,7 @@ export const QuizPlayer = ({ quizId, courseId, lessonId }: QuizPlayerProps) => {
 
   const inProgressAttempt = attempts.find(a => a.status === 'in_progress')
   const submittedAttempts = attempts.filter(a => a.status === 'submitted')
-  const lastSubmitted = submittedAttempts.at(-1)
+  const lastSubmitted = submittedAttempts[submittedAttempts.length - 1]
 
   const attemptsUsed = submittedAttempts.length
   const canRetry = quiz.maxAttempts === null || attemptsUsed < quiz.maxAttempts
