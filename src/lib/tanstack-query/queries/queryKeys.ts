@@ -41,6 +41,14 @@ export const queryKeys = {
     list: (lessonId: string) => [...queryKeys.lessonNotes.all, 'list', lessonId] as const,
   },
 
+  // Quiz
+  quiz: {
+    all: ['quiz'] as const,
+    details: () => [...queryKeys.quiz.all, 'detail'] as const,
+    detail: (quizId: string) => [...queryKeys.quiz.details(), quizId] as const,
+    attempts: (quizId: string) => [...queryKeys.quiz.all, 'attempts', quizId] as const,
+  },
+
   // // Posts
   // posts: {
   //   all: ['posts'] as const,

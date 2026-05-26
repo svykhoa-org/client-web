@@ -146,3 +146,104 @@ export interface LessonNoteApi {
   createdAt: string
   updatedAt: string
 }
+
+// ── Quiz ──────────────────────────────────────────────────────────────────────
+
+/** Question type discriminator */
+export type QuestionType = 'single_choice' | 'multiple_choice' | 'true_false' | 'short_answer'
+
+/** Status of a quiz attempt */
+export type QuizAttemptStatus = 'in_progress' | 'submitted'
+
+/** One selectable option within a question — isCorrect is never sent to learners */
+export interface QuizOption {
+  id: string
+  content: string
+  order: number
+}
+
+/** A quiz question as returned to learners (correctness stripped) */
+export interface QuizQuestion {
+  id: string
+  content: string
+  type: QuestionType
+  order: number
+  points: number
+  options: QuizOption[] // isCorrect is stripped — never sent to client
+}
+
+/** Returned by GET /quizzes/:id/take */
+export interface QuizApi {
+  id: string
+  title: string
+  passingScore: number       // 0-100 percentage
+  maxAttempts: number | null // null = unlimited
+  timeLimit: number | null   // minutes, null = no limit
+  questions: QuizQuestion[]
+}
+
+/** Returned by POST /quizzes/:id/start */
+export interface StartQuizResult {
+  attemptId: string
+  attemptNumber: number
+  startedAt: string       // ISO date string
+  expiresAt: string | null // ISO date string, null when no timeLimit
+}
+
+/** One answer entry in a quiz submission */
+export interface SubmitAnswerPayload {
+  questionId: string
+  selectedOptionIds?: string[]
+  textAnswer?: string
+}
+
+/** Payload for POST /quizzes/:id/attempts/:attemptId/submit */
+export interface SubmitQuizPayload {
+  answers: SubmitAnswerPayload[]
+}
+
+/** Option entry stored in the submission snapshot (includes isCorrect for review) */
+export interface SnapshotOption {
+  id: string
+  content: string
+  order: number
+  isCorrect: boolean
+}
+
+/** Full snapshot of one question's answer stored immutably in a QuizAttempt */
+export interface SnapshotAnswerRecord {
+  questionId: string
+  questionContent: string
+  questionType: QuestionType
+  maxPoints: number
+  allOptions: SnapshotOption[]
+  selectedOptionIds: string[] | null
+  textAnswer: string | null
+  isCorrect: boolean
+  pointsEarned: number
+}
+
+/** Returned by POST /quizzes/:id/attempts/:attemptId/submit */
+export interface QuizSubmitResult {
+  attemptId: string
+  attemptNumber: number
+  score: number       // 0-100
+  isPassed: boolean
+  totalPoints: number
+  earnedPoints: number
+  answers: SnapshotAnswerRecord[]
+}
+
+/** Returned by GET /quizzes/:id/my-attempts (one item) */
+export interface QuizAttemptApi {
+  id: string
+  quizId: string
+  userId: string
+  attemptNumber: number
+  status: QuizAttemptStatus
+  score: number
+  isPassed: boolean
+  startedAt: string
+  submittedAt: string | null
+  answers: SnapshotAnswerRecord[] | null
+}
