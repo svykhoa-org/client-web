@@ -70,11 +70,19 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
     }
     const prev = flatLessons[i - 1]
     const prevProgress = progressMap.get(prev.id)
+
+    // completed status always unlocks the next lesson
+    if (prevProgress?.status === 'completed') {
+      accessibilityMap[lesson.id] = true
+      return
+    }
+
+    // fallback: for in-progress videos, unlock when 80% watched
     const prevWatched = prevProgress?.watchedSeconds ?? 0
     if (prev.durationMinutes > 0) {
       accessibilityMap[lesson.id] = prevWatched / (prev.durationMinutes * 60) >= 0.8
     } else {
-      accessibilityMap[lesson.id] = prevProgress?.status === 'completed'
+      accessibilityMap[lesson.id] = false
     }
   })
 
