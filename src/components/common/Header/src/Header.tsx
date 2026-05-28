@@ -16,9 +16,10 @@ import {
 import { Avatar, Button, Drawer, Dropdown, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 
-import logoImage from '@/assets/images/logo.png'
+import fallbackLogo from '@/assets/images/logo.png'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
+import { useSiteSettings } from '@/hooks/useSiteSettings'
 import { cn } from '@/lib/utils'
 
 import './Header.css'
@@ -242,9 +243,10 @@ const HeaderUserMenu = ({
 
 interface HeaderLogoProps {
   onClick?: () => void
+  src?: string
 }
 
-const HeaderLogo = ({ onClick }: HeaderLogoProps) => {
+const HeaderLogo = ({ onClick, src }: HeaderLogoProps) => {
   return (
     <button
       type="button"
@@ -255,13 +257,15 @@ const HeaderLogo = ({ onClick }: HeaderLogoProps) => {
       onClick={onClick}
       aria-label="Về trang chủ"
     >
-      <img src={logoImage} alt="SVYKHOA" className="h-10 w-auto scale-150 object-contain" />
+      <img src={src} alt="SVYKHOA" className="h-10 w-auto scale-150 object-contain" />
     </button>
   )
 }
 
 const Header = () => {
   const { isAuthenticated, logout, user } = useAuth()
+  const { settings } = useSiteSettings()
+  const logoSrc = settings.logoUrl ?? fallbackLogo
   const userName = user?.fullName?.trim() || user?.email || 'Tài khoản'
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -310,7 +314,7 @@ const Header = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="shrink-0">
-            <HeaderLogo onClick={handleLogoClick} />
+            <HeaderLogo onClick={handleLogoClick} src={logoSrc} />
           </div>
 
           <div className="hidden flex-1 px-4 md:block">

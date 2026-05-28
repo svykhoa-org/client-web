@@ -7,10 +7,13 @@ import {
   YoutubeFilled,
 } from '@ant-design/icons'
 
-import logoImage from '@/assets/images/logo.png'
+import fallbackLogo from '@/assets/images/logo.png'
+import { useSiteSettings } from '@/hooks/useSiteSettings'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
+  const { settings } = useSiteSettings()
+  const logoSrc = settings.logoUrl ?? fallbackLogo
 
   return (
     <footer className="border-neutral-3 border-t bg-slate-50">
@@ -19,22 +22,36 @@ const Footer = () => {
           {/* Logo và thông tin */}
           <div className="col-span-2 flex flex-col gap-3 lg:col-span-1">
             <img
-              src={logoImage}
+              src={logoSrc}
               alt="SVYKHOA"
               className="h-8 w-auto object-contain"
               style={{ transformOrigin: 'left' }}
             />
             <p className="text-neutral-6 text-sm leading-relaxed">
-              Nền tảng học tập dành cho sinh viên y khoa, cung cấp khóa học chuyên ngành và tài liệu
-              y học chất lượng cao.
+              {settings.tagline ??
+                'Nền tảng học tập dành cho sinh viên y khoa, cung cấp khóa học chuyên ngành và tài liệu y học chất lượng cao.'}
             </p>
             <div className="flex gap-1">
-              <button className="text-neutral-5 hover:text-primary-6 rounded p-1.5 transition-colors">
-                <FacebookFilled className="text-sm" />
-              </button>
-              <button className="text-neutral-5 hover:text-primary-6 rounded p-1.5 transition-colors">
-                <YoutubeFilled className="text-sm" />
-              </button>
+              {settings.facebookUrl && (
+                <a
+                  href={settings.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-5 hover:text-primary-6 rounded p-1.5 transition-colors"
+                >
+                  <FacebookFilled className="text-sm" />
+                </a>
+              )}
+              {settings.youtubeUrl && (
+                <a
+                  href={settings.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-5 hover:text-primary-6 rounded p-1.5 transition-colors"
+                >
+                  <YoutubeFilled className="text-sm" />
+                </a>
+              )}
             </div>
           </div>
 
@@ -77,20 +94,26 @@ const Footer = () => {
             <h5 className="text-neutral-8 mb-1 text-sm font-semibold uppercase tracking-wider">
               Liên hệ
             </h5>
-            <div className="flex items-start gap-1.5">
-              <EnvironmentFilled className="text-primary-6 mt-0.5 text-sm shrink-0" />
-              <span className="text-neutral-6 text-sm leading-relaxed">
-                123 Đường Y Học, TP. Hà Nội
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <PhoneFilled className="text-primary-6 text-sm shrink-0" />
-              <span className="text-neutral-6 text-sm">+84 (0)123 456 789</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <MailFilled className="text-primary-6 text-sm shrink-0" />
-              <span className="text-neutral-6 text-sm">contact@svykhoa.vn</span>
-            </div>
+            {settings.contactAddress && (
+              <div className="flex items-start gap-1.5">
+                <EnvironmentFilled className="text-primary-6 mt-0.5 text-sm shrink-0" />
+                <span className="text-neutral-6 text-sm leading-relaxed">
+                  {settings.contactAddress}
+                </span>
+              </div>
+            )}
+            {settings.contactPhone && (
+              <div className="flex items-center gap-1.5">
+                <PhoneFilled className="text-primary-6 text-sm shrink-0" />
+                <span className="text-neutral-6 text-sm">{settings.contactPhone}</span>
+              </div>
+            )}
+            {settings.contactEmail && (
+              <div className="flex items-center gap-1.5">
+                <MailFilled className="text-primary-6 text-sm shrink-0" />
+                <span className="text-neutral-6 text-sm">{settings.contactEmail}</span>
+              </div>
+            )}
           </div>
         </div>
 
