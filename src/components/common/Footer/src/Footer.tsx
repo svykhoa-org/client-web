@@ -9,11 +9,12 @@ import {
 
 import fallbackLogo from '@/assets/images/logo.png'
 import { useSiteSettings } from '@/hooks/useSiteSettings'
+import { resolveUrl } from '@/utils/resolveUrl'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
   const { settings } = useSiteSettings()
-  const logoSrc = settings.logoUrl ?? fallbackLogo
+  const logoSrc = resolveUrl(settings.logoUrl) ?? fallbackLogo
 
   return (
     <footer className="border-neutral-3 border-t bg-slate-50">

@@ -7,6 +7,7 @@ import { Button, Result, Tabs } from 'antd'
 import RouteConfig from '@/constants/RouteConfig'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
 
+import { DocumentViewer } from './components/DocumentViewer'
 import { LessonInfoTab } from './components/LessonInfoTab'
 import { LessonNotesTab } from './components/LessonNotesTab'
 import { ListModuleSidebar } from './components/ListModuleSidebar'
@@ -50,11 +51,80 @@ export const CourseLearningPage = () => {
     )
   }
 
+  const navBar = (
+    <div className="flex shrink-0 items-center justify-between border-b border-slate-100 bg-white px-6 py-3">
+      <Button
+        icon={<LeftOutlined />}
+        disabled={!prevLesson}
+        onClick={() => prevLesson && goToLesson(prevLesson.id)}
+        className="rounded-lg border-slate-200 text-slate-600 disabled:opacity-40"
+      >
+        Bài trước
+      </Button>
+
+      <div className="text-center">
+        {currentLesson && (
+          <p className="max-w-xs truncate text-sm font-medium text-slate-700">
+            {currentLesson.title}
+          </p>
+        )}
+        {allLessons.length > 0 && (
+          <p className="text-xs text-slate-400">
+            {currentIndex + 1} / {allLessons.length}
+          </p>
+        )}
+      </div>
+
+      <Button
+        disabled={!nextLesson}
+        onClick={() => nextLesson && goToLesson(nextLesson.id)}
+        className="rounded-lg border-slate-200 text-slate-600 disabled:opacity-40"
+      >
+        Bài tiếp theo
+        <RightOutlined />
+      </Button>
+    </div>
+  )
+
+  // ── Document layout: PDF fills viewport, info scrolls below ──────────────────
+  if (currentLesson?.type === 'document') {
+    return (
+      <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
+        {/* Main column */}
+        <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
+          {/* Full-height zone: PDF + nav bar */}
+          <div className="flex flex-col" style={{ height: 'calc(100vh - 64px)' }}>
+            <DocumentViewer
+              courseId={courseId}
+              lessonId={lessonId}
+              onUnlock={setLatestUnlockedId}
+            />
+            {navBar}
+          </div>
+
+          {/* Info section — scrolls into view below */}
+          {curriculumData && currentLesson && (
+            <div className="border-t border-slate-100 bg-white px-6 py-6">
+              <LessonInfoTab course={curriculumData.course} lesson={currentLesson} />
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="shrink-0 border-t border-gray-200 md:w-80 md:border-t-0 md:border-l">
+          <div className="sticky top-0 h-[calc(100vh-64px)] overflow-hidden">
+            <ListModuleSidebar latestUnlockedId={latestUnlockedId} />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Video / Quiz layout ───────────────────────────────────────────────────────
   return (
     <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Lesson content — video or quiz */}
         {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
           <QuizPlayer quizId={currentLesson.contentId} courseId={courseId} lessonId={lessonId} />
         ) : (
@@ -72,39 +142,7 @@ export const CourseLearningPage = () => {
           />
         )}
 
-        {/* Prev / Next navigation */}
-        <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-3">
-          <Button
-            icon={<LeftOutlined />}
-            disabled={!prevLesson}
-            onClick={() => prevLesson && goToLesson(prevLesson.id)}
-            className="rounded-lg border-slate-200 text-slate-600 disabled:opacity-40"
-          >
-            Bài trước
-          </Button>
-
-          <div className="text-center">
-            {currentLesson && (
-              <p className="text-sm font-medium text-slate-700 max-w-xs truncate">
-                {currentLesson.title}
-              </p>
-            )}
-            {allLessons.length > 0 && (
-              <p className="text-xs text-slate-400">
-                {currentIndex + 1} / {allLessons.length}
-              </p>
-            )}
-          </div>
-
-          <Button
-            disabled={!nextLesson}
-            onClick={() => nextLesson && goToLesson(nextLesson.id)}
-            className="rounded-lg border-slate-200 text-slate-600 disabled:opacity-40"
-          >
-            Bài tiếp theo
-            <RightOutlined />
-          </Button>
-        </div>
+        {navBar}
 
         {/* Tabs */}
         <div className="flex-1 bg-slate-50 px-6">

@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils'
 
 import './Header.css'
 import { RoutePath } from '@/routes'
+import { resolveUrl } from '@/utils/resolveUrl'
 
 type NavMenuMode = 'horizontal' | 'vertical'
 
@@ -265,7 +266,7 @@ const HeaderLogo = ({ onClick, src }: HeaderLogoProps) => {
 const Header = () => {
   const { isAuthenticated, logout, user } = useAuth()
   const { settings } = useSiteSettings()
-  const logoSrc = settings.logoUrl ?? fallbackLogo
+  const logoSrc = resolveUrl(settings.logoUrl) ?? fallbackLogo
   const userName = user?.fullName?.trim() || user?.email || 'Tài khoản'
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
 

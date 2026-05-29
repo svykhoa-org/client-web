@@ -24,6 +24,10 @@ export const queryKeys = {
     details: () => [...queryKeys.lessons.all, 'detail'] as const,
     detail: (courseId: string, lessonId: string) =>
       [...queryKeys.lessons.details(), courseId, lessonId] as const,
+    documentContent: (lessonId: string) =>
+      [...queryKeys.lessons.all, 'document-content', lessonId] as const,
+    documentUrl: (lessonId: string) =>
+      [...queryKeys.lessons.all, 'document-url', lessonId] as const,
   },
 
   // LessonProgress
