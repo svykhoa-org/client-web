@@ -98,11 +98,11 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
       )}
 
       {/* Objectives */}
-      {course.objectives.length > 0 && (
+      {(course.objectives?.length ?? 0) > 0 && (
         <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
           <h2 className="mb-3 font-bold text-gray-900">Bạn sẽ học được gì</h2>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {course.objectives.map((obj, i) => (
+            {course.objectives!.map((obj, i) => (
               <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
                 <CheckCircleOutlined className="mt-0.5 shrink-0 text-blue-500" />
                 <span>{obj}</span>
@@ -113,11 +113,11 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
       )}
 
       {/* Requirements */}
-      {course.requirements.length > 0 && (
+      {(course.requirements?.length ?? 0) > 0 && (
         <div>
           <h2 className="mb-2 font-bold text-gray-900">Yêu cầu đầu vào</h2>
           <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
-            {course.requirements.map((req, i) => (
+            {course.requirements!.map((req, i) => (
               <li key={i}>{req}</li>
             ))}
           </ul>
@@ -125,11 +125,11 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
       )}
 
       {/* Suitable for */}
-      {course.suitableFor.length > 0 && (
+      {(course.suitableFor?.length ?? 0) > 0 && (
         <div>
           <h2 className="mb-2 font-bold text-gray-900">Khoá học dành cho</h2>
           <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
-            {course.suitableFor.map((item, i) => (
+            {course.suitableFor!.map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>

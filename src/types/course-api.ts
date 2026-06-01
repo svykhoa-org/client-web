@@ -25,9 +25,9 @@ export interface CourseApiItem {
   shortCode: string
   status: CourseApiStatus
   selfPaced: boolean
-  objectives: string[]
-  requirements: string[]
-  suitableFor: string[]
+  objectives: string[] | null
+  requirements: string[] | null
+  suitableFor: string[] | null
   instructorIds: string[]
   tags: CourseTag[] | null
   category: CourseCategory | null
