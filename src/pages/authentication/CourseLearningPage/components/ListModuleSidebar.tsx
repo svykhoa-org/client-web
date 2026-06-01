@@ -165,7 +165,9 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                   .join(' ')}
               >
                 <span className="mt-0.5 shrink-0 text-base">
-                  {isAccessible ? (
+                  {progressMap.get(lesson.id)?.status === 'completed' ? (
+                    <CheckCircleFilled className="text-green-500" />
+                  ) : isAccessible ? (
                     lessonTypeIcon(lesson.type)
                   ) : (
                     <LockOutlined className="text-gray-400" />
@@ -182,7 +184,6 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                     }`}
                   >
                     {lesson.title}
-                    {isActive && <CheckCircleFilled className="ml-1 text-blue-500 text-xs" />}
                   </p>
                   <div className="mt-0.5 flex items-center gap-2">
                     {lesson.isPreview && (

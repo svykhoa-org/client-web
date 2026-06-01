@@ -45,14 +45,13 @@ export const useUpdateWatchTime = (
           (old: Record<string, unknown> | undefined) =>
             old ? { ...old, progress: data.enrollmentProgress } : old,
         )
+        // Lesson just completed — refresh progressMap so sidebar shows tick + correct accessibility
+        queryClient.invalidateQueries({ queryKey: queryKeys.lessonProgress.all })
         if (data.enrollmentProgress >= 100) {
           options?.onCourseComplete?.()
         }
       }
       if (data.unlockedLessonId) {
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.lessonProgress.all,
-        })
         options?.onUnlock?.(data.unlockedLessonId)
       }
     },
