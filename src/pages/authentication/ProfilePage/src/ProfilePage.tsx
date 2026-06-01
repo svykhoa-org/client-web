@@ -32,6 +32,7 @@ import { useAuth } from '@/hooks/useAuth'
 import axiosInstance from '@/lib/axios'
 import { cn } from '@/lib/utils'
 import { FileSize } from '@/models/enum/FileSize'
+import RouteConfig from '@/constants/RouteConfig'
 import { RoutePath } from '@/routes'
 import {
   getDocumentDownloadUrl,
@@ -436,7 +437,21 @@ const ProfilePage: React.FC = () => {
         {enrollments.map(enrollment => {
           const { color, label } = statusConfig[enrollment.status]
           return (
-            <Section key={enrollment.id} className="p-4">
+            <Section
+              key={enrollment.id}
+              className={cn(
+                'p-4',
+                (enrollment.status === 'active' || enrollment.status === 'completed') &&
+                  'cursor-pointer transition-shadow hover:shadow-md',
+              )}
+              onClick={() => {
+                if (enrollment.status === 'active' || enrollment.status === 'completed') {
+                  navigate(
+                    `${RouteConfig.CourseDetailPage.path.replace(':id', enrollment.courseId)}?learn=1`,
+                  )
+                }
+              }}
+            >
               <div className="flex items-center gap-4">
                 {/* Thumbnail */}
                 <div className="h-16 w-24 shrink-0 overflow-hidden rounded-md bg-slate-100">
@@ -473,9 +488,18 @@ const ProfilePage: React.FC = () => {
                 </div>
 
                 {/* Action */}
-                <div className="shrink-0">
+                <div className="shrink-0" onClick={e => e.stopPropagation()}>
                   {enrollment.status === 'active' && (
-                    <Button type="primary" size="small" className="rounded-lg">
+                    <Button
+                      type="primary"
+                      size="small"
+                      className="rounded-lg"
+                      onClick={() =>
+                        navigate(
+                          `${RouteConfig.CourseDetailPage.path.replace(':id', enrollment.courseId)}?learn=1`,
+                        )
+                      }
+                    >
                       Tiếp tục
                     </Button>
                   )}
