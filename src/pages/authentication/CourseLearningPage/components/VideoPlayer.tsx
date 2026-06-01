@@ -29,6 +29,7 @@ interface VideoPlayerProps {
   onProgress?: (progress: { played: number; playedSeconds: number }) => void
   onEnded?: () => void
   onUnlock?: (unlockedLessonId: string) => void
+  onCourseComplete?: () => void
 }
 
 const HEARTBEAT_INTERVAL_MS = 30_000
@@ -59,6 +60,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
 
   const { mutate: sendWatchTime } = useUpdateWatchTime(props.lessonId, props.courseId, {
     onUnlock: props.onUnlock,
+    onCourseComplete: props.onCourseComplete,
   })
 
   const startHeartbeat = () => {

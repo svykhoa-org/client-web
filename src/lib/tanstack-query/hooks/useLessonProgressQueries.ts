@@ -27,7 +27,10 @@ export const useProgressMap = (enrollmentId: string, enabled = true) => {
 export const useUpdateWatchTime = (
   lessonId: string,
   courseId: string,
-  options?: { onUnlock?: (unlockedLessonId: string) => void },
+  options?: {
+    onUnlock?: (unlockedLessonId: string) => void
+    onCourseComplete?: () => void
+  },
 ) => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -42,6 +45,9 @@ export const useUpdateWatchTime = (
           (old: Record<string, unknown> | undefined) =>
             old ? { ...old, progress: data.enrollmentProgress } : old,
         )
+        if (data.enrollmentProgress >= 100) {
+          options?.onCourseComplete?.()
+        }
       }
       if (data.unlockedLessonId) {
         queryClient.invalidateQueries({

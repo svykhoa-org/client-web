@@ -233,6 +233,7 @@ export interface QuizSubmitResult {
   totalPoints: number
   earnedPoints: number
   answers: SnapshotAnswerRecord[]
+  enrollmentProgress: number | null
 }
 
 /** Returned by GET /quizzes/:id/my-attempts (one item) */

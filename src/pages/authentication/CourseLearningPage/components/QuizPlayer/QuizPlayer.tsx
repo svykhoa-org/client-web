@@ -18,15 +18,16 @@ interface QuizPlayerProps {
   quizId: string
   courseId: string
   lessonId: string
+  onCourseComplete?: () => void
 }
 
-export const QuizPlayer = ({ quizId, courseId, lessonId }: QuizPlayerProps) => {
+export const QuizPlayer = ({ quizId, courseId, lessonId, onCourseComplete }: QuizPlayerProps) => {
   const { data: lessonData, isLoading: isLessonLoading } = useLessonLearning(lessonId)
   const { data: quiz, isLoading: isQuizLoading } = useQuizDetail(quizId)
   const { data: attempts = [], isLoading: isAttemptsLoading } = useMyAttempts(quizId)
 
   const startMutation = useStartQuiz(quizId, courseId)
-  const submitMutation = useSubmitQuiz(quizId, lessonId, courseId)
+  const submitMutation = useSubmitQuiz(quizId, lessonId, courseId, { onCourseComplete })
 
   if (isLessonLoading || isQuizLoading || isAttemptsLoading) {
     return (

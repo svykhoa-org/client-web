@@ -7,6 +7,7 @@ import { Button, Result, Tabs } from 'antd'
 import RouteConfig from '@/constants/RouteConfig'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
 
+import { CelebrationModal } from './components/CelebrationModal'
 import { DocumentViewer } from './components/DocumentViewer'
 import { LessonInfoTab } from './components/LessonInfoTab'
 import { LessonNotesTab } from './components/LessonNotesTab'
@@ -23,6 +24,7 @@ export const CourseLearningPage = () => {
   const currentTimeRef = useRef(0)
   const playerRef = useRef<VideoPlayerHandle>(null)
   const [latestUnlockedId, setLatestUnlockedId] = useState<string | null>(null)
+  const [showCelebration, setShowCelebration] = useState(false)
 
   const { data: curriculumData } = useCourseWithCurriculum(courseId ?? '')
 
@@ -86,10 +88,14 @@ export const CourseLearningPage = () => {
     </div>
   )
 
+  const handleCourseComplete = () => setShowCelebration(true)
+
   // ── Document layout: PDF fills viewport, info scrolls below ──────────────────
   if (currentLesson?.type === 'document') {
     return (
       <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
+        <CelebrationModal open={showCelebration} onClose={() => setShowCelebration(false)} />
+
         {/* Main column */}
         <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
           {/* Full-height zone: PDF + nav bar */}
@@ -98,6 +104,7 @@ export const CourseLearningPage = () => {
               courseId={courseId}
               lessonId={lessonId}
               onUnlock={setLatestUnlockedId}
+              onCourseComplete={handleCourseComplete}
             />
             {navBar}
           </div>
@@ -123,10 +130,17 @@ export const CourseLearningPage = () => {
   // ── Video / Quiz layout ───────────────────────────────────────────────────────
   return (
     <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
+      <CelebrationModal open={showCelebration} onClose={() => setShowCelebration(false)} />
+
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
         {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
-          <QuizPlayer quizId={currentLesson.contentId} courseId={courseId} lessonId={lessonId} />
+          <QuizPlayer
+            quizId={currentLesson.contentId}
+            courseId={courseId}
+            lessonId={lessonId}
+            onCourseComplete={handleCourseComplete}
+          />
         ) : (
           <VideoPlayer
             ref={playerRef}
@@ -139,6 +153,7 @@ export const CourseLearningPage = () => {
               if (nextLesson) goToLesson(nextLesson.id)
             }}
             onUnlock={setLatestUnlockedId}
+            onCourseComplete={handleCourseComplete}
           />
         )}
 

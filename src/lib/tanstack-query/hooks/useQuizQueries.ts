@@ -35,7 +35,12 @@ export const useStartQuiz = (quizId: string, courseId: string) => {
   })
 }
 
-export const useSubmitQuiz = (quizId: string, lessonId: string, courseId: string) => {
+export const useSubmitQuiz = (
+  quizId: string,
+  lessonId: string,
+  courseId: string,
+  options?: { onCourseComplete?: () => void },
+) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ attemptId, payload }: { attemptId: string; payload: SubmitQuizPayload }) =>
@@ -47,9 +52,20 @@ export const useSubmitQuiz = (quizId: string, lessonId: string, courseId: string
         queryKey: queryKeys.lessonProgress.learning(lessonId),
       })
       if (data.isPassed) {
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.enrollment.myEnrollment(courseId),
-        })
+        if (data.enrollmentProgress !== null) {
+          queryClient.setQueryData(
+            queryKeys.enrollment.myEnrollment(courseId),
+            (old: Record<string, unknown> | undefined) =>
+              old ? { ...old, progress: data.enrollmentProgress } : old,
+          )
+          if (data.enrollmentProgress >= 100) {
+            options?.onCourseComplete?.()
+          }
+        } else {
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.enrollment.myEnrollment(courseId),
+          })
+        }
       }
     },
   })

@@ -5,7 +5,10 @@ import { useUpdateWatchTime } from './useLessonProgressQueries'
 export const useDocumentTimer = (
   lessonId: string,
   courseId: string,
-  options?: { onUnlock?: (unlockedLessonId: string) => void },
+  options?: {
+    onUnlock?: (unlockedLessonId: string) => void
+    onCourseComplete?: () => void
+  },
 ) => {
   const { mutate: sendWatchTime } = useUpdateWatchTime(lessonId, courseId, options)
   const activeRef = useRef(true)
