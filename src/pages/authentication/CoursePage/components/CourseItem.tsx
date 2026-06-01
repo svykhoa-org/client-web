@@ -1,7 +1,6 @@
 // src/pages/authentication/CoursePage/components/CourseItem.tsx
 import { useNavigate } from 'react-router'
 
-import { StarFilled } from '@ant-design/icons'
 import { Tag } from 'antd'
 
 import defaultThumbnail from '@/assets/course-thumbnail-default.jpeg'
@@ -40,7 +39,7 @@ export const CourseItem = ({ course, onClick }: Props) => {
   return (
     <div
       onClick={onClick ?? (() => navigate(RouteConfig.CourseDetailPage.path.replace(':id', course.id)))}
-      className="group cursor-pointer overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       {/* Thumbnail */}
       <div className="relative h-40 overflow-hidden">
@@ -70,7 +69,7 @@ export const CourseItem = ({ course, onClick }: Props) => {
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col gap-2 p-4">
         <h3 className="line-clamp-2 text-sm font-bold leading-snug text-gray-900">
           {course.title}
         </h3>
@@ -90,11 +89,6 @@ export const CourseItem = ({ course, onClick }: Props) => {
         )}
 
         <div className="mt-auto flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1 text-xs text-amber-500">
-            <StarFilled />
-            <span className="font-semibold">4.5</span>
-            <span className="text-gray-400">(mock)</span>
-          </div>
           {course.currentEnrollments > 0 && (
             <span className="text-xs text-gray-400">
               {course.currentEnrollments.toLocaleString('vi-VN')} học viên

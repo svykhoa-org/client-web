@@ -93,8 +93,8 @@ const fetchMyEnrollments = async (): Promise<Enrollment[]> => {
 }
 
 const fetchMyCertificates = async (): Promise<MyCertificate[]> => {
-  const res = await axiosInstance.get<{ data: { items: MyCertificate[] } }>('/certificates/my')
-  return res.data.data?.items ?? []
+  const res = await axiosInstance.get<{ data: MyCertificate[] }>('/certificates/my')
+  return Array.isArray(res.data.data) ? res.data.data : []
 }
 
 const fetchMyOrders = async (): Promise<MyOrder[]> => {
