@@ -1,10 +1,11 @@
-import type { CourseApiItem, CourseModuleWithLessons } from '@/types/course-api'
+import type { CourseApiItem, CourseInstructor, CourseModuleWithLessons } from '@/types/course-api'
 
 import axiosInstance from '@/lib/axios'
 
 export interface CourseCurriculum {
   course: CourseApiItem
   curriculum: CourseModuleWithLessons[]
+  instructors: CourseInstructor[]
 }
 
 export async function getCourseWithCurriculum(courseId: string): Promise<CourseCurriculum> {

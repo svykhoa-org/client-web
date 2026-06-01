@@ -45,7 +45,12 @@ export const MyCoursesPage: React.FC = () => {
           <Row gutter={[16, 24]}>
             {courses.map(course => (
               <Col xs={24} sm={12} lg={8} xl={6} key={course.id}>
-                <CourseItem course={course} />
+                <CourseItem
+                  course={course}
+                  onClick={() =>
+                    navigate(`${RouteConfig.CourseDetailPage.path.replace(':id', course.id)}?learn=1`)
+                  }
+                />
               </Col>
             ))}
           </Row>

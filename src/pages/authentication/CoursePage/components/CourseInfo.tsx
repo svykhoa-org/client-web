@@ -4,17 +4,19 @@ import {
   ClockCircleOutlined,
   StarFilled,
   TeamOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
-import { Tag } from 'antd'
+import { Avatar, Tag } from 'antd'
 
 import defaultThumbnail from '@/assets/course-thumbnail-default.jpeg'
-import type { CourseApiItem } from '@/types/course-api'
+import type { CourseApiItem, CourseInstructor } from '@/types/course-api'
 
 interface CourseInfoProps {
   course: CourseApiItem
+  instructors?: CourseInstructor[]
 }
 
-export const CourseInfo = ({ course }: CourseInfoProps) => {
+export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
   const durationHours = course.totalDurationMinutes
     ? Math.round(course.totalDurationMinutes / 60)
     : null
@@ -63,6 +65,26 @@ export const CourseInfo = ({ course }: CourseInfoProps) => {
 
       {/* Description */}
       {course.description && <p className="leading-relaxed text-gray-600">{course.description}</p>}
+
+      {/* Instructors */}
+      {instructors && instructors.length > 0 && (
+        <div>
+          <h2 className="mb-3 font-bold text-gray-900">Giảng viên</h2>
+          <div className="flex flex-col gap-3">
+            {instructors.map(instructor => (
+              <div key={instructor.id} className="flex items-center gap-3">
+                <Avatar
+                  src={instructor.avatar ?? undefined}
+                  icon={!instructor.avatar && <UserOutlined />}
+                  size={48}
+                  className="shrink-0 bg-blue-100 text-blue-600"
+                />
+                <span className="font-medium text-gray-800">{instructor.fullName}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Tags */}
       {course.tags && course.tags.length > 0 && (

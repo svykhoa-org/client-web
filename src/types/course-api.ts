@@ -79,6 +79,12 @@ export interface CourseModuleWithLessons extends CourseModule {
   lessons: CourseLesson[]
 }
 
+export interface CourseInstructor {
+  id: string
+  fullName: string
+  avatar: string | null
+}
+
 export interface CoursePaginationMeta {
   page: number
   pageSize: number

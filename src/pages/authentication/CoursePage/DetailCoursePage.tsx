@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useParams } from 'react-router'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams, useSearchParams } from 'react-router'
 
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -10,6 +10,7 @@ import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQue
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
 import { CheckoutModalContent, type CheckoutData } from '@/components/payment'
 import { orderService } from '@/services/Order/checkoutCourse'
+import RouteConfig from '@/constants/RouteConfig'
 
 import { CourseActions } from './components/CourseActions'
 import { CourseInfo } from './components/CourseInfo'
@@ -17,6 +18,8 @@ import { CourseModules } from './components/CourseModules'
 
 export const DetailCoursePage = () => {
   const { id } = useParams<{ id: string }>()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
   const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null)
   const queryClient = useQueryClient()
@@ -57,6 +60,20 @@ export const DetailCoursePage = () => {
     },
   })
 
+  // Auto-redirect to learning page when navigated from My Courses with ?learn=1
+  useEffect(() => {
+    if (searchParams.get('learn') !== '1') return
+    if (isLoading || isEnrollmentLoading) return
+    if (!data || !enrollment) return
+    const isEnrolled = enrollment.status === 'active' || enrollment.status === 'completed'
+    const firstLesson = data.curriculum[0]?.lessons[0]
+    if (isEnrolled && firstLesson) {
+      navigate(RouteConfig.CourseLearningPage.getPath(data.course.id, firstLesson.id), {
+        replace: true,
+      })
+    }
+  }, [searchParams, isLoading, isEnrollmentLoading, data, enrollment, navigate])
+
   if (isLoading) {
     return (
       <div className="w-full">
@@ -94,7 +111,7 @@ export const DetailCoursePage = () => {
     )
   }
 
-  const { course, curriculum } = data
+  const { course, curriculum, instructors = [] } = data
   const firstLesson = curriculum[0]?.lessons[0] ?? null
 
   return (
@@ -102,7 +119,7 @@ export const DetailCoursePage = () => {
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={16}>
           <div className="flex flex-col gap-6">
-            <CourseInfo course={course} />
+            <CourseInfo course={course} instructors={instructors} />
             <CourseModules curriculum={curriculum} />
           </div>
         </Col>

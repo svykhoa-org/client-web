@@ -1,12 +1,11 @@
 // src/pages/authentication/CoursePage/components/CourseModules.tsx
 import {
   ClockCircleOutlined,
-  EyeOutlined,
   FileTextOutlined,
   FormOutlined,
   PlayCircleOutlined,
 } from '@ant-design/icons'
-import { Collapse, Empty, Tag } from 'antd'
+import { Collapse, Empty } from 'antd'
 
 import type { CourseLesson, CourseModuleWithLessons, LessonType } from '@/types/course-api'
 
@@ -28,11 +27,6 @@ const LessonRow = ({ lesson }: { lesson: CourseLesson }) => {
       <div className="flex flex-1 items-center gap-3">
         <span className={`shrink-0 ${config.color}`}>{config.icon}</span>
         <span className="text-sm text-gray-700">{lesson.title}</span>
-        {lesson.isPreview && (
-          <Tag icon={<EyeOutlined />} color="cyan" className="ml-1 shrink-0">
-            Xem thử
-          </Tag>
-        )}
       </div>
       {lesson.durationMinutes > 0 && (
         <span className="ml-2 flex shrink-0 items-center gap-1 text-xs text-gray-400">

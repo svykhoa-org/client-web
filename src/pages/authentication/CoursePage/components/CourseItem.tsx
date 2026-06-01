@@ -26,9 +26,10 @@ function getGradient(shortCode: string): string {
 
 interface Props {
   course: CourseApiItem
+  onClick?: () => void
 }
 
-export const CourseItem = ({ course }: Props) => {
+export const CourseItem = ({ course, onClick }: Props) => {
   const navigate = useNavigate()
   const gradient = getGradient(course.shortCode)
 
@@ -38,7 +39,7 @@ export const CourseItem = ({ course }: Props) => {
 
   return (
     <div
-      onClick={() => navigate(RouteConfig.CourseDetailPage.path.replace(':id', course.id))}
+      onClick={onClick ?? (() => navigate(RouteConfig.CourseDetailPage.path.replace(':id', course.id)))}
       className="group cursor-pointer overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       {/* Thumbnail */}
