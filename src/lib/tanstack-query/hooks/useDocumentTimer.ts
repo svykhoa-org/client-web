@@ -4,9 +4,10 @@ import { useUpdateWatchTime } from './useLessonProgressQueries'
 
 export const useDocumentTimer = (
   lessonId: string,
+  courseId: string,
   options?: { onUnlock?: (unlockedLessonId: string) => void },
 ) => {
-  const { mutate: sendWatchTime } = useUpdateWatchTime(lessonId, options)
+  const { mutate: sendWatchTime } = useUpdateWatchTime(lessonId, courseId, options)
   const activeRef = useRef(true)
   const lastTickRef = useRef(Date.now())
 

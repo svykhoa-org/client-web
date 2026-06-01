@@ -2,16 +2,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { getAccessToken } from '@/lib/axios'
+import { queryKeys } from '@/lib/tanstack-query'
 import { getMyEnrollment } from '@/services/enrollment/getMyEnrollment'
 import { getMyCourses } from '@/services/enrollment'
-
-const queryKeys = {
-  enrollment: {
-    all: ['enrollment'],
-    myCourses: () => [...queryKeys.enrollment.all, 'my-courses'],
-    myEnrollment: (courseId: string) => [...queryKeys.enrollment.all, 'my-enrollment', courseId],
-  },
-}
 
 export const useMyCourses = () => {
   return useQuery({

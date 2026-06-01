@@ -26,6 +26,7 @@ export const useProgressMap = (enrollmentId: string, enabled = true) => {
 
 export const useUpdateWatchTime = (
   lessonId: string,
+  courseId: string,
   options?: { onUnlock?: (unlockedLessonId: string) => void },
 ) => {
   const queryClient = useQueryClient()
@@ -35,6 +36,13 @@ export const useUpdateWatchTime = (
       queryClient.invalidateQueries({
         queryKey: queryKeys.lessonProgress.learning(lessonId),
       })
+      if (data.enrollmentProgress !== null) {
+        queryClient.setQueryData(
+          queryKeys.enrollment.myEnrollment(courseId),
+          (old: Record<string, unknown> | undefined) =>
+            old ? { ...old, progress: data.enrollmentProgress } : old,
+        )
+      }
       if (data.unlockedLessonId) {
         queryClient.invalidateQueries({
           queryKey: queryKeys.lessonProgress.all,

@@ -114,6 +114,7 @@ export interface LessonProgressApi {
 export interface WatchTimeResponse {
   progress: LessonProgressApi
   unlockedLessonId: string | null
+  enrollmentProgress: number | null
 }
 
 // ── LessonLearning ────────────────────────────────────────────────────────────

@@ -4,6 +4,14 @@
  */
 
 export const queryKeys = {
+  // Enrollment
+  enrollment: {
+    all: ['enrollment'] as const,
+    myCourses: () => [...queryKeys.enrollment.all, 'my-courses'] as const,
+    myEnrollment: (courseId: string) =>
+      [...queryKeys.enrollment.all, 'my-enrollment', courseId] as const,
+  },
+
   // Courses
   courses: {
     all: ['courses'] as const,

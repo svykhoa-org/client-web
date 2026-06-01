@@ -26,7 +26,7 @@ export const QuizPlayer = ({ quizId, courseId, lessonId }: QuizPlayerProps) => {
   const { data: attempts = [], isLoading: isAttemptsLoading } = useMyAttempts(quizId)
 
   const startMutation = useStartQuiz(quizId, courseId)
-  const submitMutation = useSubmitQuiz(quizId, lessonId)
+  const submitMutation = useSubmitQuiz(quizId, lessonId, courseId)
 
   if (isLessonLoading || isQuizLoading || isAttemptsLoading) {
     return (

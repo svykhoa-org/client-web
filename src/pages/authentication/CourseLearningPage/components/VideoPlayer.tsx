@@ -57,7 +57,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
     enabled: !!learningData?.isAccessible,
   })
 
-  const { mutate: sendWatchTime } = useUpdateWatchTime(props.lessonId, {
+  const { mutate: sendWatchTime } = useUpdateWatchTime(props.lessonId, props.courseId, {
     onUnlock: props.onUnlock,
   })
 

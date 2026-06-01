@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { queryKeys } from '@/lib/tanstack-query'
+import { queryKeys } from '@/lib/tanstack-query/queries/queryKeys'
 import { getMyAttempts } from '@/services/Quiz/getMyAttempts'
 import { getQuizDetail } from '@/services/Quiz/getQuizDetail'
 import { startQuiz } from '@/services/Quiz/startQuiz'
@@ -35,17 +35,22 @@ export const useStartQuiz = (quizId: string, courseId: string) => {
   })
 }
 
-export const useSubmitQuiz = (quizId: string, lessonId: string) => {
+export const useSubmitQuiz = (quizId: string, lessonId: string, courseId: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ attemptId, payload }: { attemptId: string; payload: SubmitQuizPayload }) =>
       submitQuiz(quizId, attemptId, payload),
-    onSuccess: () => {
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: queryKeys.quiz.attempts(quizId) })
       queryClient.invalidateQueries({ queryKey: queryKeys.lessonProgress.all })
       queryClient.invalidateQueries({
         queryKey: queryKeys.lessonProgress.learning(lessonId),
       })
+      if (data.isPassed) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.enrollment.myEnrollment(courseId),
+        })
+      }
     },
   })
 }

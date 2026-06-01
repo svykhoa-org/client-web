@@ -15,7 +15,7 @@ interface DocumentViewerProps {
   onUnlock?: (unlockedLessonId: string) => void
 }
 
-export const DocumentViewer = ({ lessonId, onUnlock }: DocumentViewerProps) => {
+export const DocumentViewer = ({ courseId, lessonId, onUnlock }: DocumentViewerProps) => {
   const {
     data: learningData,
     isLoading: isLearningLoading,
@@ -28,7 +28,7 @@ export const DocumentViewer = ({ lessonId, onUnlock }: DocumentViewerProps) => {
   const { data: urlData, isLoading: isUrlLoading } = useLessonDocumentUrl(lessonId, isAccessible)
 
   // Silently tracks active reading time — pauses on tab hide/blur, heartbeat every 30s
-  useDocumentTimer(lessonId, { onUnlock })
+  useDocumentTimer(lessonId, courseId, { onUnlock })
 
   // ── Loading ──────────────────────────────────────────────────────────────────
   if (isLearningLoading) {
