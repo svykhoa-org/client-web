@@ -146,6 +146,7 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
           .map(lesson => {
             const isActive = lesson.id === activeLessonId
             const isAccessible = accessibilityMap[lesson.id] ?? true
+            const isCompleted = progressMap.get(lesson.id)?.status === 'completed'
             const isFlashing = flashSet.has(lesson.id)
             return (
               <button
@@ -156,8 +157,13 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                 }
                 className={[
                   'flex items-start gap-2 px-3 py-2.5 text-left transition-colors border-l-2',
-                  isActive ? 'bg-blue-50 border-blue-500' : 'border-transparent',
-                  isAccessible && !isActive ? 'hover:bg-blue-50' : '',
+                  isActive
+                    ? 'bg-blue-50 border-blue-500'
+                    : isCompleted
+                      ? 'border-green-400 bg-green-50/50'
+                      : 'border-transparent',
+                  isAccessible && !isActive && !isCompleted ? 'hover:bg-gray-50' : '',
+                  isAccessible && isCompleted && !isActive ? 'hover:bg-green-50' : '',
                   !isAccessible ? 'cursor-not-allowed opacity-60' : '',
                   isFlashing ? 'animate-pulse bg-blue-50' : '',
                 ]
@@ -165,7 +171,7 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                   .join(' ')}
               >
                 <span className="mt-0.5 shrink-0 text-base">
-                  {progressMap.get(lesson.id)?.status === 'completed' ? (
+                  {isCompleted ? (
                     <CheckCircleFilled className="text-green-500" />
                   ) : isAccessible ? (
                     lessonTypeIcon(lesson.type)
@@ -178,9 +184,11 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                     className={`text-xs leading-snug ${
                       isActive
                         ? 'font-semibold text-blue-700'
-                        : isAccessible
-                          ? 'text-gray-700'
-                          : 'text-gray-400'
+                        : isCompleted
+                          ? 'text-green-700'
+                          : isAccessible
+                            ? 'text-gray-700'
+                            : 'text-gray-400'
                     }`}
                   >
                     {lesson.title}

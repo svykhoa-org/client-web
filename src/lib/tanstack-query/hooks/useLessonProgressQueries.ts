@@ -20,7 +20,8 @@ export const useProgressMap = (enrollmentId: string, enabled = true) => {
     queryKey: queryKeys.lessonProgress.progressMap(enrollmentId),
     queryFn: () => getProgressMap(enrollmentId),
     enabled: enabled && !!enrollmentId,
-    staleTime: 1000 * 30, // 30s
+    staleTime: 0,
+    refetchOnMount: 'always',
   })
 }
 
