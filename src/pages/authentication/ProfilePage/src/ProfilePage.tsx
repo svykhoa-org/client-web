@@ -144,8 +144,21 @@ const NAV_ITEMS: NavItem[] = [
 // ─── Shared primitives ────────────────────────────────────────────────────────
 
 /** Wrapper card — flat, consistent radius, light border */
-const Section = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <div className={cn('rounded-lg border border-slate-100 bg-white p-6', className)}>{children}</div>
+const Section = ({
+  children,
+  className,
+  onClick,
+}: {
+  children: React.ReactNode
+  className?: string
+  onClick?: React.MouseEventHandler<HTMLDivElement>
+}) => (
+  <div
+    className={cn('rounded-lg border border-slate-100 bg-white p-6', className)}
+    onClick={onClick}
+  >
+    {children}
+  </div>
 )
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
