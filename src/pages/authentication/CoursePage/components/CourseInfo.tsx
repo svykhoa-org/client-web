@@ -2,7 +2,7 @@
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
-  StarFilled,
+  // StarFilled,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -43,11 +43,11 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
 
       {/* Stats row */}
       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-        <span className="flex items-center gap-1 font-semibold text-amber-500">
+        {/* <span className="flex items-center gap-1 font-semibold text-amber-500">
           <StarFilled />
           4.5
           <span className="font-normal text-gray-400">(mock)</span>
-        </span>
+        </span> */}
         {course.currentEnrollments > 0 && (
           <span className="flex items-center gap-1">
             <TeamOutlined />
