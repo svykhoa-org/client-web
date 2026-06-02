@@ -16,7 +16,12 @@ interface DocumentViewerProps {
   onCourseComplete?: () => void
 }
 
-export const DocumentViewer = ({ courseId, lessonId, onUnlock, onCourseComplete }: DocumentViewerProps) => {
+export const DocumentViewer = ({
+  courseId,
+  lessonId,
+  onUnlock,
+  onCourseComplete,
+}: DocumentViewerProps) => {
   const {
     data: learningData,
     isLoading: isLearningLoading,

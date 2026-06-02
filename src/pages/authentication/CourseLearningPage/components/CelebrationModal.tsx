@@ -85,8 +85,8 @@ export const CelebrationModal = ({ open, onClose }: CelebrationModalProps) => {
 
         <blockquote className="mt-2 rounded-xl bg-blue-50 px-5 py-4 text-sm italic text-blue-700">
           "Tri thức là ngọn đuốc không bao giờ tắt —{' '}
-          <span className="font-semibold">mỗi khoá học là một ngọn lửa mới bạn thắp lên.</span>{' '}
-          Hãy tiếp tục toả sáng!"
+          <span className="font-semibold">mỗi khoá học là một ngọn lửa mới bạn thắp lên.</span> Hãy
+          tiếp tục toả sáng!"
         </blockquote>
 
         <Button type="primary" size="large" className="mt-2 w-full rounded-lg" onClick={onClose}>

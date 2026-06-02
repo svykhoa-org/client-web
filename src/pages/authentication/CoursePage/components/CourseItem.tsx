@@ -38,7 +38,9 @@ export const CourseItem = ({ course, onClick }: Props) => {
 
   return (
     <div
-      onClick={onClick ?? (() => navigate(RouteConfig.CourseDetailPage.path.replace(':id', course.id)))}
+      onClick={
+        onClick ?? (() => navigate(RouteConfig.CourseDetailPage.path.replace(':id', course.id)))
+      }
       className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       {/* Thumbnail */}

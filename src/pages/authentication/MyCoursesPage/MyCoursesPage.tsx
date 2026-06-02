@@ -48,7 +48,9 @@ export const MyCoursesPage: React.FC = () => {
                 <CourseItem
                   course={course}
                   onClick={() =>
-                    navigate(`${RouteConfig.CourseDetailPage.path.replace(':id', course.id)}?learn=1`)
+                    navigate(
+                      `${RouteConfig.CourseDetailPage.path.replace(':id', course.id)}?learn=1`,
+                    )
                   }
                 />
               </Col>

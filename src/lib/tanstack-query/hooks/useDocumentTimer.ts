@@ -20,9 +20,7 @@ export const useDocumentTimer = (
 
     const consumeElapsed = (): number => {
       const now = Date.now()
-      const elapsed = activeRef.current
-        ? Math.floor((now - lastTickRef.current) / 1000)
-        : 0
+      const elapsed = activeRef.current ? Math.floor((now - lastTickRef.current) / 1000) : 0
       lastTickRef.current = now
       return elapsed
     }
