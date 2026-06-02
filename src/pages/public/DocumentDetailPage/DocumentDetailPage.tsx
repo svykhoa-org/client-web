@@ -44,6 +44,16 @@ const resolvePreviewUrl = (document?: Document | null) => {
   return getPublicUrl(document.preview)
 }
 
+const resolveThumbnailUrl = (document?: Document | null) => {
+  if (!document?.thumbnail) return undefined
+
+  if (document.thumbnail.url?.startsWith('http')) {
+    return document.thumbnail.url
+  }
+
+  return getPublicUrl(document.thumbnail)
+}
+
 export const DocumentDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -79,6 +89,7 @@ export const DocumentDetailPage = () => {
 
   const fileUrl = useMemo(() => resolveFileUrl(document), [document])
   const previewUrl = useMemo(() => resolvePreviewUrl(document), [document])
+  const thumbnailUrl = useMemo(() => resolveThumbnailUrl(document), [document])
 
   const handleDownload = () => {
     if (!document?.id) {
@@ -217,12 +228,7 @@ export const DocumentDetailPage = () => {
       <div className="flex gap-4">
         <section className="flex-1 space-y-4">
           <div className="flex gap-4">
-            <Avatar
-              size={200}
-              shape="square"
-              className="mb-4"
-              src={getPublicUrl(document.thumbnail)}
-            />
+            <Avatar size={200} shape="square" className="mb-4" src={thumbnailUrl} />
 
             <div className="">
               <p>Mô tả: {document.description || 'Tài liệu chưa có mô tả chi tiết.'}</p>
