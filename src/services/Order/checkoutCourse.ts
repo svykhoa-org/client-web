@@ -10,9 +10,9 @@ export interface CheckoutResponse {
 export const checkoutCourse = async (courseId: string): Promise<CheckoutResponse> => {
   const response = await axiosInstance.post<CheckoutResponse>('/orders/checkout/course', {
     courseId,
-    successUrl: '/order/success',
-    cancelUrl: '/order/cancel',
-    errorUrl: '/order/error',
+    successUrl: `${window.location.origin}/order/success`,
+    cancelUrl: `${window.location.origin}/order/cancel`,
+    errorUrl: `${window.location.origin}/order/error`,
   })
   return response.data
 }

@@ -127,9 +127,9 @@ export const DocumentDetailPage = () => {
       try {
         const checkoutData = await executeCheckout({
           documentId: document.id,
-          successUrl: RoutePath.DocumentOrderSuccessPage.path,
-          cancelUrl: RoutePath.DocumentOrderCancelPage.path,
-          errorUrl: RoutePath.DocumentOrderErrorPage.path,
+          successUrl: `${window.location.origin}${RoutePath.DocumentOrderSuccessPage.path}`,
+          cancelUrl: `${window.location.origin}${RoutePath.DocumentOrderCancelPage.path}`,
+          errorUrl: `${window.location.origin}${RoutePath.DocumentOrderErrorPage.path}`,
         })
 
         if (!checkoutData.checkoutUrl) {
