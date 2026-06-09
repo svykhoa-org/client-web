@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
@@ -23,14 +23,31 @@ export const CourseLearningPage = () => {
 
   const currentTimeRef = useRef(0)
   const playerRef = useRef<VideoPlayerHandle>(null)
+  const mediaRef = useRef<HTMLDivElement>(null)
   const [latestUnlockedId, setLatestUnlockedId] = useState<string | null>(null)
   const [showCelebration, setShowCelebration] = useState(false)
+  // Measured height of the video frame — the sidebar's lesson list mirrors it
+  const [mediaHeight, setMediaHeight] = useState<number>()
 
   const { data: curriculumData } = useCourseWithCurriculum(courseId ?? '')
 
   const allLessons = curriculumData?.curriculum.flatMap(m => m.lessons) ?? []
   const currentIndex = allLessons.findIndex(l => l.id === lessonId)
   const currentLesson = currentIndex >= 0 ? allLessons[currentIndex] : undefined
+
+  useEffect(() => {
+    const el = mediaRef.current
+    if (!el) {
+      setMediaHeight(undefined)
+      return
+    }
+    const observer = new ResizeObserver(entries => {
+      const height = entries[0]?.contentRect.height
+      if (height) setMediaHeight(height)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [currentLesson?.type, currentLesson?.id])
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : undefined
   const nextLesson =
     currentIndex >= 0 && currentIndex < allLessons.length - 1
@@ -134,28 +151,30 @@ export const CourseLearningPage = () => {
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
-          <QuizPlayer
-            quizId={currentLesson.contentId}
-            courseId={courseId}
-            lessonId={lessonId}
-            onCourseComplete={handleCourseComplete}
-          />
-        ) : (
-          <VideoPlayer
-            ref={playerRef}
-            courseId={courseId}
-            lessonId={lessonId}
-            onProgress={({ playedSeconds }) => {
-              currentTimeRef.current = playedSeconds
-            }}
-            onEnded={() => {
-              if (nextLesson) goToLesson(nextLesson.id)
-            }}
-            onUnlock={setLatestUnlockedId}
-            onCourseComplete={handleCourseComplete}
-          />
-        )}
+        <div ref={mediaRef}>
+          {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
+            <QuizPlayer
+              quizId={currentLesson.contentId}
+              courseId={courseId}
+              lessonId={lessonId}
+              onCourseComplete={handleCourseComplete}
+            />
+          ) : (
+            <VideoPlayer
+              ref={playerRef}
+              courseId={courseId}
+              lessonId={lessonId}
+              onProgress={({ playedSeconds }) => {
+                currentTimeRef.current = playedSeconds
+              }}
+              onEnded={() => {
+                if (nextLesson) goToLesson(nextLesson.id)
+              }}
+              onUnlock={setLatestUnlockedId}
+              onCourseComplete={handleCourseComplete}
+            />
+          )}
+        </div>
 
         {navBar}
 
@@ -195,7 +214,7 @@ export const CourseLearningPage = () => {
       {/* Sidebar */}
       <div className="shrink-0 border-t border-gray-200 md:w-80 md:border-t-0 md:border-l">
         <div className="sticky top-0 h-[calc(100vh-64px)] overflow-hidden">
-          <ListModuleSidebar latestUnlockedId={latestUnlockedId} />
+          <ListModuleSidebar latestUnlockedId={latestUnlockedId} listHeight={mediaHeight} />
         </div>
       </div>
     </div>

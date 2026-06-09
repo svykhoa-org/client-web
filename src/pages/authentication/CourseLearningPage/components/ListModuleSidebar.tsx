@@ -8,17 +8,20 @@ import {
   ClockCircleOutlined,
   EyeOutlined,
   FileTextOutlined,
+  LeftOutlined,
   LockOutlined,
   PlayCircleOutlined,
   QuestionCircleOutlined,
+  RightOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
-import { Collapse, Progress, Spin, Tag } from 'antd'
+import { Avatar, Collapse, Progress, Spin, Tag } from 'antd'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
 import { useProgressMap } from '@/lib/tanstack-query/hooks/useLessonProgressQueries'
-import type { LessonProgressApi, LessonType } from '@/types/course-api'
+import type { CourseInstructor, LessonProgressApi, LessonType } from '@/types/course-api'
 
 const lessonTypeIcon = (type: LessonType) => {
   switch (type) {
@@ -33,12 +36,68 @@ const lessonTypeIcon = (type: LessonType) => {
   }
 }
 
+/** Bottom card introducing the course instructor(s) — paginates when there are several */
+const InstructorCard = ({ instructors }: { instructors: CourseInstructor[] }) => {
+  const [index, setIndex] = useState(0)
+  if (instructors.length === 0) return null
+
+  const safeIndex = Math.min(index, instructors.length - 1)
+  const instructor = instructors[safeIndex]
+  const hasMany = instructors.length > 1
+
+  return (
+    <div className="p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="font-bold text-gray-800 text-sm">Giảng viên</h3>
+        {hasMany && (
+          <div className="flex items-center gap-2 text-gray-500">
+            <button
+              type="button"
+              aria-label="Giảng viên trước"
+              onClick={() => setIndex(i => (i - 1 + instructors.length) % instructors.length)}
+              className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-xs transition-colors hover:bg-gray-50"
+            >
+              <LeftOutlined />
+            </button>
+            <span className="text-xs">
+              {safeIndex + 1}/{instructors.length}
+            </span>
+            <button
+              type="button"
+              aria-label="Giảng viên kế tiếp"
+              onClick={() => setIndex(i => (i + 1) % instructors.length)}
+              className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-xs transition-colors hover:bg-gray-50"
+            >
+              <RightOutlined />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-start gap-3 rounded-lg border border-slate-100 bg-white p-3">
+        <Avatar
+          src={instructor.avatar ?? undefined}
+          icon={!instructor.avatar && <UserOutlined />}
+          size={56}
+          className="shrink-0 bg-slate-100 text-slate-400"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold text-gray-800 text-sm leading-snug">{instructor.fullName}</p>
+          <p className="mt-1 text-xs text-gray-500 leading-relaxed">Giảng viên khoá học</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 interface ListModuleSidebarProps {
   /** lessonId returned by the server when a lesson is newly unlocked — triggers flash */
   latestUnlockedId?: string | null
+  /** Pixel height for the lesson-list block so it mirrors the video frame; the rest goes to the instructor card */
+  listHeight?: number
 }
 
-export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) => {
+export const ListModuleSidebar = ({ latestUnlockedId, listHeight }: ListModuleSidebarProps) => {
   const params = useParams()
   const courseId = params[RouteConfig.CourseLearningPage.paramKey.courseId] ?? ''
   const activeLessonId = params[RouteConfig.CourseLearningPage.paramKey.lessonId]
@@ -218,39 +277,54 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
     ),
   }))
 
+  const instructors = curriculumData?.instructors ?? []
+
   return (
     <div className="flex h-full flex-col border-l border-gray-200 bg-white">
-      {/* Header */}
-      <div className="border-b border-gray-200 px-4 py-3">
-        <h3 className="font-bold text-gray-800 text-sm">Nội dung khoá học</h3>
-        {enrollment && (
-          <div className="mt-2">
-            <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
-              <span>Tiến độ</span>
-              <span>{enrollment.progress ?? 0}%</span>
+      {/* Lesson list — height mirrors the video frame, scrolls when taller */}
+      <div
+        className={listHeight ? 'flex shrink-0 flex-col' : 'flex min-h-0 flex-1 flex-col'}
+        style={listHeight ? { height: listHeight } : undefined}
+      >
+        {/* Header */}
+        <div className="shrink-0 border-b border-gray-200 px-4 py-3">
+          <h3 className="font-bold text-gray-800 text-sm">Nội dung khoá học</h3>
+          {enrollment && (
+            <div className="mt-2">
+              <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
+                <span>Tiến độ</span>
+                <span>{enrollment.progress ?? 0}%</span>
+              </div>
+              <Progress
+                percent={enrollment.progress ?? 0}
+                showInfo={false}
+                strokeColor="#2563eb"
+                trailColor="#e5e7eb"
+                size="small"
+              />
             </div>
-            <Progress
-              percent={enrollment.progress ?? 0}
-              showInfo={false}
-              strokeColor="#2563eb"
-              trailColor="#e5e7eb"
-              size="small"
-            />
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Module accordion */}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <Collapse
+            defaultActiveKey={
+              defaultOpenKeys.length > 0 ? defaultOpenKeys : [curriculum[0]?.id ?? '']
+            }
+            bordered={false}
+            className="bg-white"
+            items={collapseItems}
+          />
+        </div>
       </div>
 
-      {/* Module accordion */}
-      <div className="flex-1 overflow-y-auto">
-        <Collapse
-          defaultActiveKey={
-            defaultOpenKeys.length > 0 ? defaultOpenKeys : [curriculum[0]?.id ?? '']
-          }
-          bordered={false}
-          className="bg-white"
-          items={collapseItems}
-        />
-      </div>
+      {/* Instructor intro card — fills the space below the lesson list */}
+      {instructors.length > 0 && (
+        <div className="min-h-0 flex-1 overflow-y-auto border-t border-gray-200">
+          <InstructorCard instructors={instructors} />
+        </div>
+      )}
     </div>
   )
 }
