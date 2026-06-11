@@ -258,7 +258,7 @@ const HeaderLogo = ({ onClick, src }: HeaderLogoProps) => {
       onClick={onClick}
       aria-label="Về trang chủ"
     >
-      <img src={src} alt="SVYKHOA" className="h-10 w-auto scale-150 object-contain" />
+      <img src={src} alt="SVYKHOA" className="h-9 w-auto scale-[1.65] rounded-xl object-contain" />
     </button>
   )
 }

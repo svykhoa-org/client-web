@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router'
 
 import { Spin } from 'antd'
-import { Circle } from 'lucide-react'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { useListing } from '@/hooks/useCRUD/useListing'
@@ -26,10 +25,7 @@ export const ListBulletins = () => {
         throw new Error(response.message)
       }
     },
-    defaultSearchParams: {
-      page: 1,
-      limit: 15,
-    },
+    defaultSearchParams: { page: 1, limit: 15 },
   })
 
   const handleBulletinClick = (bulletin: Bulletin) => {
@@ -37,20 +33,26 @@ export const ListBulletins = () => {
   }
 
   return (
-    <Spin spinning={isLoading}>
-      <h4 className="mb-4 rounded-xs bg-white py-1 text-center text-xl font-bold">Thông báo mới</h4>
-      <ul className="bg-white px-3 py-4">
-        {data.map(bulletin => (
-          <li
-            className="flex cursor-pointer items-start gap-1 border-b border-gray-200 py-2 text-sm hover:text-blue-800"
-            key={bulletin.id}
-            onClick={() => handleBulletinClick(bulletin)}
-          >
-            <Circle size={12} className="pt-1" />
-            <span>{bulletin.title}</span>
-          </li>
-        ))}
-      </ul>
-    </Spin>
+    <div className="rounded-xl border border-gray-100 bg-white">
+      <div className="border-b border-gray-100 px-4 py-3">
+        <h4 className="text-sm font-semibold text-gray-800">Thông báo mới</h4>
+      </div>
+      <Spin spinning={isLoading}>
+        <ul className="divide-y divide-gray-50 px-2 py-1">
+          {data.map(bulletin => (
+            <li
+              key={bulletin.id}
+              className="flex cursor-pointer items-start gap-2 px-2 py-2.5 transition-colors duration-150 hover:bg-gray-50"
+              onClick={() => handleBulletinClick(bulletin)}
+            >
+              <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-teal-500" />
+              <span className="text-xs leading-snug text-gray-600 hover:text-teal-700">
+                {bulletin.title}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Spin>
+    </div>
   )
 }
