@@ -99,7 +99,7 @@ const HeaderNavMenu = ({ mode = 'horizontal', onItemClick }: HeaderNavMenuProps)
 
 interface HeaderUserMenuProps {
   isAuthenticated: boolean
-  user?: { fullName?: string; email?: string; role?: string } | null
+  user?: { fullName?: string; email?: string; role?: string; avatarUrl?: string } | null
   userName?: string
   onLogin: () => void
   onRegister: () => void
@@ -193,36 +193,50 @@ const HeaderUserMenu = ({
       placement="bottomRight"
       trigger={['click']}
       dropdownRender={() => (
-        <div className="w-56 overflow-hidden rounded-lg border border-slate-100 bg-white shadow-md">
+        <div className="shadow-primary-10/10 w-64 overflow-hidden rounded-xl border border-neutral-3 bg-white shadow-lg">
           {/* User info */}
-          <div className="border-b border-slate-100 px-4 py-3">
-            <div className="truncate text-sm font-semibold text-slate-900">{displayName}</div>
-            <div className="truncate text-xs text-slate-400">{user?.email || ''}</div>
+          <div className="flex items-center gap-3 border-b border-neutral-2 px-4 py-3.5">
+            <Avatar
+              size={40}
+              icon={<UserOutlined />}
+              src={user?.avatarUrl}
+              className="bg-primary-9 shrink-0"
+            />
+            <div className="min-w-0">
+              <div className="truncate text-sm font-semibold text-neutral-10">{displayName}</div>
+              <div className="truncate text-xs text-neutral-5">{user?.email || ''}</div>
+            </div>
           </div>
 
           {/* Menu items */}
-          <div className="p-1">
+          <div className="p-1.5">
             {[
-              { label: 'Hồ sơ cá nhân', onClick: onProfile },
-              { label: 'Khoá học của tôi', onClick: () => navigate('/profile?tab=courses') },
-              { label: 'Chứng chỉ của tôi', onClick: () => navigate('/profile?tab=certs') },
-              { label: 'Lịch sử đơn hàng', onClick: () => navigate('/profile?tab=orders') },
+              { label: 'Hồ sơ của tôi', icon: <UserOutlined />, onClick: onProfile },
+              {
+                label: 'Khoá học của tôi',
+                icon: <BookOutlined />,
+                onClick: () => navigate('/profile?tab=courses'),
+              },
             ].map(item => (
               <button
                 key={item.label}
                 onClick={item.onClick}
-                className="w-full rounded-md px-3 py-2 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                className="hover:bg-primary-1 hover:text-primary-9 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-neutral-8 transition-colors"
               >
+                <span className="text-base text-neutral-5">{item.icon}</span>
                 {item.label}
               </button>
             ))}
 
-            <div className="my-1 border-t border-slate-100" />
+            <div className="my-1.5 h-px bg-neutral-2" />
 
             <button
               onClick={onLogout}
-              className="w-full rounded-md px-3 py-2 text-left text-sm text-red-500 transition-colors hover:bg-red-50"
+              className="text-error-3 hover:bg-error-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors"
             >
+              <span className="text-base">
+                <LogoutOutlined />
+              </span>
               Đăng xuất
             </button>
           </div>
@@ -231,12 +245,12 @@ const HeaderUserMenu = ({
     >
       <button
         type="button"
-        className="sv-user-btn flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white pl-1 pr-3 transition-all"
+        className="sv-user-btn hover:border-primary-4 flex h-9 items-center gap-2 rounded-full border border-neutral-3 bg-white pl-1 pr-3 transition-all"
         aria-label="Mở menu tài khoản"
       >
-        <Avatar size={28} icon={<UserOutlined />} className="bg-blue-600" />
-        <span className="max-w-24 truncate text-sm font-medium text-slate-700">{displayName}</span>
-        <DownOutlined className="text-[10px] text-slate-400" />
+        <Avatar size={28} icon={<UserOutlined />} src={user?.avatarUrl} className="bg-primary-9" />
+        <span className="max-w-24 truncate text-sm font-medium text-neutral-8">{displayName}</span>
+        <DownOutlined className="text-[10px] text-neutral-5" />
       </button>
     </Dropdown>
   )
