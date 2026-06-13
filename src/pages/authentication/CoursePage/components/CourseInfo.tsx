@@ -2,7 +2,7 @@
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
-  // StarFilled,
+  SafetyCertificateOutlined,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -16,6 +16,10 @@ interface CourseInfoProps {
   instructors?: CourseInstructor[]
 }
 
+const SectionHeading = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="mb-3 text-base font-semibold text-neutral-10">{children}</h2>
+)
+
 export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
   const durationHours = course.totalDurationMinutes
     ? Math.round(course.totalDurationMinutes / 60)
@@ -24,10 +28,10 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
   return (
     <div className="flex flex-col gap-5">
       {/* Thumbnail */}
-      <div className="overflow-hidden rounded-xl">
+      <div className="overflow-hidden rounded-xl border border-neutral-3">
         <img
           src={course.thumbnail ?? defaultThumbnail}
-          alt={course.title}
+          alt={`Ảnh bìa khoá học ${course.title}`}
           className="h-56 w-full object-cover sm:h-72"
           onError={e => {
             ;(e.target as HTMLImageElement).src = defaultThumbnail
@@ -35,106 +39,127 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
         />
       </div>
 
-      {/* Title + subtitle */}
-      <div>
-        <h1 className="text-2xl font-bold leading-tight text-gray-900">{course.title}</h1>
-        {course.subTitle && <p className="mt-1 text-base text-gray-500">{course.subTitle}</p>}
-      </div>
+      {/* Main info card */}
+      <div className="rounded-xl border border-neutral-3 bg-white p-6 sm:p-7">
+        {/* Title + subtitle */}
+        <h1 className="text-2xl font-bold leading-tight text-neutral-10 text-balance">
+          {course.title}
+        </h1>
+        {course.subTitle && <p className="mt-1.5 text-base text-neutral-6">{course.subTitle}</p>}
 
-      {/* Stats row */}
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-        {/* <span className="flex items-center gap-1 font-semibold text-amber-500">
-          <StarFilled />
-          4.5
-          <span className="font-normal text-gray-400">(mock)</span>
-        </span> */}
-        {course.currentEnrollments > 0 && (
-          <span className="flex items-center gap-1">
-            <TeamOutlined />
-            {course.currentEnrollments.toLocaleString('vi-VN')} học viên
-          </span>
-        )}
-        {durationHours !== null && (
-          <span className="flex items-center gap-1">
-            <ClockCircleOutlined />
-            {durationHours} giờ học
-          </span>
-        )}
-        {course.cmeCredits != null && <Tag color="gold">{course.cmeCredits} CME credits</Tag>}
-      </div>
-
-      {/* Description */}
-      {course.description && <p className="leading-relaxed text-gray-600">{course.description}</p>}
-
-      {/* Instructors */}
-      {instructors && instructors.length > 0 && (
-        <div>
-          <h2 className="mb-3 font-bold text-gray-900">Giảng viên</h2>
-          <div className="flex flex-col gap-3">
-            {instructors.map(instructor => (
-              <div key={instructor.id} className="flex items-center gap-3">
-                <Avatar
-                  src={instructor.avatar ?? undefined}
-                  icon={!instructor.avatar && <UserOutlined />}
-                  size={48}
-                  className="shrink-0 bg-blue-100 text-blue-600"
-                />
-                <span className="font-medium text-gray-800">{instructor.fullName}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Tags */}
-      {course.tags && course.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {course.tags.map(tag => (
-            <Tag key={tag.id} color={tag.color ?? 'blue'}>
-              {tag.name}
+        {/* Stats row */}
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-neutral-6">
+          {course.currentEnrollments > 0 && (
+            <span className="flex items-center gap-1.5">
+              <TeamOutlined className="text-neutral-5" />
+              <span className="tabular-nums">
+                {course.currentEnrollments.toLocaleString('vi-VN')}
+              </span>{' '}
+              học viên
+            </span>
+          )}
+          {durationHours !== null && (
+            <span className="flex items-center gap-1.5">
+              <ClockCircleOutlined className="text-neutral-5" />
+              {durationHours} giờ học
+            </span>
+          )}
+          {course.cmeCredits != null && (
+            <Tag color="gold" className="mr-0 rounded-md">
+              {course.cmeCredits} CME credits
             </Tag>
-          ))}
+          )}
         </div>
-      )}
 
-      {/* Objectives */}
-      {(course.objectives?.length ?? 0) > 0 && (
-        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
-          <h2 className="mb-3 font-bold text-gray-900">Bạn sẽ học được gì</h2>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {course.objectives!.map((obj, i) => (
-              <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                <CheckCircleOutlined className="mt-0.5 shrink-0 text-blue-500" />
-                <span>{obj}</span>
-              </div>
+        {/* Tags */}
+        {course.tags && course.tags.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {course.tags.map(tag => (
+              <Tag key={tag.id} color={tag.color ?? undefined} className="rounded-md">
+                {tag.name}
+              </Tag>
             ))}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Requirements */}
-      {(course.requirements?.length ?? 0) > 0 && (
-        <div>
-          <h2 className="mb-2 font-bold text-gray-900">Yêu cầu đầu vào</h2>
-          <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
-            {course.requirements!.map((req, i) => (
-              <li key={i}>{req}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {/* Description */}
+        {course.description && (
+          <p className="mt-5 max-w-prose leading-relaxed text-neutral-7 text-pretty">
+            {course.description}
+          </p>
+        )}
 
-      {/* Suitable for */}
-      {(course.suitableFor?.length ?? 0) > 0 && (
-        <div>
-          <h2 className="mb-2 font-bold text-gray-900">Khoá học dành cho</h2>
-          <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
-            {course.suitableFor!.map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {/* Objectives — highlighted callout */}
+        {(course.objectives?.length ?? 0) > 0 && (
+          <div className="border-primary-2 bg-primary-1 mt-6 rounded-lg border p-5">
+            <SectionHeading>Bạn sẽ học được gì</SectionHeading>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+              {course.objectives!.map((obj, i) => (
+                <div key={i} className="flex items-start gap-2 text-sm text-neutral-8">
+                  <CheckCircleOutlined className="text-primary-6 mt-0.5 shrink-0" />
+                  <span>{obj}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Instructors */}
+        {instructors && instructors.length > 0 && (
+          <div className="mt-6">
+            <SectionHeading>
+              Giảng viên
+              <span className="ml-2 text-sm font-normal text-neutral-5">{instructors.length}</span>
+            </SectionHeading>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {instructors.map(instructor => (
+                <div
+                  key={instructor.id}
+                  className="hover:border-primary-3 hover:bg-primary-1/40 flex items-center gap-3.5 rounded-xl border border-neutral-2 bg-neutral-1 p-3.5 transition-colors"
+                >
+                  <Avatar
+                    src={instructor.avatar ?? undefined}
+                    icon={!instructor.avatar && <UserOutlined />}
+                    size={52}
+                    className="bg-primary-9 ring-primary-1 shrink-0 text-white ring-2"
+                  />
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-neutral-9">{instructor.fullName}</p>
+                    <p className="text-primary-7 mt-0.5 flex items-center gap-1 text-xs">
+                      <SafetyCertificateOutlined />
+                      Giảng viên
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Requirements */}
+        {(course.requirements?.length ?? 0) > 0 && (
+          <div className="mt-6">
+            <SectionHeading>Yêu cầu đầu vào</SectionHeading>
+            <ul className="list-inside list-disc space-y-1.5 text-sm text-neutral-7">
+              {course.requirements!.map((req, i) => (
+                <li key={i}>{req}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Suitable for */}
+        {(course.suitableFor?.length ?? 0) > 0 && (
+          <div className="mt-6">
+            <SectionHeading>Khoá học dành cho</SectionHeading>
+            <ul className="list-inside list-disc space-y-1.5 text-sm text-neutral-7">
+              {course.suitableFor!.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

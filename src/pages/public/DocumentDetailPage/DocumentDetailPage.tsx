@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { DownloadOutlined, LockOutlined } from '@ant-design/icons'
-import { Alert, Avatar, Button, Card, Modal, Skeleton, Tag, Typography, message } from 'antd'
+import { DownloadOutlined, FileTextOutlined, LockOutlined } from '@ant-design/icons'
+import { Alert, Button, Modal, Skeleton, Tag, message } from 'antd'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { PageHeader } from '@/components/ui/PageHeader'
@@ -21,8 +21,6 @@ import {
 import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
-
-const { Title, Text } = Typography
 
 const resolveFileUrl = (document?: Document | null) => {
   if (!document?.file) return undefined
@@ -225,61 +223,86 @@ export const DocumentDetailPage = () => {
         onBack={() => navigate(-1)}
       />
 
-      <div className="flex gap-4">
-        <section className="flex-1 space-y-4">
-          <div className="flex gap-4">
-            <Avatar size={200} shape="square" className="mb-4" src={thumbnailUrl} />
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <section className="min-w-0 flex-1 space-y-6">
+          {/* Overview */}
+          <div className="rounded-xl border border-neutral-3 bg-white p-6">
+            <div className="flex flex-col gap-5 sm:flex-row">
+              <div className="bg-primary-1 mx-auto aspect-[3/4] w-40 shrink-0 overflow-hidden rounded-lg sm:mx-0">
+                {thumbnailUrl ? (
+                  <img
+                    src={thumbnailUrl}
+                    alt={`Bìa tài liệu ${document.title}`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <FileTextOutlined className="text-primary-5 text-3xl" />
+                  </div>
+                )}
+              </div>
 
-            <div className="">
-              <p>Mô tả: {document.description || 'Tài liệu chưa có mô tả chi tiết.'}</p>
-              <p>Tác giả: Nguyễn Văn A</p>
-              <div className="flex gap-2 mt-4">
-                <Tag>{document.category?.name}</Tag>
-                <Tag>
-                  {formatFileSize({
-                    bytes: document.fileSize,
-                    toUnit: FileSize.MB,
-                  })}
-                </Tag>
-                {document.totalPages ? <Tag>{document.totalPages} trang</Tag> : null}
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap gap-2">
+                  {document.category?.name ? (
+                    <Tag className="mr-0 rounded-md">{document.category.name}</Tag>
+                  ) : null}
+                  <Tag className="mr-0 rounded-md">
+                    {formatFileSize({ bytes: document.fileSize ?? 0, toUnit: FileSize.MB })}
+                  </Tag>
+                  {document.totalPages ? (
+                    <Tag className="mr-0 rounded-md">{document.totalPages} trang</Tag>
+                  ) : null}
+                </div>
+                <p className="mt-4 max-w-prose leading-relaxed text-neutral-7 text-pretty">
+                  {document.description || 'Tài liệu chưa có mô tả chi tiết.'}
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="text-sm font-semibold">Tóm tắt:</div>
-
-          <Card title="Phiên bản xem trước">
-            {previewUrl ? (
-              <iframe
-                title="Document Preview"
-                src={previewUrl}
-                className="h-140 w-full rounded border border-slate-200"
-              />
-            ) : (
-              <div className="flex h-70 flex-col items-center justify-center rounded border border-dashed border-slate-300 bg-slate-50 text-center">
-                <LockOutlined className="mb-3 text-3xl text-slate-500" />
-                <Text className="text-slate-700">Phiên bản xem trước không khả dụng</Text>
-              </div>
-            )}
-          </Card>
+          {/* Preview */}
+          <div className="overflow-hidden rounded-xl border border-neutral-3 bg-white">
+            <div className="border-b border-neutral-2 px-5 py-4">
+              <h2 className="font-semibold text-neutral-10">Xem trước tài liệu</h2>
+            </div>
+            <div className="p-4">
+              {previewUrl ? (
+                <iframe
+                  title="Xem trước tài liệu"
+                  src={previewUrl}
+                  className="h-140 w-full rounded-lg border border-neutral-3"
+                />
+              ) : (
+                <div className="flex h-70 flex-col items-center justify-center rounded-lg border border-dashed border-neutral-3 bg-neutral-1 text-center">
+                  <LockOutlined className="mb-3 text-3xl text-neutral-5" />
+                  <p className="text-neutral-7">Phiên bản xem trước không khả dụng</p>
+                </div>
+              )}
+            </div>
+          </div>
         </section>
 
-        <aside className="sticky top-24 basis-75">
-          <Card className="">
+        <aside className="w-full shrink-0 lg:sticky lg:top-20 lg:w-80 lg:self-start">
+          <div className="shadow-primary-10/10 rounded-xl border border-neutral-3 bg-white p-6 shadow-md">
             {isOwned ? (
-              <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm font-semibold text-green-700">
+              <div className="bg-success-1 text-success-3 mb-4 rounded-lg px-3 py-2 text-center text-sm font-semibold">
                 Bạn đã sở hữu tài liệu này
               </div>
             ) : null}
 
             <div className="mb-5">
-              <Text className="block text-sm text-slate-500">Giá tài liệu</Text>
-              <Title level={2} className="mb-0! mt-1!">
-                {formatCurrency({ value: document.price })}
-              </Title>
+              <p className="text-sm text-neutral-5">Giá tài liệu</p>
+              {document.price === 0 ? (
+                <p className="text-success-3 mt-1 text-3xl font-bold">Miễn phí</p>
+              ) : (
+                <p className="mt-1 text-3xl font-bold tabular-nums text-neutral-10">
+                  {formatCurrency({ value: document.price })}
+                </p>
+              )}
             </div>
 
-            <div className="mb-6 flex flex-col gap-3">
+            <div className="mb-6">
               {isOwned ? (
                 <Button
                   type="primary"
@@ -287,6 +310,8 @@ export const DocumentDetailPage = () => {
                   icon={<DownloadOutlined />}
                   onClick={handleDownload}
                   loading={isPreparingDownload}
+                  block
+                  className="h-12 font-semibold"
                 >
                   Tải xuống PDF
                 </Button>
@@ -296,29 +321,33 @@ export const DocumentDetailPage = () => {
                   size="large"
                   onClick={handlePurchase}
                   loading={isCheckingOut}
+                  block
+                  className="h-12 font-semibold"
                 >
                   Mua tài liệu
                 </Button>
               )}
             </div>
 
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2.5 text-sm">
               <div className="flex items-center justify-between">
-                <Text className="text-slate-500">Dung lượng</Text>
-                <Text className="font-medium text-slate-800">
-                  {formatFileSize({ bytes: document.fileSize, toUnit: FileSize.MB })}
-                </Text>
+                <span className="text-neutral-6">Dung lượng</span>
+                <span className="font-medium tabular-nums text-neutral-9">
+                  {formatFileSize({ bytes: document.fileSize ?? 0, toUnit: FileSize.MB })}
+                </span>
               </div>
               <div className="flex items-center justify-between">
-                <Text className="text-slate-500">Số trang</Text>
-                <Text className="font-medium text-slate-800">{document.totalPages || 0} trang</Text>
+                <span className="text-neutral-6">Số trang</span>
+                <span className="font-medium tabular-nums text-neutral-9">
+                  {document.totalPages || 0} trang
+                </span>
               </div>
               <div className="flex items-center justify-between">
-                <Text className="text-slate-500">Định dạng</Text>
-                <Text className="font-medium text-slate-800">PDF</Text>
+                <span className="text-neutral-6">Định dạng</span>
+                <span className="font-medium text-neutral-9">PDF</span>
               </div>
             </div>
-          </Card>
+          </div>
         </aside>
       </div>
 

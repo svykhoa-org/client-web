@@ -9,7 +9,7 @@ import {
   SafetyCertificateOutlined,
   ShoppingCartOutlined,
 } from '@ant-design/icons'
-import { Button, Card, Divider } from 'antd'
+import { Button } from 'antd'
 
 import RouteConfig from '@/constants/RouteConfig'
 import type { Enrollment } from '@/models/Enrollment'
@@ -77,7 +77,7 @@ export const CourseActions = ({
           onClick={isLoggedIn ? onFreeEnroll : () => navigate(RouteConfig.LoginPage.path)}
           loading={isFreeEnrollLoading}
           block
-          className="h-12 bg-green-600 text-base font-semibold hover:bg-green-700"
+          className="!bg-success-3 h-12 text-base font-semibold transition hover:!bg-success-3 hover:brightness-95"
         >
           {isLoggedIn ? 'Đăng ký miễn phí' : 'Đăng nhập để đăng ký'}
         </Button>
@@ -101,23 +101,25 @@ export const CourseActions = ({
 
   const priceDisplay =
     course.price === 0 ? (
-      <span className="text-3xl font-bold text-green-600">Miễn phí</span>
+      <span className="text-success-3 text-3xl font-bold">Miễn phí</span>
     ) : (
-      <span className="text-3xl font-bold text-gray-900">
+      <span className="text-3xl font-bold tabular-nums text-neutral-10">
         {course.price.toLocaleString('vi-VN')}
-        <span className="ml-1 text-base font-normal text-gray-400">đ</span>
+        <span className="ml-1 text-base font-normal text-neutral-5">đ</span>
       </span>
     )
 
   return (
-    <Card className="shadow-md">
+    <div className="shadow-primary-10/10 rounded-xl border border-neutral-3 bg-white p-6 shadow-md">
       {!isEnrolled && <div className="mb-4 text-center">{priceDisplay}</div>}
 
       {isEnrolled && enrollment && (
-        <div className="mb-4 rounded-lg bg-green-50 p-3 text-center">
-          <CheckCircleOutlined className="text-lg text-green-600" />
-          <p className="mt-1 text-sm font-medium text-green-700">Bạn đã đăng ký khoá học này</p>
-          <p className="text-xs text-green-600">Tiến độ: {Math.round(enrollment.progress)}%</p>
+        <div className="bg-success-1 mb-4 rounded-lg p-3 text-center">
+          <CheckCircleOutlined className="text-success-3 text-lg" />
+          <p className="text-success-3 mt-1 text-sm font-semibold">Bạn đã đăng ký khoá học này</p>
+          <p className="text-success-3/80 text-xs tabular-nums">
+            Tiến độ: {Math.round(enrollment.progress)}%
+          </p>
         </div>
       )}
 
@@ -126,40 +128,37 @@ export const CourseActions = ({
       </div>
 
       {!isEnrolled && course.price > 0 && (
-        <p className="mt-2 text-center text-xs text-gray-400">Thanh toán qua cổng SePay</p>
+        <p className="mt-2 text-center text-xs text-neutral-5">Thanh toán qua cổng SePay</p>
       )}
 
-      <Divider className="my-4" />
+      <div className="my-5 h-px bg-neutral-2" />
 
-      <div className="space-y-2 text-sm text-gray-600">
-        <div className="flex items-center gap-2">
-          <LaptopOutlined className="text-gray-400" />
+      <ul className="space-y-2.5 text-sm text-neutral-7">
+        <li className="flex items-center gap-2.5">
+          <LaptopOutlined className="text-primary-6" />
           <span>Học trên mọi thiết bị</span>
-        </div>
+        </li>
         {course.totalDurationMinutes && (
-          <div className="flex items-center gap-2">
-            <ClockCircleOutlined className="text-gray-400" />
+          <li className="flex items-center gap-2.5">
+            <ClockCircleOutlined className="text-primary-6" />
             <span>{Math.round(course.totalDurationMinutes / 60)} giờ học</span>
-          </div>
+          </li>
         )}
-        {course.accessDurationDays ? (
-          <div className="flex items-center gap-2">
-            <SafetyCertificateOutlined className="text-gray-400" />
-            <span>Truy cập {course.accessDurationDays} ngày</span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <SafetyCertificateOutlined className="text-gray-400" />
-            <span>Truy cập vĩnh viễn</span>
-          </div>
-        )}
+        <li className="flex items-center gap-2.5">
+          <SafetyCertificateOutlined className="text-primary-6" />
+          <span>
+            {course.accessDurationDays
+              ? `Truy cập ${course.accessDurationDays} ngày`
+              : 'Truy cập vĩnh viễn'}
+          </span>
+        </li>
         {course.cmeCredits && (
-          <div className="flex items-center gap-2">
-            <CheckCircleOutlined className="text-gray-400" />
+          <li className="flex items-center gap-2.5">
+            <CheckCircleOutlined className="text-primary-6" />
             <span>{course.cmeCredits} CME credits</span>
-          </div>
+          </li>
         )}
-      </div>
-    </Card>
+      </ul>
+    </div>
   )
 }

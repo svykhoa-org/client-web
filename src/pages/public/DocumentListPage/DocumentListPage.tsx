@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { CaretRightOutlined, SearchOutlined } from '@ant-design/icons'
-import { Alert, Button, Card, Input } from 'antd'
+import { CaretRightOutlined, FileTextOutlined, SearchOutlined } from '@ant-design/icons'
+import { Input } from 'antd'
 
 import { DocumentSortSelect, type DocumentSortValue } from '@/components/ui/SelectVariants'
 import { useInfiniteList, useList } from '@/hooks'
@@ -266,8 +266,8 @@ export const DocumentListPage = () => {
               onClick={() => setCategoryFilter(node.id)}
               className={`flex-1 rounded-md px-3 py-2 text-left text-sm transition-colors ${
                 isSelected
-                  ? 'bg-sky-50 font-semibold text-sky-700'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  ? 'bg-primary-1 text-primary-9 font-semibold'
+                  : 'hover:bg-neutral-1 text-neutral-7 hover:text-neutral-9'
               }`}
             >
               {node.name}
@@ -277,7 +277,7 @@ export const DocumentListPage = () => {
               <button
                 type="button"
                 onClick={() => toggleCategoryExpanded(node.id)}
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                className="hover:bg-neutral-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-neutral-5 transition-colors hover:text-neutral-8"
                 aria-label={isExpanded ? 'Thu gọn danh mục' : 'Mở rộng danh mục'}
               >
                 <CaretRightOutlined
@@ -288,7 +288,7 @@ export const DocumentListPage = () => {
           </div>
 
           {hasChildren && isExpanded ? (
-            <div className="mt-1 ml-3 space-y-1 border-l border-slate-200 pl-3">
+            <div className="mt-1 ml-3 space-y-1 border-l border-neutral-2 pl-3">
               {node.children.map(child => renderCategoryNode(child))}
             </div>
           ) : null}
@@ -299,83 +299,91 @@ export const DocumentListPage = () => {
   )
 
   return (
-    <div className="flex w-full">
-      <aside className="sticky top-20 bg-white rounded-md hidden shrink-0 self-start px-4 py-6 lg:block">
-        <div>
-          <h3 className="mb-4 text-base font-bold tracking-wide text-primary-5 uppercase">
-            Danh mục tài liệu
-          </h3>
+    <div className="flex w-full gap-6">
+      <aside className="sticky top-20 hidden w-60 shrink-0 self-start rounded-xl border border-neutral-3 bg-white p-4 lg:block">
+        <h2 className="mb-3 px-1 text-xs font-semibold uppercase tracking-wider text-neutral-5">
+          Danh mục tài liệu
+        </h2>
 
-          <div className="space-y-2">
-            <Button
-              block
-              type={categoryFilter === '' ? 'primary' : 'default'}
-              onClick={() => setCategoryFilter('')}
-            >
-              Tất cả danh mục
-            </Button>
+        <div className="space-y-1">
+          <button
+            type="button"
+            onClick={() => setCategoryFilter('')}
+            className={`w-full rounded-md px-3 py-2 text-left text-sm transition-colors ${
+              categoryFilter === ''
+                ? 'bg-primary-1 text-primary-9 font-semibold'
+                : 'hover:bg-neutral-1 text-neutral-7 hover:text-neutral-9'
+            }`}
+          >
+            Tất cả danh mục
+          </button>
 
-            {categoryTree.map(node => renderCategoryNode(node))}
+          {categoryTree.map(node => renderCategoryNode(node))}
 
-            {!categoryTree.length ? (
-              <p className="px-3 py-2 text-xs text-slate-400">
-                Danh mục sẽ hiện khi có dữ liệu tài liệu.
-              </p>
-            ) : null}
-          </div>
+          {!categoryTree.length ? (
+            <p className="px-3 py-2 text-xs text-neutral-5">
+              Danh mục sẽ hiện khi có dữ liệu tài liệu.
+            </p>
+          ) : null}
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 pl-0 lg:pl-6">
-        <div className="">
-          <Card className="mb-4! shadow-none!">
-            <label className="mb-4 block">
-              <Input
-                value={searchKeyword}
-                onChange={event => setSearchKeyword(event.target.value)}
-                prefix={<SearchOutlined className="text-slate-400" />}
-                placeholder="Tìm kiếm bài báo, tác giả, DOI..."
-              />
-            </label>
-
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span>Lọc theo:</span>
-                <DocumentSortSelect
-                  className="min-w-40"
-                  value={sortValue}
-                  onChange={setSortValue}
-                />
-              </div>
-              <div className="ml-auto flex min-w-55 items-center justify-end gap-3 text-sm text-slate-500">
-                <span>
-                  Hiển thị <span className="font-bold text-slate-900">{totalItems}</span> kết quả{' '}
-                  {debouncedSearchKeyword && `cho từ khóa "${debouncedSearchKeyword}"`}
-                </span>
+      <main className="min-w-0 flex-1">
+        {/* Header + search toolbar */}
+        <header className="mb-4 overflow-hidden rounded-xl border border-neutral-3 bg-white">
+          <div className="from-primary-1 flex items-start justify-between gap-4 bg-gradient-to-br to-white px-5 pb-4 pt-5 sm:px-6">
+            <div className="flex items-start gap-3.5">
+              <span className="bg-primary-9 shadow-primary-10/20 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg text-white shadow-sm">
+                <FileTextOutlined />
+              </span>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-neutral-10">
+                  Thư viện tài liệu
+                </h1>
+                <p className="mt-0.5 text-sm text-neutral-6">
+                  Tài liệu y khoa chọn lọc, tải về dạng PDF
+                </p>
               </div>
             </div>
-          </Card>
+            <div className="shrink-0 text-right">
+              <div className="text-primary-9 text-2xl font-bold leading-none tabular-nums">
+                {totalItems}
+              </div>
+              <div className="mt-1 text-xs text-neutral-5">tài liệu</div>
+            </div>
+          </div>
 
-          {debouncedSearchKeyword ? (
-            <Alert
-              type="info"
-              showIcon
-              message={`Kết quả đang lọc theo từ khóa: ${debouncedSearchKeyword}`}
-              className="mb-4!"
+          <div className="flex flex-col gap-3 border-t border-neutral-2 px-5 py-4 sm:flex-row sm:items-center sm:px-6">
+            <Input
+              value={searchKeyword}
+              onChange={event => setSearchKeyword(event.target.value)}
+              prefix={<SearchOutlined className="text-neutral-5" />}
+              placeholder="Tìm kiếm tài liệu theo tên..."
+              className="rounded-lg sm:flex-1"
+              size="large"
+              allowClear
             />
-          ) : null}
+            <div className="flex items-center gap-2">
+              <span className="hidden shrink-0 text-sm text-neutral-6 sm:inline">Sắp xếp</span>
+              <DocumentSortSelect
+                className="w-full sm:w-44"
+                value={sortValue}
+                onChange={setSortValue}
+              />
+            </div>
+          </div>
+        </header>
 
-          <DocumentInfiniteList
-            documents={documents}
-            loadingInitial={loadingInitial}
-            loadingMore={loadingMore}
-            hasNextPage={hasNextPage}
-            errorMessage={errorMessage}
-            searchKeyword={debouncedSearchKeyword}
-            sentinelRef={sentinelRef}
-            onRetry={handleRetry}
-          />
-        </div>
+        <DocumentInfiniteList
+          documents={documents}
+          loadingInitial={loadingInitial}
+          loadingMore={loadingMore}
+          hasNextPage={hasNextPage}
+          errorMessage={errorMessage}
+          searchKeyword={debouncedSearchKeyword}
+          sentinelRef={sentinelRef}
+          onRetry={handleRetry}
+        />
       </main>
     </div>
   )

@@ -15,11 +15,11 @@ const MainLayout = () => {
       {/* Banner */}
       {banner && <div className="mb-4">{banner}</div>}
 
-      <div className="container mx-auto flex-1">
+      <div className="container mx-auto flex-1s">
         <div className="flex flex-col gap-4 py-4 md:flex-row">
           {leftSidebar && <aside className="order-2 md:order-1 md:w-1/5">{leftSidebar}</aside>}
 
-          <main className="order-1 flex-1 md:order-2">
+          <main className="order-1 flex-1 md:order-2 md:mx-0 mx-4">
             <Outlet />
           </main>
 

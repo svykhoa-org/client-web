@@ -51,49 +51,66 @@ export const ListCoursePage = () => {
 
   return (
     <div className="w-full">
-      {/* Page header */}
-      <div className="mb-6 flex items-center gap-3">
-        <BookOutlined className="text-2xl text-blue-500" />
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">Khoá học E-Learning</h1>
-          <p className="text-sm text-gray-500">
-            Nâng cao kiến thức y khoa với các khoá học chuyên sâu
-          </p>
+      {/* Page header + search toolbar */}
+      <header className="mb-6 overflow-hidden rounded-2xl border border-neutral-3 bg-white">
+        {/* Title band */}
+        <div className="from-primary-1 bg-gradient-to-br to-white px-6 pb-5 pt-6 sm:px-8 sm:pt-7">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <span className="bg-primary-9 shadow-primary-10/20 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xl text-white shadow-sm">
+                <BookOutlined />
+              </span>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-10 text-balance">
+                  Khoá học E-Learning
+                </h1>
+                <p className="mt-1 max-w-prose text-sm text-neutral-6">
+                  Nâng cao kiến thức y khoa với các khoá học chuyên sâu
+                </p>
+              </div>
+            </div>
+            {!isLoading && (
+              <div className="shrink-0 text-right">
+                <div className="text-primary-9 text-2xl font-bold leading-none tabular-nums">
+                  {total}
+                </div>
+                <div className="mt-1 text-xs text-neutral-5">khoá học</div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Filters */}
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Input
-          value={search}
-          onChange={handleSearchChange}
-          prefix={<SearchOutlined className="text-gray-400" />}
-          placeholder="Tìm kiếm khoá học..."
-          className="sm:max-w-xs"
-          allowClear
-        />
-        <div className="flex items-center gap-3">
-          {!isLoading && (
-            <span className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-800">{total}</span> khoá học
-            </span>
-          )}
-          <Select<SortOption>
-            value={sort}
-            onChange={handleSortChange}
-            options={sortOptions}
-            className="w-40"
+        {/* Search + sort */}
+        <div className="flex flex-col gap-3 border-t border-neutral-2 px-6 py-4 sm:flex-row sm:items-center sm:px-8">
+          <Input
+            value={search}
+            onChange={handleSearchChange}
+            prefix={<SearchOutlined className="text-neutral-5" />}
+            placeholder="Tìm kiếm khoá học theo tên..."
+            className="rounded-lg sm:flex-1"
+            size="large"
+            allowClear
           />
+          <div className="flex items-center gap-2">
+            <span className="hidden shrink-0 text-sm text-neutral-6 sm:inline">Sắp xếp</span>
+            <Select<SortOption>
+              value={sort}
+              onChange={handleSortChange}
+              options={sortOptions}
+              size="large"
+              className="w-full sm:w-44"
+            />
+          </div>
         </div>
-      </div>
+      </header>
 
       {/* Course grid */}
       {isLoading ? (
         <Row gutter={[16, 16]}>
           {Array.from({ length: 6 }).map((_, i) => (
             <Col key={i} xs={24} sm={12} lg={8}>
-              <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-                <Skeleton.Image active className="!h-36 !w-full" />
+              <div className="overflow-hidden rounded-xl border border-neutral-3 bg-white">
+                <Skeleton.Image active className="!aspect-video !h-auto !w-full" />
                 <div className="p-4">
                   <Skeleton active paragraph={{ rows: 2 }} />
                 </div>
@@ -102,14 +119,15 @@ export const ListCoursePage = () => {
           ))}
         </Row>
       ) : courses.length === 0 ? (
-        <Empty
-          description={
-            debouncedSearch
-              ? `Không tìm thấy khoá học nào cho "${debouncedSearch}"`
-              : 'Chưa có khoá học nào'
-          }
-          className="py-16"
-        />
+        <div className="rounded-xl border border-neutral-3 bg-white py-16">
+          <Empty
+            description={
+              debouncedSearch
+                ? `Không tìm thấy khoá học nào cho "${debouncedSearch}"`
+                : 'Chưa có khoá học nào'
+            }
+          />
+        </div>
       ) : (
         <Row gutter={[16, 16]}>
           {courses.map(course => (

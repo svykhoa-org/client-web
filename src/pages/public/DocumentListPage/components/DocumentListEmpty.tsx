@@ -10,7 +10,7 @@ export const DocumentListEmpty = ({ keyword }: DocumentListEmptyProps) => {
     : 'Chưa có tài liệu phù hợp với bộ lọc hiện tại.'
 
   return (
-    <div className="rounded-xl border border-dashed border-slate-300 bg-white px-4 py-12">
+    <div className="rounded-xl border border-dashed border-neutral-3 bg-white px-4 py-16">
       <Empty description={description} />
     </div>
   )

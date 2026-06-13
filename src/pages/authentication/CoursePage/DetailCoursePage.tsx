@@ -52,7 +52,7 @@ export const DetailCoursePage = () => {
       return response.data
     },
     onSuccess: () => {
-      void message.success('Đăng ký khoá học thành công!')
+      void message.success('Đăng ký khoá học thành công')
       void queryClient.invalidateQueries({ queryKey: ['enrollment'] })
     },
     onError: () => {
@@ -76,11 +76,19 @@ export const DetailCoursePage = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full">
-        <Skeleton.Image active className="!mb-5 !h-56 !w-full sm:!h-72" />
-        <Skeleton active paragraph={{ rows: 4 }} className="mb-6" />
-        <Skeleton active paragraph={{ rows: 6 }} />
-      </div>
+      <Row gutter={[24, 24]}>
+        <Col xs={24} lg={16}>
+          <Skeleton.Image active className="!mb-5 !h-56 !w-full !rounded-xl sm:!h-72" />
+          <div className="rounded-xl border border-neutral-3 bg-white p-6">
+            <Skeleton active paragraph={{ rows: 4 }} />
+          </div>
+        </Col>
+        <Col xs={24} lg={8}>
+          <div className="rounded-xl border border-neutral-3 bg-white p-6">
+            <Skeleton active paragraph={{ rows: 6 }} />
+          </div>
+        </Col>
+      </Row>
     )
   }
 
@@ -116,6 +124,15 @@ export const DetailCoursePage = () => {
 
   return (
     <>
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        className="hover:text-primary-8 focus-visible:ring-primary-5/60 mb-4 inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-neutral-6 transition-colors focus-visible:outline-none focus-visible:ring-2"
+      >
+        <ArrowLeftOutlined className="text-xs" />
+        Quay lại danh sách
+      </button>
+
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={16}>
           <div className="flex flex-col gap-6">
@@ -125,7 +142,7 @@ export const DetailCoursePage = () => {
         </Col>
 
         <Col xs={24} lg={8}>
-          <div className="lg:sticky lg:top-12">
+          <div className="lg:sticky lg:top-20">
             <CourseActions
               course={{
                 id: course.id,

@@ -10,9 +10,12 @@ export const DocumentListSkeleton = ({ count = 4 }: DocumentListSkeletonProps) =
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={`document-skeleton-${index}`}
-          className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+          className="flex gap-4 rounded-xl border border-neutral-3 bg-white p-4 sm:gap-5 sm:p-5"
         >
-          <Skeleton active paragraph={{ rows: 3 }} title={{ width: '78%' }} />
+          <Skeleton.Image active className="!h-28 !w-20 shrink-0 !rounded-lg sm:!w-24" />
+          <div className="flex-1">
+            <Skeleton active paragraph={{ rows: 2 }} title={{ width: '62%' }} />
+          </div>
         </div>
       ))}
     </div>

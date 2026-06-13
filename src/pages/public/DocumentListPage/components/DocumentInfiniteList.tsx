@@ -75,7 +75,7 @@ export const DocumentInfiniteList = ({
       ) : null}
 
       {loadingMore ? (
-        <div className="flex items-center justify-center py-3 text-slate-500">
+        <div className="flex items-center justify-center py-3 text-neutral-6">
           <Spin indicator={<LoadingOutlined spin />} />
           <span className="ml-2 text-sm">Đang tải thêm tài liệu...</span>
         </div>
@@ -84,7 +84,7 @@ export const DocumentInfiniteList = ({
       <div ref={sentinelRef} className="h-1 w-full" />
 
       {!hasNextPage && documents.length > 0 ? (
-        <p className="py-2 text-center text-sm text-slate-400">
+        <p className="py-2 text-center text-sm text-neutral-5">
           Bạn đã xem hết danh sách tài liệu.
         </p>
       ) : null}
