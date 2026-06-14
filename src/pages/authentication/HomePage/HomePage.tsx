@@ -97,8 +97,8 @@ export const HomePage = () => {
 
       {/* Content section kéo lên 24px để tạo overlap mềm với đáy hero */}
       <div className="relative z-10 -mt-6 container mx-auto px-4 py-8">
-        <div className="grid grid-cols-8 gap-6">
-          <section className="col-span-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-8">
+          <section className="col-span-1 lg:col-span-6">
             <Carousel autoplay className="mb-6 overflow-hidden rounded-xl">
               <div>
                 <img
@@ -124,7 +124,7 @@ export const HomePage = () => {
             </Carousel>
             <ListArticles />
           </section>
-          <aside className="col-span-2">
+          <aside className="col-span-1 lg:col-span-2">
             <ListBulletins />
           </aside>
         </div>

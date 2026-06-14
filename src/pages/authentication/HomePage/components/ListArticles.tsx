@@ -1,4 +1,4 @@
-import { Pagination, Spin } from 'antd'
+import { Pagination, Skeleton, Spin } from 'antd'
 
 import { useListing } from '@/hooks/useCRUD/useListing'
 import type { Article } from '@/models/Article'
@@ -30,25 +30,36 @@ export const ListArticles = () => {
   return (
     <>
       <h4 className="mb-4 text-start text-xl font-bold">Tin nổi bật</h4>
-      <Spin spinning={isLoading}>
+      {isLoading ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {data.map(item => (
-            <ArticleItem key={item.id} article={item} />
-          ))}
-          {data.length !== 0 && (
-            <div className="col-span-full flex justify-center">
-              <Pagination
-                current={page}
-                pageSize={limit}
-                total={totalItems}
-                onChange={page => {
-                  setSearchParams({ page, limit })
-                }}
-              />
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="overflow-hidden rounded-xl bg-white p-4">
+              <Skeleton.Image active className="!h-44 !w-full rounded-lg" />
+              <Skeleton active title={{ width: '80%' }} paragraph={{ rows: 2 }} className="mt-3" />
             </div>
-          )}
+          ))}
         </div>
-      </Spin>
+      ) : (
+        <Spin spinning={false}>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {data.map(item => (
+              <ArticleItem key={item.id} article={item} />
+            ))}
+            {data.length !== 0 && (
+              <div className="col-span-full flex justify-center">
+                <Pagination
+                  current={page}
+                  pageSize={limit}
+                  total={totalItems}
+                  onChange={page => {
+                    setSearchParams({ page, limit })
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </Spin>
+      )}
     </>
   )
 }
