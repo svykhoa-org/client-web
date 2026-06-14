@@ -1,104 +1,87 @@
-import React, { useEffect } from 'react'
-import ReactMarkdown from 'react-markdown'
-import { useLocation } from 'react-router'
+import React, { useEffect, useRef } from 'react'
 
-import { Alert, Empty, Spin, Tabs } from 'antd'
+import { useLocation } from 'react-router'
 
 import SearchBar from '@/components/common/Header/src/SearchBar'
 
-import { useSearching } from './hooks/useSearching'
+import { AnswerPanel } from './components/AnswerPanel'
+import { ResourceRail } from './components/ResourceRail'
+import { useAiSearch } from './hooks/useAiSearch'
 import './styles.css'
 
 export const MedicalSearchPage: React.FC = () => {
   const location = useLocation()
+  const startedFor = useRef<string | null>(null)
 
-  const { loading, rawResult, error, handleSearch } = useSearching()
+  const {
+    query,
+    answer,
+    status,
+    statusMessage,
+    error,
+    courses,
+    documents,
+    resourcesLoading,
+    resourcesReady,
+    handleSearch,
+  } = useAiSearch()
 
+  // Kick off the search passed from the Home hero (via navigation state),
+  // guarded so React StrictMode's double-mount does not fire it twice.
   useEffect(() => {
-    if (location.state?.searchQuery) {
-      handleSearch(location.state.searchQuery)
+    const initialQuery = (location.state as { searchQuery?: string } | null)?.searchQuery
+    if (initialQuery && startedFor.current !== initialQuery) {
+      startedFor.current = initialQuery
+      handleSearch(initialQuery)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // Chỉ chạy một lần khi component mount
+  }, [location.state, handleSearch])
 
-  const renderContent = () => {
-    if (!rawResult.trim()) {
-      return (
-        <div className="medical-search-empty">
-          <Empty description="Không có kết quả" />
-        </div>
-      )
-    }
-
-    return (
-      <div className="medical-search-content">
-        <ReactMarkdown>{rawResult}</ReactMarkdown>
-      </div>
-    )
-  }
+  const hasQuery = Boolean(query)
 
   return (
-    <div className="container min-h-screen px-4">
-      <div className="mb-8 flex w-full justify-center">
-        <SearchBar placeholder="Nhập triệu chứng, tên bệnh cần tìm ..." onSearch={handleSearch} />
+    <div className="mx-auto max-w-3xl px-4 pb-16 pt-6">
+      {/* Search bar — shares a view-transition-name with the Home hero bar so it
+          morphs from the centre of the screen up to here on navigation. */}
+      <div
+        className="mx-auto w-full max-w-2xl"
+        style={{ viewTransitionName: 'medical-search-bar' }}
+      >
+        <SearchBar onSearch={handleSearch} />
       </div>
 
-      {loading ? (
-        <div className="medical-search-loading">
-          <Spin size="large" />
-          <p className="medical-search-loading-text">Đang tìm kiếm thông tin, vui lòng chờ...</p>
-        </div>
-      ) : error ? (
-        <div className="medical-search-empty">
-          <Alert
-            message="Lỗi tìm kiếm"
-            description={error}
-            type="error"
-            showIcon
-            action={
-              <button className="ant-btn ant-btn-default" onClick={() => window.location.reload()}>
-                Thử lại
-              </button>
-            }
+      {hasQuery ? (
+        <div className="msearch-grid mt-8">
+          {/* The submitted question lives here as the heading, so the search
+              input is cleared after submit. */}
+          <h1 className="msearch-question text-2xl font-bold leading-snug text-neutral-10 sm:text-3xl">
+            {query}
+          </h1>
+
+          <div className="mt-6">
+            <AnswerPanel
+              status={status}
+              answer={answer}
+              statusMessage={statusMessage}
+              error={error}
+              onRetry={() => handleSearch(query)}
+            />
+          </div>
+
+          {/* Related resources as a lightweight suggestion section below the answer. */}
+          <ResourceRail
+            courses={courses}
+            documents={documents}
+            loading={resourcesLoading}
+            ready={resourcesReady}
           />
         </div>
       ) : (
-        <div className="mx-auto max-w-6xl">
-          <Tabs
-            defaultActiveKey="1"
-            className="medical-search-tabs"
-            centered
-            size="large"
-            items={[
-              {
-                key: '1',
-                label: (
-                  <span className="px-4 py-2 text-base font-medium">📋 Hướng dẫn chuẩn đoán</span>
-                ),
-                children: renderContent(),
-              },
-              {
-                key: '2',
-                label: (
-                  <span className="px-4 py-2 text-base font-medium">📚 Tài liệu tham khảo</span>
-                ),
-                children: (
-                  <div className="medical-search-empty">
-                    <Empty description="Tính năng đang phát triển" />
-                  </div>
-                ),
-              },
-              {
-                key: '3',
-                label: <span className="px-4 py-2 text-base font-medium">🎓 Khóa học CME</span>,
-                children: (
-                  <div className="medical-search-empty">
-                    <Empty description="Tính năng đang phát triển" />
-                  </div>
-                ),
-              },
-            ]}
-          />
+        <div className="mx-auto mt-16 max-w-md text-center">
+          <h1 className="text-xl font-bold text-neutral-9">Bạn muốn tìm hiểu điều gì?</h1>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-6">
+            Nhập triệu chứng, tên bệnh hoặc câu hỏi y khoa. Trợ lý AI sẽ tổng hợp câu trả lời và gợi
+            ý khóa học, tài liệu liên quan.
+          </p>
         </div>
       )}
     </div>

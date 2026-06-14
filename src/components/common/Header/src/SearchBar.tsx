@@ -14,7 +14,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [value, setValue] = useState('')
 
   const handleSearch = () => {
-    if (value.trim()) onSearch?.(value.trim())
+    if (!value.trim()) return
+    onSearch?.(value.trim())
+    // Clear the field after submit: the query is surfaced elsewhere (e.g. as the
+    // results heading on /search), so keeping it in the input is redundant.
+    setValue('')
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -24,13 +28,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className="w-full max-w-2xl">
       <div
-        className="flex h-14 items-center overflow-hidden rounded-full bg-white"
+        className="flex h-12 items-center overflow-hidden rounded-full bg-white sm:h-14"
         style={{
           boxShadow:
             '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(13, 148, 136, 0.08), inset 0 0 0 1px rgba(255,255,255,0.8)',
         }}
       >
-        <div className="flex flex-1 items-center gap-3 pl-5 pr-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2 pl-4 pr-1 sm:gap-3 sm:pl-5 sm:pr-2">
           <Search size={17} className="flex-shrink-0 text-teal-500" />
           <input
             type="text"
@@ -38,7 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             onChange={e => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="flex-1 bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400"
+            className="min-w-0 flex-1 bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400"
           />
           {value && (
             <button
@@ -52,11 +56,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
         <button
           onClick={handleSearch}
-          className="m-1.5 flex h-11 items-center gap-2 rounded-full bg-teal-600 px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-teal-700 active:scale-[0.97]"
+          className="m-1 flex h-10 flex-shrink-0 items-center gap-2 rounded-full bg-teal-600 px-4 text-sm font-semibold text-white transition-all duration-200 hover:bg-teal-700 active:scale-[0.97] sm:m-1.5 sm:h-11 sm:px-6"
           aria-label="Tìm kiếm"
         >
           <Search size={15} />
-          <span>Tìm kiếm</span>
+          <span className="hidden sm:inline">Tìm kiếm</span>
         </button>
       </div>
     </div>

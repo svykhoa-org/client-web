@@ -13,7 +13,12 @@ export const HomePage = () => {
   const navigate = useNavigate()
 
   const handleSearch = (value: string) => {
-    navigate(RouteConfig.MedicalSearchPage.path, { state: { searchQuery: value } })
+    // `viewTransition` wraps the route swap in document.startViewTransition so the
+    // search bar (shared `view-transition-name`) morphs from here up to /search.
+    navigate(RouteConfig.MedicalSearchPage.path, {
+      state: { searchQuery: value },
+      viewTransition: true,
+    })
   }
 
   return (
@@ -80,7 +85,10 @@ export const HomePage = () => {
             <p className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-600">
               Tìm kiếm triệu chứng, bệnh lý, thuốc và tài liệu y khoa với sự hỗ trợ từ chuyên gia
             </p>
-            <div className="flex justify-center">
+            <div
+              className="mx-auto w-full max-w-2xl"
+              style={{ viewTransitionName: 'medical-search-bar' }}
+            >
               <SearchBar onSearch={handleSearch} />
             </div>
           </div>
