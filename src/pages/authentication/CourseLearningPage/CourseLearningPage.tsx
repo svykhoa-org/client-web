@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import {
+  EditOutlined,
+  InfoCircleOutlined,
   LeftOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -29,6 +31,29 @@ const getSidebarPref = () => {
   }
 }
 
+const MobileTab = ({
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  icon: React.ReactNode
+  label: string
+  active?: boolean
+  onClick: () => void
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors active:bg-neutral-2 ${
+      active ? 'text-primary-6' : 'text-neutral-5'
+    }`}
+  >
+    <span className="text-[18px] leading-none">{icon}</span>
+    <span className="text-[10px] font-medium leading-none">{label}</span>
+  </button>
+)
+
 export const CourseLearningPage = () => {
   const params = useParams()
   const navigate = useNavigate()
@@ -41,6 +66,8 @@ export const CourseLearningPage = () => {
   const [showCelebration, setShowCelebration] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(getSidebarPref)
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
+  const [mobileInfoOpen, setMobileInfoOpen] = useState(false)
+  const [mobileNotesOpen, setMobileNotesOpen] = useState(false)
 
   const { data: curriculumData } = useCourseWithCurriculum(courseId ?? '')
 
@@ -81,7 +108,7 @@ export const CourseLearningPage = () => {
 
   const handleCourseComplete = () => setShowCelebration(true)
 
-  // Desktop nav bar
+  // ── Desktop nav bar ──────────────────────────────────────────────────────────
   const navBar = (
     <div className="flex shrink-0 items-center gap-2 border-b border-neutral-3 bg-white px-4 py-2">
       <button
@@ -129,41 +156,57 @@ export const CourseLearningPage = () => {
     </div>
   )
 
-  // Mobile fixed bottom bar
+  // ── Mobile bottom tab bar ────────────────────────────────────────────────────
+  const isDocument = currentLesson?.type === 'document'
+
   const mobileNav = (
-    <div className="fixed bottom-0 left-0 right-0 z-40 flex h-14 items-center border-t border-neutral-3 bg-white px-3 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 flex h-14 items-stretch border-t border-neutral-3 bg-white md:hidden">
+      {/* Prev */}
       <button
+        type="button"
         disabled={!prevLesson}
         onClick={() => prevLesson && goToLesson(prevLesson.id)}
-        className="flex shrink-0 items-center gap-1 px-3 py-2 text-sm font-medium text-neutral-6 transition-colors hover:text-neutral-9 disabled:pointer-events-none disabled:opacity-40"
+        className="flex w-11 shrink-0 items-center justify-center text-neutral-5 transition-colors hover:text-neutral-9 disabled:pointer-events-none disabled:opacity-30"
       >
-        <LeftOutlined className="text-xs" />
-        Trước
+        <LeftOutlined />
       </button>
 
-      <button
-        onClick={() => setMobileDrawerOpen(true)}
-        className="flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 py-1"
-      >
-        <span className="flex items-center gap-1.5 text-[11px] text-neutral-5">
-          <UnorderedListOutlined />
-          {allLessons.length > 0 && (
-            <span>
-              {currentIndex + 1}/{allLessons.length}
-            </span>
-          )}
-        </span>
-        {currentLesson && (
-          <p className="max-w-[160px] truncate text-xs font-semibold text-neutral-9">
-            {currentLesson.title}
-          </p>
+      {/* Divider */}
+      <div className="my-2.5 w-px bg-neutral-3" />
+
+      {/* Action tabs */}
+      <div className="flex flex-1 divide-x divide-neutral-2">
+        <MobileTab
+          icon={<UnorderedListOutlined />}
+          label="Bài học"
+          active={mobileDrawerOpen}
+          onClick={() => setMobileDrawerOpen(true)}
+        />
+        <MobileTab
+          icon={<InfoCircleOutlined />}
+          label="Thông tin"
+          active={mobileInfoOpen}
+          onClick={() => setMobileInfoOpen(true)}
+        />
+        {!isDocument && (
+          <MobileTab
+            icon={<EditOutlined />}
+            label="Ghi chú"
+            active={mobileNotesOpen}
+            onClick={() => setMobileNotesOpen(true)}
+          />
         )}
-      </button>
+      </div>
 
+      {/* Divider */}
+      <div className="my-2.5 w-px bg-neutral-3" />
+
+      {/* Next */}
       <button
+        type="button"
         disabled={!nextLesson}
         onClick={() => nextLesson && goToLesson(nextLesson.id)}
-        className="flex shrink-0 items-center gap-1 rounded-lg bg-primary-6 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-7 disabled:pointer-events-none disabled:opacity-40"
+        className="flex shrink-0 items-center gap-1.5 rounded-l-xl bg-primary-6 px-4 text-sm font-semibold text-white transition-colors hover:bg-primary-7 disabled:pointer-events-none disabled:opacity-40"
       >
         Tiếp
         <RightOutlined className="text-xs" />
@@ -171,6 +214,7 @@ export const CourseLearningPage = () => {
     </div>
   )
 
+  // ── Shared drawers ───────────────────────────────────────────────────────────
   const sidebarContent = <ListModuleSidebar latestUnlockedId={latestUnlockedId} />
 
   const mobileDrawer = (
@@ -183,6 +227,45 @@ export const CourseLearningPage = () => {
       styles={{ header: { display: 'none' }, body: { padding: 0, overflow: 'hidden' } }}
     >
       {sidebarContent}
+    </Drawer>
+  )
+
+  const mobileInfoSheet = (
+    <Drawer
+      open={mobileInfoOpen}
+      onClose={() => setMobileInfoOpen(false)}
+      placement="bottom"
+      height="75vh"
+      className="md:hidden"
+      title="Thông tin bài học"
+      styles={{ body: { padding: '16px 20px', overflowY: 'auto' } }}
+    >
+      {curriculumData && currentLesson ? (
+        <LessonInfoTab course={curriculumData.course} lesson={currentLesson} />
+      ) : (
+        <div className="py-8 text-center text-sm text-neutral-5">Đang tải...</div>
+      )}
+    </Drawer>
+  )
+
+  const mobileNotesSheet = (
+    <Drawer
+      open={mobileNotesOpen}
+      onClose={() => setMobileNotesOpen(false)}
+      placement="bottom"
+      height="75vh"
+      className="md:hidden"
+      title="Ghi chú"
+      styles={{ body: { padding: '0 20px 20px', overflowY: 'auto' } }}
+    >
+      <LessonNotesTab
+        lessonId={lessonId}
+        getCurrentTime={() => currentTimeRef.current}
+        onSeek={seconds => {
+          playerRef.current?.seekTo(seconds)
+          setMobileNotesOpen(false)
+        }}
+      />
     </Drawer>
   )
 
@@ -203,6 +286,7 @@ export const CourseLearningPage = () => {
       <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
         <CelebrationModal open={showCelebration} onClose={() => setShowCelebration(false)} />
         {mobileDrawer}
+        {mobileInfoSheet}
 
         <div className="flex min-w-0 flex-1 flex-col pb-14 md:pb-0">
           <div className="flex flex-col" style={{ height: 'calc(100vh - 64px)' }}>
@@ -215,7 +299,7 @@ export const CourseLearningPage = () => {
             <div className="hidden md:block">{navBar}</div>
           </div>
           {curriculumData && currentLesson && (
-            <div className="border-t border-neutral-3 bg-white px-6 py-6">
+            <div className="hidden border-t border-neutral-3 bg-white px-6 py-6 md:block">
               <LessonInfoTab course={curriculumData.course} lesson={currentLesson} />
             </div>
           )}
@@ -232,6 +316,8 @@ export const CourseLearningPage = () => {
     <div className="-mx-4 flex min-h-[calc(100vh-64px)] flex-col md:flex-row">
       <CelebrationModal open={showCelebration} onClose={() => setShowCelebration(false)} />
       {mobileDrawer}
+      {mobileInfoSheet}
+      {mobileNotesSheet}
 
       <div className="flex min-w-0 flex-1 flex-col pb-14 md:pb-0">
         {currentLesson?.type === 'quiz' && currentLesson.contentId ? (
