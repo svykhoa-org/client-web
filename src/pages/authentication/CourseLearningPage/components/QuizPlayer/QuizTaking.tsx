@@ -42,8 +42,8 @@ const ExitWarningOverlay = ({
           <ExclamationCircleOutlined className="text-3xl text-red-500" />
         </div>
       </div>
-      <h3 className="mb-2 text-lg font-semibold text-slate-800">Bạn đã thoát toàn màn hình</h3>
-      <p className="mb-8 text-sm text-slate-500 leading-relaxed">
+      <h3 className="mb-2 text-lg font-semibold text-neutral-9">Bạn đã thoát toàn màn hình</h3>
+      <p className="mb-8 text-sm text-neutral-6 leading-relaxed">
         Bài thi vẫn đang tiến hành. Vui lòng quay lại toàn màn hình để tiếp tục hoặc nộp bài ngay.
       </p>
       <div className="flex flex-col gap-3">
@@ -88,14 +88,14 @@ const SubmitConfirmOverlay = ({
           <SendOutlined className="text-3xl text-amber-500" />
         </div>
       </div>
-      <h3 className="mb-2 text-lg font-semibold text-slate-800">Nộp bài?</h3>
+      <h3 className="mb-2 text-lg font-semibold text-neutral-9">Nộp bài?</h3>
       {unanswered > 0 ? (
-        <p className="mb-8 text-sm leading-relaxed text-slate-500">
+        <p className="mb-8 text-sm leading-relaxed text-neutral-6">
           Bạn còn <span className="font-semibold text-red-500">{unanswered} câu</span> chưa trả lời.
           Các câu bỏ trống sẽ tính 0 điểm.
         </p>
       ) : (
-        <p className="mb-8 text-sm leading-relaxed text-slate-500">
+        <p className="mb-8 text-sm leading-relaxed text-neutral-6">
           Bạn đã trả lời tất cả câu hỏi. Xác nhận nộp bài?
         </p>
       )}
@@ -177,7 +177,7 @@ export const QuizTaking = ({ quiz, attempt, onSubmit, isSubmitting }: QuizTaking
      */
     <div
       ref={containerRef}
-      className={`flex flex-col bg-slate-50 [&:fullscreen]:h-screen [&:fullscreen]:overflow-hidden${isFullscreen ? ' h-screen overflow-hidden' : ''}`}
+      className={`flex flex-col bg-neutral-2 [&:fullscreen]:h-screen [&:fullscreen]:overflow-hidden${isFullscreen ? ' h-screen overflow-hidden' : ''}`}
     >
       {/* Overlays — inside the container so they appear in fullscreen */}
       {showExitWarning && <ExitWarningOverlay onReturn={dismissExitWarning} onSubmit={doSubmit} />}
@@ -194,10 +194,10 @@ export const QuizTaking = ({ quiz, attempt, onSubmit, isSubmitting }: QuizTaking
       )}
 
       {/* Header — shrink-0 so it never compresses in fullscreen flex layout */}
-      <div className="shrink-0 border-b border-slate-200 bg-white">
+      <div className="shrink-0 border-b border-neutral-3 bg-white">
         <div className="flex items-center gap-4 px-5 py-3">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-slate-800">{quiz.title}</p>
+            <p className="truncate text-sm font-semibold text-neutral-9">{quiz.title}</p>
             <div className="mt-1">
               <Progress
                 percent={progressPercent}
@@ -241,9 +241,9 @@ export const QuizTaking = ({ quiz, attempt, onSubmit, isSubmitting }: QuizTaking
       </div>
 
       {/* Footer — shrink-0 always sticks to bottom of the fullscreen container */}
-      <div className="shrink-0 border-t border-slate-200 bg-white px-5 py-4">
+      <div className="shrink-0 border-t border-neutral-3 bg-white px-5 py-4">
         <div className="mx-auto flex max-w-2xl items-center justify-between">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-neutral-6">
             {answeredCount}/{totalCount} câu đã trả lời
           </p>
           <Button

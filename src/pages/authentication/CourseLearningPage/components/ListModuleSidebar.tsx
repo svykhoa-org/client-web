@@ -6,6 +6,7 @@ import {
   BookOutlined,
   CheckCircleFilled,
   ClockCircleOutlined,
+  DownOutlined,
   EyeOutlined,
   FileTextOutlined,
   LeftOutlined,
@@ -15,7 +16,7 @@ import {
   RightOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Avatar, Collapse, Progress, Spin, Tag } from 'antd'
+import { Avatar, Progress, Spin } from 'antd'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
@@ -26,17 +27,16 @@ import type { CourseInstructor, LessonProgressApi, LessonType } from '@/types/co
 const lessonTypeIcon = (type: LessonType) => {
   switch (type) {
     case 'video':
-      return <PlayCircleOutlined className="text-blue-500" />
+      return <PlayCircleOutlined className="text-primary-6" />
     case 'document':
-      return <FileTextOutlined className="text-green-600" />
+      return <FileTextOutlined className="text-success-3" />
     case 'quiz':
-      return <QuestionCircleOutlined className="text-orange-500" />
+      return <QuestionCircleOutlined className="text-warning-3" />
     default:
-      return <BookOutlined className="text-gray-400" />
+      return <BookOutlined className="text-neutral-5" />
   }
 }
 
-/** Bottom card introducing the course instructor(s) — paginates when there are several */
 const InstructorCard = ({ instructors }: { instructors: CourseInstructor[] }) => {
   const [index, setIndex] = useState(0)
   if (instructors.length === 0) return null
@@ -48,25 +48,27 @@ const InstructorCard = ({ instructors }: { instructors: CourseInstructor[] }) =>
   return (
     <div className="p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-bold text-gray-800 text-sm">Giảng viên</h3>
+        <h3 className="text-[11px] font-semibold uppercase tracking-widest text-neutral-5">
+          Giảng viên
+        </h3>
         {hasMany && (
-          <div className="flex items-center gap-2 text-gray-500">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               aria-label="Giảng viên trước"
               onClick={() => setIndex(i => (i - 1 + instructors.length) % instructors.length)}
-              className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-xs transition-colors hover:bg-gray-50"
+              className="flex h-5 w-5 items-center justify-center rounded-full border border-neutral-3 text-[10px] text-neutral-5 transition-colors hover:border-neutral-6 hover:text-neutral-8"
             >
               <LeftOutlined />
             </button>
-            <span className="text-xs">
+            <span className="text-xs text-neutral-5">
               {safeIndex + 1}/{instructors.length}
             </span>
             <button
               type="button"
               aria-label="Giảng viên kế tiếp"
               onClick={() => setIndex(i => (i + 1) % instructors.length)}
-              className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-xs transition-colors hover:bg-gray-50"
+              className="flex h-5 w-5 items-center justify-center rounded-full border border-neutral-3 text-[10px] text-neutral-5 transition-colors hover:border-neutral-6 hover:text-neutral-8"
             >
               <RightOutlined />
             </button>
@@ -74,16 +76,16 @@ const InstructorCard = ({ instructors }: { instructors: CourseInstructor[] }) =>
         )}
       </div>
 
-      <div className="flex items-start gap-3 rounded-lg border border-slate-100 bg-white p-3">
+      <div className="flex items-start gap-3 rounded-xl border border-neutral-3 bg-neutral-2 p-3">
         <Avatar
           src={instructor.avatar ?? undefined}
           icon={!instructor.avatar && <UserOutlined />}
-          size={56}
-          className="shrink-0 bg-slate-100 text-slate-400"
+          size={48}
+          className="shrink-0 bg-neutral-3 text-neutral-6"
         />
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-gray-800 text-sm leading-snug">{instructor.fullName}</p>
-          <p className="mt-1 text-xs text-gray-500 leading-relaxed">Giảng viên khoá học</p>
+          <p className="text-sm font-semibold leading-snug text-neutral-9">{instructor.fullName}</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-neutral-6">Giảng viên khoá học</p>
         </div>
       </div>
     </div>
@@ -91,13 +93,10 @@ const InstructorCard = ({ instructors }: { instructors: CourseInstructor[] }) =>
 }
 
 interface ListModuleSidebarProps {
-  /** lessonId returned by the server when a lesson is newly unlocked — triggers flash */
   latestUnlockedId?: string | null
-  /** Pixel height for the lesson-list block so it mirrors the video frame; the rest goes to the instructor card */
-  listHeight?: number
 }
 
-export const ListModuleSidebar = ({ latestUnlockedId, listHeight }: ListModuleSidebarProps) => {
+export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) => {
   const params = useParams()
   const courseId = params[RouteConfig.CourseLearningPage.paramKey.courseId] ?? ''
   const activeLessonId = params[RouteConfig.CourseLearningPage.paramKey.lessonId]
@@ -110,16 +109,13 @@ export const ListModuleSidebar = ({ latestUnlockedId, listHeight }: ListModuleSi
   const curriculum = curriculumData?.curriculum ?? []
   const isLoading = isCurriculumLoading || isEnrollmentLoading
 
-  // Build Map<lessonId, LessonProgress> from flat list
   const progressMap = new Map<string, LessonProgressApi>()
   progressList?.forEach(p => progressMap.set(p.lessonId, p))
 
-  // Flat ordered lesson list: modules sorted by order, lessons within by order
   const flatLessons = [...curriculum]
     .sort((a, b) => a.order - b.order)
     .flatMap(mod => [...mod.lessons].sort((a, b) => a.order - b.order))
 
-  // Compute accessibility for each lesson
   const accessibilityMap: Record<string, boolean> = {}
   flatLessons.forEach((lesson, i) => {
     if (lesson.isPreview || i === 0) {
@@ -128,14 +124,10 @@ export const ListModuleSidebar = ({ latestUnlockedId, listHeight }: ListModuleSi
     }
     const prev = flatLessons[i - 1]
     const prevProgress = progressMap.get(prev.id)
-
-    // completed status always unlocks the next lesson
     if (prevProgress?.status === 'completed') {
       accessibilityMap[lesson.id] = true
       return
     }
-
-    // fallback: for in-progress videos, unlock when 80% watched
     const prevWatched = prevProgress?.watchedSeconds ?? 0
     if (prev.durationMinutes > 0) {
       accessibilityMap[lesson.id] = prevWatched / (prev.durationMinutes * 60) >= 0.8
@@ -144,7 +136,6 @@ export const ListModuleSidebar = ({ latestUnlockedId, listHeight }: ListModuleSi
     }
   })
 
-  // Flash animation state
   const [flashSet, setFlashSet] = useState<Set<string>>(new Set())
   const flashTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
 
@@ -163,165 +154,183 @@ export const ListModuleSidebar = ({ latestUnlockedId, listHeight }: ListModuleSi
     flashTimers.current.set(lessonId, timer)
   }, [])
 
-  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
       flashTimers.current.forEach(t => clearTimeout(t))
     }
   }, [])
 
-  // Trigger flash when parent signals a newly unlocked lesson
   useEffect(() => {
     if (latestUnlockedId) triggerFlash(latestUnlockedId)
   }, [latestUnlockedId, triggerFlash])
 
+  const [openModules, setOpenModules] = useState<Set<string>>(new Set<string>())
+
+  useEffect(() => {
+    if (curriculum.length === 0) return
+    const activeModule = curriculum.find(mod => mod.lessons.some(l => l.id === activeLessonId))
+    const targetId = activeModule?.id ?? curriculum[0]?.id
+    if (!targetId) return
+    setOpenModules(prev => {
+      if (prev.has(targetId)) return prev
+      return new Set([...prev, targetId])
+    })
+  }, [curriculum.length, activeLessonId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleModule = (id: string) => {
+    setOpenModules(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
+      <div className="flex h-full items-center justify-center bg-white">
         <Spin />
       </div>
     )
   }
 
-  const defaultOpenKeys = curriculum
-    .filter(mod => mod.lessons.some(l => l.id === activeLessonId))
-    .map(mod => mod.id)
-
-  const collapseItems = curriculum.map(mod => ({
-    key: mod.id,
-    label: (
-      <div className="flex flex-col gap-0.5">
-        <span className="font-semibold text-gray-800 text-sm leading-snug">{mod.title}</span>
-        <span className="text-xs text-gray-500">
-          {mod.lessonCount ?? mod.lessons.length} bài
-          {mod.totalDurationMinutes ? ` · ${mod.totalDurationMinutes} phút` : ''}
-        </span>
-      </div>
-    ),
-    children: (
-      <div className="flex flex-col">
-        {[...mod.lessons]
-          .sort((a, b) => a.order - b.order)
-          .map(lesson => {
-            const isActive = lesson.id === activeLessonId
-            const isAccessible = accessibilityMap[lesson.id] ?? true
-            const isCompleted = progressMap.get(lesson.id)?.status === 'completed'
-            const isFlashing = flashSet.has(lesson.id)
-            return (
-              <button
-                key={lesson.id}
-                disabled={!isAccessible}
-                onClick={() =>
-                  navigate(RouteConfig.CourseLearningPage.getPath(courseId, lesson.id))
-                }
-                className={[
-                  'flex items-start gap-2 px-3 py-2.5 text-left transition-colors border-l-2',
-                  isActive
-                    ? 'bg-blue-50 border-blue-500'
-                    : isCompleted
-                      ? 'border-green-400 bg-green-50/50'
-                      : 'border-transparent',
-                  isAccessible && !isActive && !isCompleted ? 'hover:bg-gray-50' : '',
-                  isAccessible && isCompleted && !isActive ? 'hover:bg-green-50' : '',
-                  !isAccessible ? 'cursor-not-allowed opacity-60' : '',
-                  isFlashing ? 'animate-pulse bg-blue-50' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              >
-                <span className="mt-0.5 shrink-0 text-base">
-                  {isCompleted ? (
-                    <CheckCircleFilled className="text-green-500" />
-                  ) : isAccessible ? (
-                    lessonTypeIcon(lesson.type)
-                  ) : (
-                    <LockOutlined className="text-gray-400" />
-                  )}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p
-                    className={`text-xs leading-snug ${
-                      isActive
-                        ? 'font-semibold text-blue-700'
-                        : isCompleted
-                          ? 'text-green-700'
-                          : isAccessible
-                            ? 'text-gray-700'
-                            : 'text-gray-400'
-                    }`}
-                  >
-                    {lesson.title}
-                  </p>
-                  <div className="mt-0.5 flex items-center gap-2">
-                    {lesson.isPreview && (
-                      <Tag
-                        icon={<EyeOutlined />}
-                        color="cyan"
-                        className="text-xs m-0 px-1 py-0 leading-4"
-                      >
-                        Xem thử
-                      </Tag>
-                    )}
-                    {lesson.durationMinutes > 0 && (
-                      <span className="flex items-center gap-0.5 text-xs text-gray-400">
-                        <ClockCircleOutlined />
-                        {lesson.durationMinutes} phút
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </button>
-            )
-          })}
-      </div>
-    ),
-  }))
-
   const instructors = curriculumData?.instructors ?? []
 
   return (
-    <div className="flex h-full flex-col border-l border-gray-200 bg-white">
-      {/* Lesson list — height mirrors the video frame, scrolls when taller */}
-      <div
-        className={listHeight ? 'flex shrink-0 flex-col' : 'flex min-h-0 flex-1 flex-col'}
-        style={listHeight ? { height: listHeight } : undefined}
-      >
-        {/* Header */}
-        <div className="shrink-0 border-b border-gray-200 px-4 py-3">
-          <h3 className="font-bold text-gray-800 text-sm">Nội dung khoá học</h3>
-          {enrollment && (
-            <div className="mt-2">
-              <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
-                <span>Tiến độ</span>
-                <span>{enrollment.progress ?? 0}%</span>
-              </div>
-              <Progress
-                percent={enrollment.progress ?? 0}
-                showInfo={false}
-                strokeColor="#2563eb"
-                trailColor="#e5e7eb"
-                size="small"
-              />
+    <div className="flex h-full flex-col bg-white">
+      {/* Header */}
+      <div className="shrink-0 border-b border-neutral-3 px-4 py-2">
+        <h3 className="text-[11px] font-semibold uppercase tracking-widest text-neutral-5">
+          Nội dung khoá học
+        </h3>
+        {enrollment && (
+          <div className="mt-2.5">
+            <div className="mb-1.5 flex items-center justify-between">
+              <span className="text-xs text-neutral-6">Tiến độ</span>
+              <span className="text-xs font-semibold text-primary-8">
+                {enrollment.progress ?? 0}%
+              </span>
             </div>
-          )}
-        </div>
-
-        {/* Module accordion */}
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <Collapse
-            defaultActiveKey={
-              defaultOpenKeys.length > 0 ? defaultOpenKeys : [curriculum[0]?.id ?? '']
-            }
-            bordered={false}
-            className="bg-white"
-            items={collapseItems}
-          />
-        </div>
+            <Progress
+              percent={enrollment.progress ?? 0}
+              showInfo={false}
+              strokeColor="#1976d2"
+              trailColor="#e5e5e5"
+              size="small"
+            />
+          </div>
+        )}
       </div>
 
-      {/* Instructor intro card — fills the space below the lesson list */}
+      {/* Module accordion */}
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {[...curriculum]
+          .sort((a, b) => a.order - b.order)
+          .map(mod => {
+            const isOpen = openModules.has(mod.id)
+            return (
+              <div key={mod.id} className="border-b border-neutral-2">
+                {/* Module header */}
+                <button
+                  type="button"
+                  onClick={() => toggleModule(mod.id)}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-neutral-2"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold leading-snug text-neutral-9">{mod.title}</p>
+                    <p className="mt-0.5 text-xs text-neutral-5">
+                      {mod.lessonCount ?? mod.lessons.length} bài
+                      {mod.totalDurationMinutes ? ` · ${mod.totalDurationMinutes} phút` : ''}
+                    </p>
+                  </div>
+                  <DownOutlined
+                    className="shrink-0 text-xs text-neutral-5 transition-transform duration-200"
+                    style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                  />
+                </button>
+
+                {/* Lesson list */}
+                {isOpen && (
+                  <div className="border-t border-neutral-2">
+                    {[...mod.lessons]
+                      .sort((a, b) => a.order - b.order)
+                      .map(lesson => {
+                        const isActive = lesson.id === activeLessonId
+                        const isAccessible = accessibilityMap[lesson.id] ?? true
+                        const isCompleted = progressMap.get(lesson.id)?.status === 'completed'
+                        const isFlashing = flashSet.has(lesson.id)
+
+                        return (
+                          <button
+                            key={lesson.id}
+                            disabled={!isAccessible}
+                            onClick={() =>
+                              navigate(RouteConfig.CourseLearningPage.getPath(courseId, lesson.id))
+                            }
+                            className={[
+                              'flex w-full items-start gap-3 border-l-2 px-4 py-3 text-left transition-colors',
+                              isActive
+                                ? 'border-primary-6 bg-primary-1'
+                                : isCompleted
+                                  ? 'border-success-3/40 hover:bg-neutral-2'
+                                  : 'border-transparent hover:bg-neutral-2',
+                              !isAccessible ? 'cursor-not-allowed opacity-50' : '',
+                              isFlashing && !isActive ? 'animate-pulse bg-primary-1/60' : '',
+                            ]
+                              .filter(Boolean)
+                              .join(' ')}
+                          >
+                            <span className="mt-0.5 shrink-0 text-sm">
+                              {isCompleted ? (
+                                <CheckCircleFilled className="text-success-3" />
+                              ) : isAccessible ? (
+                                lessonTypeIcon(lesson.type)
+                              ) : (
+                                <LockOutlined className="text-neutral-4" />
+                              )}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <p
+                                className={`text-xs leading-snug ${
+                                  isActive
+                                    ? 'font-semibold text-primary-8'
+                                    : isCompleted
+                                      ? 'text-success-3'
+                                      : isAccessible
+                                        ? 'text-neutral-8'
+                                        : 'text-neutral-4'
+                                }`}
+                              >
+                                {lesson.title}
+                              </p>
+                              <div className="mt-1 flex flex-wrap items-center gap-2">
+                                {lesson.isPreview && (
+                                  <span className="inline-flex items-center gap-0.5 rounded border border-info-3/60 px-1 py-0.5 text-[10px] font-medium text-info-3">
+                                    <EyeOutlined className="text-[10px]" />
+                                    Xem thử
+                                  </span>
+                                )}
+                                {lesson.durationMinutes > 0 && (
+                                  <span className="flex items-center gap-0.5 text-[11px] text-neutral-5">
+                                    <ClockCircleOutlined className="text-[10px]" />
+                                    {lesson.durationMinutes} phút
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </button>
+                        )
+                      })}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+      </div>
+
+      {/* Instructor card */}
       {instructors.length > 0 && (
-        <div className="min-h-0 flex-1 overflow-y-auto border-t border-gray-200">
+        <div className="shrink-0 border-t border-neutral-3">
           <InstructorCard instructors={instructors} />
         </div>
       )}

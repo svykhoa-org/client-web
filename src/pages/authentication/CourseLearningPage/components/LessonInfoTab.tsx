@@ -1,4 +1,9 @@
-import { BookOutlined, ClockCircleOutlined, PlayCircleOutlined } from '@ant-design/icons'
+import {
+  BookOutlined,
+  CheckOutlined,
+  ClockCircleOutlined,
+  PlayCircleOutlined,
+} from '@ant-design/icons'
 import { Tag } from 'antd'
 
 import type { CourseApiItem, CourseLesson, LessonType } from '@/types/course-api'
@@ -38,101 +43,84 @@ function formatTotalDuration(minutes: number | null): string {
 
 export function LessonInfoTab({ course, lesson }: LessonInfoTabProps) {
   return (
-    <div className="space-y-6 py-4">
+    <div className="divide-y divide-neutral-3 py-2">
       {/* Bài học */}
-      <section>
-        <h3 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
-          Bài học
-        </h3>
-        <div className="rounded-lg border border-slate-100 bg-white p-4 space-y-3">
-          <div className="flex items-start justify-between gap-4">
-            <h2 className="text-base font-semibold text-slate-800 leading-snug">{lesson.title}</h2>
-            <Tag color={LESSON_TYPE_COLOR[lesson.type]} className="shrink-0">
-              {LESSON_TYPE_LABEL[lesson.type]}
-            </Tag>
-          </div>
+      <section className="pb-5 pt-4">
+        <div className="mb-2 flex items-start justify-between gap-3">
+          <h2 className="text-base font-semibold leading-snug text-neutral-9">{lesson.title}</h2>
+          <Tag color={LESSON_TYPE_COLOR[lesson.type]} className="shrink-0">
+            {LESSON_TYPE_LABEL[lesson.type]}
+          </Tag>
+        </div>
 
-          {lesson.description && (
-            <p className="text-sm text-slate-500 leading-relaxed">{lesson.description}</p>
+        {lesson.description && (
+          <p className="mb-3 text-sm leading-relaxed text-neutral-6">{lesson.description}</p>
+        )}
+
+        <div className="flex flex-wrap gap-4 text-sm text-neutral-6">
+          {lesson.durationMinutes > 0 && (
+            <span className="flex items-center gap-1.5">
+              <ClockCircleOutlined className="text-neutral-5" />
+              {formatDuration(lesson.durationMinutes)}
+            </span>
           )}
-
-          <div className="flex flex-wrap gap-4 pt-1 text-sm text-slate-500">
-            {lesson.durationMinutes > 0 && (
-              <span className="flex items-center gap-1.5">
-                <ClockCircleOutlined className="text-slate-400" />
-                {formatDuration(lesson.durationMinutes)}
-              </span>
-            )}
-            {lesson.isPreview && (
-              <span className="flex items-center gap-1.5">
-                <PlayCircleOutlined className="text-slate-400" />
-                Bài học xem thử
-              </span>
-            )}
-          </div>
+          {lesson.isPreview && (
+            <span className="flex items-center gap-1.5">
+              <PlayCircleOutlined className="text-neutral-5" />
+              Bài học xem thử
+            </span>
+          )}
         </div>
       </section>
 
       {/* Khoá học */}
-      <section>
-        <h3 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
-          Khoá học
-        </h3>
-        <div className="rounded-lg border border-slate-100 bg-white p-4 space-y-3">
-          <div className="flex items-start gap-3">
-            {course.thumbnail && (
-              <img
-                src={course.thumbnail}
-                alt={course.title}
-                className="h-14 w-20 rounded object-cover shrink-0"
-              />
+      <section className="py-5">
+        <div className="flex items-start gap-3">
+          {course.thumbnail && (
+            <img
+              src={course.thumbnail}
+              alt={course.title}
+              className="h-14 w-20 shrink-0 rounded-lg object-cover"
+            />
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold leading-snug text-neutral-9">{course.title}</p>
+            {course.subTitle && (
+              <p className="mt-0.5 text-xs leading-relaxed text-neutral-6">{course.subTitle}</p>
             )}
-            <div className="min-w-0">
-              <p className="font-semibold text-slate-800 text-sm leading-snug">{course.title}</p>
-              {course.subTitle && (
-                <p className="mt-0.5 text-xs text-slate-500 leading-relaxed">{course.subTitle}</p>
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-5">
+              {course.totalDurationMinutes != null && (
+                <span className="flex items-center gap-1">
+                  <ClockCircleOutlined />
+                  {formatTotalDuration(course.totalDurationMinutes)} tổng thời lượng
+                </span>
               )}
+              {course.currentEnrollments > 0 && (
+                <span className="flex items-center gap-1">
+                  <BookOutlined />
+                  {course.currentEnrollments.toLocaleString('vi-VN')} học viên
+                </span>
+              )}
+              {course.category && <span>{course.category.name}</span>}
             </div>
-          </div>
-
-          <div className="flex flex-wrap gap-x-6 gap-y-1.5 pt-1 text-sm text-slate-500 border-t border-slate-50">
-            {course.totalDurationMinutes != null && (
-              <span className="flex items-center gap-1.5 pt-2">
-                <ClockCircleOutlined className="text-slate-400" />
-                {formatTotalDuration(course.totalDurationMinutes)} tổng thời lượng
-              </span>
-            )}
-            {course.currentEnrollments > 0 && (
-              <span className="flex items-center gap-1.5 pt-2">
-                <BookOutlined className="text-slate-400" />
-                {course.currentEnrollments.toLocaleString('vi-VN')} học viên
-              </span>
-            )}
-            {course.category && (
-              <span className="flex items-center gap-1.5 pt-2 text-slate-400">
-                {course.category.name}
-              </span>
-            )}
           </div>
         </div>
       </section>
 
       {/* Mục tiêu khoá học */}
       {course.objectives && course.objectives.length > 0 && (
-        <section>
-          <h3 className="mb-3 text-xs font-semibold tracking-widest text-slate-400 uppercase">
+        <section className="py-5">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-5">
             Bạn sẽ học được
           </h3>
-          <div className="rounded-lg border border-slate-100 bg-white p-4">
-            <ul className="space-y-2">
-              {course.objectives.map((obj, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                  <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
-                  {obj}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="space-y-2">
+            {course.objectives.map((obj, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-neutral-7">
+                <CheckOutlined className="mt-0.5 shrink-0 text-primary-6" />
+                {obj}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
     </div>

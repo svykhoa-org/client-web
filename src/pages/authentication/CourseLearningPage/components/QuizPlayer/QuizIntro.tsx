@@ -41,15 +41,15 @@ export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: Quiz
     <div className="flex flex-col items-center justify-center px-6 py-10 text-center">
       <div className="w-full max-w-lg">
         {/* Main card */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+        <div className="rounded-2xl border border-neutral-3 bg-white p-8">
           <div className="mb-5 flex justify-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-50">
               <QuestionCircleOutlined className="text-3xl text-orange-400" />
             </div>
           </div>
 
-          <h2 className="mb-1 text-xl font-semibold text-slate-800">{quiz.title}</h2>
-          <p className="mb-8 text-sm text-slate-400">{quiz.questions.length} câu hỏi</p>
+          <h2 className="mb-1 text-xl font-semibold text-neutral-9">{quiz.title}</h2>
+          <p className="mb-8 text-sm text-neutral-5">{quiz.questions.length} câu hỏi</p>
 
           {/* Stats */}
           <div className="mb-8 grid grid-cols-3 gap-4">
@@ -80,7 +80,7 @@ export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: Quiz
           {/* Last attempt result */}
           {attemptsUsed > 0 && (
             <div className="mb-6">
-              <p className="mb-2 text-xs text-slate-400">Kết quả lần thi gần nhất</p>
+              <p className="mb-2 text-xs text-neutral-5">Kết quả lần thi gần nhất</p>
               {(() => {
                 const last = submittedAttempts[submittedAttempts.length - 1]!
                 return (
@@ -88,7 +88,7 @@ export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: Quiz
                     color={last.isPassed ? 'success' : 'error'}
                     className="rounded-lg px-3 py-1 text-sm"
                   >
-                    {last.isPassed ? '✓ Đạt' : '✗ Chưa đạt'} — {last.score}%
+                    {last.isPassed ? '✓ Đạt' : '✗ Chưa đạt'} · {last.score}%
                   </Tag>
                 )
               })()}
@@ -117,14 +117,14 @@ export const QuizIntro = ({ quiz, submittedAttempts, onStart, isStarting }: Quiz
         </div>
 
         {/* Strict mode notice */}
-        <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-6 py-5 text-left">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        <div className="mt-4 rounded-2xl border border-neutral-3 bg-white px-6 py-5 text-left">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-neutral-5">
             Quy định khi làm bài
           </p>
           <div className="flex flex-col gap-3">
             {STRICT_RULES.map((rule, i) => (
-              <div key={i} className="flex items-center gap-3 text-sm text-slate-600">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-50">
+              <div key={i} className="flex items-center gap-3 text-sm text-neutral-7">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-neutral-2">
                   {rule.icon}
                 </span>
                 {rule.label}
