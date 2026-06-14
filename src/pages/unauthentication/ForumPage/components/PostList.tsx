@@ -1,4 +1,5 @@
 import { Spin } from 'antd'
+import { FileText } from 'lucide-react'
 
 import PostCard from '@/components/post/PostCard'
 import Pagination from '@/components/ui/Pagination'
@@ -25,48 +26,26 @@ const PostList = ({
   pageSize = 10,
   showPagination = true,
 }: PostListProps) => {
-  // Debug pagination values
-  console.log('PostList Pagination:', {
-    currentPage,
-    pageSize,
-    totalItems,
-    showPagination,
-    postsLength: posts.length,
-    hasPagination: totalItems > 0,
-  })
   if (posts.length === 0 && !loading) {
     return (
-      <div className="text-neutral-6 bg-neutral-1 rounded-lg p-8 text-center">
-        <div className="mb-4">
-          <svg
-            className="text-neutral-4 mx-auto h-12 w-12"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
+      <div className="flex flex-col items-center justify-center rounded-xl border border-neutral-3/60 bg-white px-8 py-16 text-center">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-neutral-2">
+          <FileText className="h-8 w-8 text-neutral-4" />
         </div>
-        <h3 className="text-neutral-8 mb-2 text-lg font-medium">Chưa có bài viết nào</h3>
-        <p className="text-sm">Hiện tại chưa có bài viết nào trong danh mục này.</p>
+        <h3 className="mb-1 text-base font-semibold text-neutral-8">Chưa có bài viết nào</h3>
+        <p className="max-w-[280px] text-sm text-neutral-5">
+          Hiện tại chưa có bài viết nào trong danh mục này.
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {posts.map(post => (
-        <div key={post.id} className="rounded-lg bg-white shadow-sm transition-all hover:shadow-md">
-          <PostCard post={post} onViewMore={onViewMore} />
-        </div>
+        <PostCard key={post.id} post={post} onViewMore={onViewMore} />
       ))}
 
-      {/* Pagination Section */}
       {loading && (
         <div className="flex justify-center py-8">
           <Spin size="large" />
@@ -74,7 +53,7 @@ const PostList = ({
       )}
 
       {!loading && showPagination && (
-        <div className="flex justify-center py-8">
+        <div className="flex justify-center py-6">
           <Pagination
             current={currentPage}
             pageSize={pageSize}
@@ -83,9 +62,6 @@ const PostList = ({
             showSizeChanger={false}
             defaultCurrent={1}
             defaultPageSize={10}
-            // showTotal={(total: number, range: [number, number]) =>
-            //   `${range[0]}-${range[1]} của ${total} bài viết`
-            // }
           />
         </div>
       )}

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
+import { Eye, MessageCircle, Paperclip, Pin } from 'lucide-react'
 
-import Card from '@/components/ui/Card'
 import type { Post } from '@/models/Post'
 
 type PostCardProps = {
@@ -8,132 +8,121 @@ type PostCardProps = {
   onViewMore?: (post: Post) => void
 }
 
-const PostCard = (props: PostCardProps) => {
-  const { post, onViewMore } = props
+const PostCard = ({ post, onViewMore }: PostCardProps) => {
+  const formatDate = (dateString: string) => dayjs(dateString).format('DD/MM/YYYY')
 
-  const formatDate = (dateString: string) => {
-    return dayjs(dateString).locale('vi').format('HH:mm DD/MM/YYYY [GMT]Z')
-  }
-
-  const handleCardClick = () => {
-    onViewMore?.(post)
-  }
+  const initials = (name: string) =>
+    name
+      .split(' ')
+      .map(n => n[0])
+      .slice(-2)
+      .join('')
+      .toUpperCase()
 
   return (
-    <Card
-      title={post.title}
-      className="cursor-pointer bg-white hover:border-green-100"
-      onClick={handleCardClick}
+    <div
+      className="group relative cursor-pointer overflow-hidden rounded-xl border border-neutral-3/60 bg-white transition-all duration-200 hover:border-primary-4 hover:shadow-[0_4px_20px_rgba(25,118,210,0.10)]"
+      onClick={() => onViewMore?.(post)}
     >
-      <div className="space-y-2">
-        {/* Author and Category Info */}
-        <div className="text-neutral-6 flex items-center justify-between text-sm">
-          <div className="flex items-center space-x-2">
+      {/* Left accent bar */}
+      <span className="absolute left-0 top-0 h-full w-0.5 bg-transparent transition-all duration-200 group-hover:bg-primary-5" />
+
+      <div className="px-5 py-4">
+        {/* Top row: pinned + category + date */}
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            {post.isPinned && (
+              <span className="flex shrink-0 items-center gap-1 rounded-full bg-warning-1 px-2 py-0.5 text-xs font-semibold text-warning-3">
+                <Pin className="h-3 w-3" />
+                Ghim
+              </span>
+            )}
+            {post.category && (
+              <span className="truncate rounded-full bg-primary-1 px-2.5 py-0.5 text-xs font-medium text-primary-7">
+                {post.category.name}
+              </span>
+            )}
+          </div>
+          <time className="shrink-0 text-xs text-neutral-5" dateTime={post.createdAt}>
+            {formatDate(post.createdAt)}
+          </time>
+        </div>
+
+        {/* Title */}
+        <h3 className="mb-2 line-clamp-2 text-base font-semibold leading-snug text-neutral-9 transition-colors group-hover:text-primary-6">
+          {post.title}
+        </h3>
+
+        {/* Content preview */}
+        <div
+          className="mb-3 line-clamp-2 text-sm leading-relaxed text-neutral-6"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+
+        {/* Tags */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="mb-3 flex flex-wrap gap-1.5">
+            {post.tags.slice(0, 4).map((tag, i) => (
+              <span key={i} className="rounded-md bg-neutral-2 px-2 py-0.5 text-xs text-neutral-6">
+                #{tag}
+              </span>
+            ))}
+            {post.tags.length > 4 && (
+              <span className="py-0.5 text-xs text-neutral-4">+{post.tags.length - 4}</span>
+            )}
+          </div>
+        )}
+
+        {/* Bottom: author + stats */}
+        <div className="flex items-center justify-between border-t border-neutral-2 pt-3">
+          <div className="flex min-w-0 items-center gap-2">
             {post.author ? (
               <>
                 {post.author.avatarUrl ? (
                   <img
                     src={post.author.avatarUrl}
                     alt={post.author.fullName}
-                    className="h-6 w-6 rounded-full"
+                    className="h-7 w-7 shrink-0 rounded-full object-cover ring-2 ring-neutral-2"
                   />
                 ) : (
-                  <div className="bg-neutral-3 flex h-6 w-6 items-center justify-center rounded-full">
-                    <span className="text-neutral-9 text-xs font-medium">
-                      {post.author.fullName.charAt(0).toUpperCase()}
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-1 ring-2 ring-primary-2">
+                    <span className="text-[10px] font-bold text-primary-7">
+                      {initials(post.author.fullName)}
                     </span>
                   </div>
                 )}
-                <span>{post.author.fullName}</span>
+                <span className="truncate text-sm font-medium text-neutral-7">
+                  {post.author.fullName}
+                </span>
               </>
             ) : (
-              <span className="font-medium">Ẩn danh</span>
+              <span className="text-sm text-neutral-5">Ẩn danh</span>
             )}
           </div>
-          <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
-        </div>
 
-        {/* Post Content */}
-        <div className="prose prose-sm max-w-none">
-          <div
-            className="text-neutral-7 line-clamp-2 overflow-hidden leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        </div>
-
-        {/* Tags */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-primary-1 text-primary-8 rounded-full px-2 py-1 text-xs font-medium"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Post Statistics */}
-        <div className="text-neutral-5 flex items-center justify-between border-t pt-2 text-sm">
-          <div className="flex items-center space-x-4">
+          <div className="flex shrink-0 items-center gap-3 text-xs text-neutral-5">
             {post.viewCount !== undefined && (
-              <span className="flex items-center">
-                <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-                {post.viewCount} lượt xem
+              <span className="flex items-center gap-1">
+                <Eye className="h-3.5 w-3.5" />
+                {post.viewCount}
               </span>
             )}
             {post.commentCount !== undefined && (
-              <span className="flex items-center">
-                <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-                {post.commentCount} bình luận
+              <span className="flex items-center gap-1">
+                <MessageCircle className="h-3.5 w-3.5" />
+                {post.commentCount}
+              </span>
+            )}
+            {post.attachments && post.attachments.length > 0 && (
+              <span className="flex items-center gap-1">
+                <Paperclip className="h-3.5 w-3.5" />
+                {post.attachments.length}
               </span>
             )}
           </div>
-
-          {/* Empty space for layout balance */}
-          <div></div>
         </div>
-
-        {/* Attachments */}
-        {post.attachments && post.attachments.length > 0 && (
-          <div className="pt-2">
-            <span className="text-neutral-6 flex items-center text-sm">
-              <svg className="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                />
-              </svg>
-              {post.attachments.length} tệp đính kèm
-            </span>
-          </div>
-        )}
       </div>
-    </Card>
+    </div>
   )
 }
 
