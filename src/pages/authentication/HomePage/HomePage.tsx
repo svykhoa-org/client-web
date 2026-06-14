@@ -75,15 +75,16 @@ export const HomePage = () => {
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="mx-auto max-w-4xl text-center">
             <p className="mb-3 text-xs font-semibold tracking-widest text-blue-700 uppercase">
               Nền tảng y khoa sinh viên
             </p>
             <h1 className="mb-5 text-5xl font-bold leading-tight tracking-tight text-gray-900">
-              Tra cứu thông tin y khoa <span className="text-blue-700">chính xác và toàn diện</span>
+              Tra cứu & tổng hợp thông tin y khoa <br />
+              <span className="text-blue-700">chính xác và toàn diện</span>
             </h1>
-            <p className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-600">
-              Tìm kiếm triệu chứng, bệnh lý, thuốc và tài liệu y khoa với sự hỗ trợ từ chuyên gia
+            <p className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-600 font-medium">
+              Tìm kiếm triệu chứng, bệnh lý với sự hỗ trợ từ chuyên gia AI
             </p>
             <div
               className="mx-auto w-full max-w-2xl"
@@ -102,21 +103,21 @@ export const HomePage = () => {
             <Carousel autoplay className="mb-6 overflow-hidden rounded-xl">
               <div>
                 <img
-                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80"
+                  src="https://i.pinimg.com/736x/6c/4f/d0/6c4fd0ea9cb17aa05170f9c71255f20e.jpg"
                   className="h-64 w-full object-cover"
                   alt="Medical research environment"
                 />
               </div>
               <div>
                 <img
-                  src="https://images.unsplash.com/photo-1519494080410-f9aa8cfbfc02?auto=format&fit=crop&w=900&q=80"
+                  src="https://i.pinimg.com/736x/bb/10/f9/bb10f918a49e8ee1d315fce99aee7c02.jpg"
                   className="h-64 w-full object-cover"
                   alt="Medical team"
                 />
               </div>
               <div>
                 <img
-                  src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=900&q=80"
+                  src="https://i.pinimg.com/736x/a3/da/e0/a3dae00bc3985145bdc88db548f28265.jpg"
                   className="h-64 w-full object-cover"
                   alt="Medical education"
                 />

@@ -9,7 +9,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
-  placeholder = 'Nhập tên bệnh lý, triệu chứng hoặc khóa học...',
+  placeholder = 'Nhập tên bệnh lý, triệu chứng...',
 }) => {
   const [value, setValue] = useState('')
 
@@ -35,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         }}
       >
         <div className="flex min-w-0 flex-1 items-center gap-2 pl-4 pr-1 sm:gap-3 sm:pl-5 sm:pr-2">
-          <Search size={17} className="flex-shrink-0 text-blue-500" />
+          <Search size={17} className="shrink-0 text-blue-500" />
           <input
             type="text"
             value={value}
