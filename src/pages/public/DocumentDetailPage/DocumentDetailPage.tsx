@@ -212,7 +212,7 @@ export const DocumentDetailPage = () => {
   }
 
   return (
-    <div className="">
+    <div className="pb-16 lg:pb-0">
       <PageHeader
         title={document.title}
         breadcrumbItems={[
@@ -283,7 +283,7 @@ export const DocumentDetailPage = () => {
           </div>
         </section>
 
-        <aside className="w-full shrink-0 lg:sticky lg:top-20 lg:w-80 lg:self-start">
+        <aside className="hidden lg:block lg:sticky lg:top-20 lg:w-80 lg:self-start">
           <div className="shadow-primary-10/10 rounded-xl border border-neutral-3 bg-white p-6 shadow-md">
             {isOwned ? (
               <div className="bg-success-1 text-success-3 mb-4 rounded-lg px-3 py-2 text-center text-sm font-semibold">
@@ -349,6 +349,45 @@ export const DocumentDetailPage = () => {
             </div>
           </div>
         </aside>
+      </div>
+
+      {/* Mobile bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center gap-3 border-t border-neutral-3 bg-white px-4 lg:hidden">
+        <div className="shrink-0">
+          {document.price === 0 ? (
+            <span className="text-success-3 text-base font-bold">Miễn phí</span>
+          ) : isOwned ? (
+            <span className="text-xs font-semibold text-success-3">Đã sở hữu</span>
+          ) : (
+            <span className="text-base font-bold tabular-nums text-neutral-10">
+              {formatCurrency({ value: document.price })}
+            </span>
+          )}
+        </div>
+        <div className="flex-1">
+          {isOwned ? (
+            <Button
+              type="primary"
+              block
+              icon={<DownloadOutlined />}
+              onClick={handleDownload}
+              loading={isPreparingDownload}
+              className="h-10 font-semibold"
+            >
+              Tải xuống PDF
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              block
+              onClick={handlePurchase}
+              loading={isCheckingOut}
+              className="h-10 font-semibold"
+            >
+              {document.price === 0 ? 'Tải về miễn phí' : 'Mua tài liệu'}
+            </Button>
+          )}
+        </div>
       </div>
 
       <Modal

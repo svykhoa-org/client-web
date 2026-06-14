@@ -4,7 +4,6 @@ import {
   CheckCircleFilled,
   CheckCircleOutlined,
   CloseCircleFilled,
-  CloseCircleOutlined,
   DownOutlined,
   ReloadOutlined,
   TrophyOutlined,

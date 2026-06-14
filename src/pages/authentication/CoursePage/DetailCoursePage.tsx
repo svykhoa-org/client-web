@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import {
+  ArrowLeftOutlined,
+  PlayCircleOutlined,
+  ShoppingCartOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Alert, Button, Col, Modal, Row, Skeleton, message } from 'antd'
+import { Alert, Button, Col, Drawer, Modal, Row, Skeleton, message } from 'antd'
 
 import axiosInstance, { getAccessToken } from '@/lib/axios'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
@@ -22,6 +27,7 @@ export const DetailCoursePage = () => {
   const navigate = useNavigate()
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
   const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null)
+  const [mobileModulesOpen, setMobileModulesOpen] = useState(false)
   const queryClient = useQueryClient()
 
   const isLoggedIn = !!getAccessToken()
@@ -121,9 +127,10 @@ export const DetailCoursePage = () => {
 
   const { course, curriculum, instructors = [] } = data
   const firstLesson = curriculum[0]?.lessons[0] ?? null
+  const isEnrolled = enrollment?.status === 'active' || enrollment?.status === 'completed'
 
   return (
-    <>
+    <div className="pb-16 lg:pb-0">
       <button
         type="button"
         onClick={() => navigate(-1)}
@@ -142,7 +149,7 @@ export const DetailCoursePage = () => {
         </Col>
 
         <Col xs={24} lg={8}>
-          <div className="lg:sticky lg:top-20">
+          <div className="hidden lg:block lg:sticky lg:top-20">
             <CourseActions
               course={{
                 id: course.id,
@@ -164,6 +171,81 @@ export const DetailCoursePage = () => {
         </Col>
       </Row>
 
+      {/* Mobile bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center gap-3 border-t border-neutral-3 bg-white px-4 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setMobileModulesOpen(true)}
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-lg border border-neutral-3 px-3 text-sm text-neutral-7 transition-colors hover:bg-neutral-2"
+        >
+          <UnorderedListOutlined className="text-xs" />
+          Chương trình
+        </button>
+        <div className="flex-1">
+          {isEnrollmentLoading ? (
+            <Button block disabled loading className="h-10 font-semibold" />
+          ) : isEnrolled ? (
+            <Button
+              type="primary"
+              block
+              icon={<PlayCircleOutlined />}
+              disabled={!firstLesson}
+              onClick={() =>
+                firstLesson &&
+                navigate(RouteConfig.CourseLearningPage.getPath(course.id, firstLesson.id))
+              }
+              className="h-10 font-semibold"
+            >
+              Vào học ngay
+            </Button>
+          ) : course.price === 0 ? (
+            <Button
+              type="primary"
+              block
+              onClick={
+                isLoggedIn
+                  ? () => freeEnrollMutation.mutate(course.id)
+                  : () => navigate(RouteConfig.LoginPage.path)
+              }
+              loading={freeEnrollMutation.isPending}
+              className="!bg-success-3 h-10 font-semibold"
+            >
+              {isLoggedIn ? 'Đăng ký miễn phí' : 'Đăng nhập để đăng ký'}
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              block
+              icon={<ShoppingCartOutlined />}
+              onClick={
+                isLoggedIn
+                  ? () => checkoutMutation.mutate(course.id)
+                  : () => navigate(RouteConfig.LoginPage.path)
+              }
+              loading={checkoutMutation.isPending}
+              className="h-10 font-semibold"
+            >
+              {isLoggedIn
+                ? `${course.price.toLocaleString('vi-VN')}đ · Đăng ký`
+                : 'Đăng nhập để đăng ký'}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile curriculum sheet */}
+      <Drawer
+        open={mobileModulesOpen}
+        onClose={() => setMobileModulesOpen(false)}
+        placement="bottom"
+        height="80vh"
+        className="lg:hidden"
+        title="Chương trình học"
+        styles={{ body: { padding: 0, overflowY: 'auto' } }}
+      >
+        <CourseModules curriculum={curriculum} />
+      </Drawer>
+
       <Modal
         title="Thanh toán khoá học"
         open={isPaymentModalOpen}
@@ -174,6 +256,6 @@ export const DetailCoursePage = () => {
       >
         {checkoutData && <CheckoutModalContent checkoutData={checkoutData} />}
       </Modal>
-    </>
+    </div>
   )
 }
