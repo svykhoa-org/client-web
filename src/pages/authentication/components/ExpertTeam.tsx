@@ -69,7 +69,7 @@ export const ExpertTeam: React.FC = () => {
   return (
     <section className="py-12">
       <div className="mb-10">
-        <p className="mb-2 text-xs font-semibold tracking-widest text-teal-600 uppercase">
+        <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
           Chuyên gia
         </p>
         <h2 className="text-3xl font-bold text-gray-900">Đội ngũ chuyên gia</h2>

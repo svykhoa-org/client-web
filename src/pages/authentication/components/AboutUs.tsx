@@ -29,7 +29,7 @@ export const AboutUs: React.FC = () => {
     <section className="py-16">
       <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="max-w-sm">
-          <p className="mb-2 text-xs font-semibold tracking-widest text-teal-600 uppercase">
+          <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
             Về chúng tôi
           </p>
           <h2 className="text-3xl font-bold leading-tight text-gray-900">Về SVYKHOA</h2>

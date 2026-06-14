@@ -54,8 +54,8 @@ export const ListBulletins = () => {
                 className="flex cursor-pointer items-start gap-2 px-2 py-2.5 transition-colors duration-150 hover:bg-gray-50"
                 onClick={() => handleBulletinClick(bulletin)}
               >
-                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-teal-500" />
-                <span className="text-xs leading-snug text-gray-600 hover:text-teal-700">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-5" />
+                <span className="text-xs leading-snug text-gray-600 hover:text-primary-7">
                   {bulletin.title}
                 </span>
               </li>

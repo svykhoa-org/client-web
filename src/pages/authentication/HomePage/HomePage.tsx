@@ -27,15 +27,15 @@ export const HomePage = () => {
       <section
         className="relative -mt-4 pb-28 pt-24"
         style={{
-          background: 'linear-gradient(180deg, #C8EBE8 0%, #DCF3F1 35%, #EDF6F5 65%, #f5f5f5 100%)',
+          background: 'linear-gradient(180deg, #C8DBF7 0%, #DCE9FB 35%, #EDF3FC 65%, #f5f5f5 100%)',
           width: '100vw',
           marginLeft: 'calc(50% - 50vw)',
         }}
       >
         {/* Blob container — overflow-hidden HERE để blobs bị clip, section thì không */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-teal-300/15 blur-3xl" />
-          <div className="absolute right-1/4 bottom-12 h-64 w-64 rounded-full bg-sky-300/10 blur-3xl" />
+          <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-blue-300/15 blur-3xl" />
+          <div className="absolute right-1/4 bottom-12 h-64 w-64 rounded-full bg-blue-200/10 blur-3xl" />
         </div>
 
         {/* Bottom fade overlay — fade về đúng màu nền #f5f5f5 của body */}
@@ -47,7 +47,7 @@ export const HomePage = () => {
         {/* Decorative line-art — left corner: concentric scope rings */}
         <div
           className="pointer-events-none absolute bottom-16 left-8 hidden lg:block"
-          style={{ opacity: 0.08, color: '#0d9488' }}
+          style={{ opacity: 0.08, color: '#1976d2' }}
         >
           <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
             <circle cx="90" cy="90" r="70" stroke="currentColor" strokeWidth="1.2" />
@@ -61,7 +61,7 @@ export const HomePage = () => {
         {/* Decorative line-art — right corner: EKG heartbeat */}
         <div
           className="pointer-events-none absolute top-10 right-8 hidden lg:block"
-          style={{ opacity: 0.08, color: '#0d9488' }}
+          style={{ opacity: 0.08, color: '#1976d2' }}
         >
           <svg width="220" height="80" viewBox="0 0 220 80" fill="none">
             <path
@@ -76,11 +76,11 @@ export const HomePage = () => {
 
         <div className="relative mx-auto max-w-7xl px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <p className="mb-3 text-xs font-semibold tracking-widest text-teal-700 uppercase">
+            <p className="mb-3 text-xs font-semibold tracking-widest text-blue-700 uppercase">
               Nền tảng y khoa sinh viên
             </p>
             <h1 className="mb-5 text-5xl font-bold leading-tight tracking-tight text-gray-900">
-              Tra cứu thông tin y khoa <span className="text-teal-700">chính xác và toàn diện</span>
+              Tra cứu thông tin y khoa <span className="text-blue-700">chính xác và toàn diện</span>
             </h1>
             <p className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-600">
               Tìm kiếm triệu chứng, bệnh lý, thuốc và tài liệu y khoa với sự hỗ trợ từ chuyên gia

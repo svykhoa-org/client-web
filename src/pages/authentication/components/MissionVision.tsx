@@ -55,7 +55,7 @@ export const MissionVision: React.FC = () => {
   return (
     <section className="py-16">
       <div className="mb-12 text-center">
-        <p className="mb-2 text-xs font-semibold tracking-widest text-teal-600 uppercase">
+        <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
           Định hướng phát triển
         </p>
         <h2 className="text-3xl font-bold text-gray-900">Sứ mệnh và tầm nhìn</h2>

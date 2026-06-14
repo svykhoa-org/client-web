@@ -31,11 +31,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         className="flex h-12 items-center overflow-hidden rounded-full bg-white sm:h-14"
         style={{
           boxShadow:
-            '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(13, 148, 136, 0.08), inset 0 0 0 1px rgba(255,255,255,0.8)',
+            '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(25, 118, 210, 0.08), inset 0 0 0 1px rgba(255,255,255,0.8)',
         }}
       >
         <div className="flex min-w-0 flex-1 items-center gap-2 pl-4 pr-1 sm:gap-3 sm:pl-5 sm:pr-2">
-          <Search size={17} className="flex-shrink-0 text-teal-500" />
+          <Search size={17} className="flex-shrink-0 text-blue-500" />
           <input
             type="text"
             value={value}
@@ -56,7 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
         <button
           onClick={handleSearch}
-          className="m-1 flex h-10 flex-shrink-0 items-center gap-2 rounded-full bg-teal-600 px-4 text-sm font-semibold text-white transition-all duration-200 hover:bg-teal-700 active:scale-[0.97] sm:m-1.5 sm:h-11 sm:px-6"
+          className="m-1 flex h-10 flex-shrink-0 items-center gap-2 rounded-full bg-primary-6 px-4 text-sm font-semibold text-white transition-all duration-200 hover:bg-primary-7 active:scale-[0.97] sm:m-1.5 sm:h-11 sm:px-6"
           aria-label="Tìm kiếm"
         >
           <Search size={15} />

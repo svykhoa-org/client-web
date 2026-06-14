@@ -151,7 +151,7 @@ const HeaderUserMenu = ({
   if (isMobile) {
     return (
       <div className="space-y-3">
-        <div className="flex items-center space-x-3 rounded-lg bg-slate-50 p-3">
+        <div className="flex items-center space-x-3 gap-3 rounded-lg bg-slate-50 p-3">
           <Avatar size={40} icon={<UserOutlined />} className="bg-blue-600" />
           <div>
             <div className="font-medium text-slate-900">{displayName}</div>
@@ -163,9 +163,9 @@ const HeaderUserMenu = ({
             type="text"
             icon={<UserOutlined className="text-blue-600" />}
             onClick={onProfile}
-            className="w-full justify-start text-left hover:bg-slate-100"
+            className="w-full justify-start  text-left hover:bg-slate-100"
           >
-            Thông tin cá nhân
+            <div className="w-full text-left">Thông tin cá nhân</div>
           </Button>
           <Button
             type="text"
@@ -173,7 +173,7 @@ const HeaderUserMenu = ({
             onClick={() => navigate(RouteConfig.MyCoursesPage.path)}
             className="w-full justify-start text-left hover:bg-slate-100"
           >
-            Khóa học của tôi
+            <div className="w-full text-left">Khóa học của tôi</div>
           </Button>
           <Button
             type="text"
@@ -181,7 +181,7 @@ const HeaderUserMenu = ({
             onClick={onLogout}
             className="w-full justify-start text-left text-red-600 hover:bg-slate-100"
           >
-            Đăng xuất
+            <div className="w-full text-left">Đăng xuất</div>
           </Button>
         </div>
       </div>

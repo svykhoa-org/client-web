@@ -52,7 +52,7 @@
   transform: translateX(-50%) !important;
   width: 20px !important;
   height: 2px !important;
-  background: #0d9488 !important;
+  background: #1976d2 !important;
   border-bottom: none !important;
   border-radius: 2px !important;
   content: '' !important;
@@ -60,17 +60,17 @@
 }
 
 .sv-header-nav.ant-menu-horizontal .ant-menu-item:hover {
-  background-color: #f0fdfa !important;
-  color: #0d9488 !important;
+  background-color: #e8f1fb !important;
+  color: #1976d2 !important;
 }
 
 .sv-header-nav.ant-menu-horizontal .ant-menu-item-selected {
   background-color: transparent !important;
-  color: #0d9488 !important;
+  color: #1976d2 !important;
 }
 
 .sv-header-nav.ant-menu-horizontal .ant-menu-item-selected .ant-menu-title-content {
-  color: #0d9488 !important;
+  color: #1976d2 !important;
   font-weight: 600;
 }
 
