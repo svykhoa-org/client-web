@@ -10,7 +10,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Alert, Button, Col, Drawer, Modal, Row, Skeleton, message } from 'antd'
 
-import axiosInstance, { getAccessToken } from '@/lib/axios'
+import { getAccessToken } from '@/lib/axios'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
 import { CheckoutModalContent, type CheckoutData } from '@/components/payment'
@@ -52,14 +52,30 @@ export const DetailCoursePage = () => {
     },
   })
 
-  const freeEnrollMutation = useMutation({
-    mutationFn: async (courseId: string) => {
-      const response = await axiosInstance.post('/enrollments', { courseId })
-      return response.data
-    },
-    onSuccess: () => {
-      void message.success('Đăng ký khoá học thành công')
+  // Khoá học 0đ: mở popup thanh toán; khi xác nhận sẽ ghi nhận order + đăng ký ngay.
+  const openFreeModal = (courseTitle: string) => {
+    setCheckoutData({
+      checkoutUrl: '',
+      checkoutFields: { order_description: courseTitle, order_amount: 0, currency: 'VND' },
+      free: true,
+    })
+    setIsPaymentModalOpen(true)
+  }
+
+  const confirmFreeMutation = useMutation({
+    mutationFn: (courseId: string) => orderService.checkoutCourse(courseId),
+    onSuccess: response => {
+      if (response.statusCode !== 201) {
+        void message.error(response.message || 'Không thể đăng ký khoá học')
+        return
+      }
+      setIsPaymentModalOpen(false)
       void queryClient.invalidateQueries({ queryKey: ['enrollment'] })
+      void message.success('Đăng ký khoá học thành công')
+      const firstLesson = data?.curriculum[0]?.lessons[0]
+      if (data && firstLesson) {
+        navigate(RouteConfig.CourseLearningPage.getPath(data.course.id, firstLesson.id))
+      }
     },
     onError: () => {
       void message.error('Không thể đăng ký khoá học. Vui lòng thử lại.')
@@ -162,9 +178,9 @@ export const DetailCoursePage = () => {
               isEnrollmentLoading={isEnrollmentLoading}
               isLoggedIn={isLoggedIn}
               onPurchase={() => checkoutMutation.mutate(course.id)}
-              onFreeEnroll={() => freeEnrollMutation.mutate(course.id)}
+              onFreeEnroll={() => openFreeModal(course.title)}
               isPurchaseLoading={checkoutMutation.isPending}
-              isFreeEnrollLoading={freeEnrollMutation.isPending}
+              isFreeEnrollLoading={confirmFreeMutation.isPending}
               firstLessonId={firstLesson?.id ?? null}
             />
           </div>
@@ -204,10 +220,10 @@ export const DetailCoursePage = () => {
               block
               onClick={
                 isLoggedIn
-                  ? () => freeEnrollMutation.mutate(course.id)
+                  ? () => openFreeModal(course.title)
                   : () => navigate(RouteConfig.LoginPage.path)
               }
-              loading={freeEnrollMutation.isPending}
+              loading={confirmFreeMutation.isPending}
               className="!bg-success-3 h-10 font-semibold"
             >
               {isLoggedIn ? 'Đăng ký miễn phí' : 'Đăng nhập để đăng ký'}
@@ -254,7 +270,13 @@ export const DetailCoursePage = () => {
         width={600}
         destroyOnClose
       >
-        {checkoutData && <CheckoutModalContent checkoutData={checkoutData} />}
+        {checkoutData && (
+          <CheckoutModalContent
+            checkoutData={checkoutData}
+            onConfirmFree={() => confirmFreeMutation.mutate(course.id)}
+            confirmingFree={confirmFreeMutation.isPending}
+          />
+        )}
       </Modal>
     </div>
   )

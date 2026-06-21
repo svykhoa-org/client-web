@@ -25,6 +25,8 @@ export interface SepayCheckoutFields extends Record<
 export interface CheckoutData {
   checkoutUrl: string
   checkoutFields: SepayCheckoutFields
+  /** Đơn 0đ: bấm "Thanh toán ngay" sẽ ghi nhận order + cấp quyền ngay, không qua SePay. */
+  free?: boolean
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -39,11 +41,18 @@ const toInputValue = (v: string | number | boolean | null | undefined): string =
 
 interface CheckoutModalContentProps {
   checkoutData: CheckoutData
+  /** Bắt buộc khi checkoutData.free — xử lý xác nhận đơn 0đ. */
+  onConfirmFree?: () => void
+  confirmingFree?: boolean
 }
 
-export const CheckoutModalContent = ({ checkoutData }: CheckoutModalContentProps) => {
+export const CheckoutModalContent = ({
+  checkoutData,
+  onConfirmFree,
+  confirmingFree,
+}: CheckoutModalContentProps) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const { checkoutUrl, checkoutFields } = checkoutData
+  const { checkoutUrl, checkoutFields, free } = checkoutData
 
   // Entrance animation
   const [visible, setVisible] = useState(false)
@@ -101,7 +110,7 @@ export const CheckoutModalContent = ({ checkoutData }: CheckoutModalContentProps
           <div className="flex items-center justify-between px-4 py-3">
             <span className="text-xs text-slate-400">Tổng tiền</span>
             <span className="text-base font-bold text-slate-900">
-              {formatCurrency(amount, currency)}
+              {free ? 'Miễn phí' : formatCurrency(amount, currency)}
             </span>
           </div>
         </div>
@@ -109,28 +118,43 @@ export const CheckoutModalContent = ({ checkoutData }: CheckoutModalContentProps
         {/* Divider */}
         <div className="my-5 border-t border-slate-100" />
 
-        {/* Form */}
-        <form ref={formRef} action={checkoutUrl} method="POST">
-          {Object.entries(checkoutFields).map(([field, value]) => (
-            <input key={field} type="hidden" name={field} value={toInputValue(value)} />
-          ))}
-
+        {free ? (
           <Button
             type="primary"
-            htmlType="submit"
             size="large"
             block
+            loading={confirmingFree}
+            onClick={onConfirmFree}
             className="rounded-lg font-medium"
           >
             Thanh toán ngay
           </Button>
-        </form>
+        ) : (
+          /* Form */
+          <form ref={formRef} action={checkoutUrl} method="POST">
+            {Object.entries(checkoutFields).map(([field, value]) => (
+              <input key={field} type="hidden" name={field} value={toInputValue(value)} />
+            ))}
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              className="rounded-lg font-medium"
+            >
+              Thanh toán ngay
+            </Button>
+          </form>
+        )}
       </div>
 
       {/* Footer */}
       <div className="rounded-b-xl border-t border-slate-50 bg-slate-50 px-6 py-3">
         <p className="text-center text-[11px] text-slate-300">
-          Giao dịch được mã hóa và xử lý bởi SePay · Không lưu thông tin thẻ
+          {free
+            ? 'Khoá học/tài liệu miễn phí · Đăng ký để bắt đầu ngay'
+            : 'Giao dịch được mã hóa và xử lý bởi SePay · Không lưu thông tin thẻ'}
         </p>
       </div>
     </div>

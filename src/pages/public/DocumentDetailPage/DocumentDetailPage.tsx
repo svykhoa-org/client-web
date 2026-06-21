@@ -82,8 +82,9 @@ export const DocumentDetailPage = () => {
     void execute(id)
   }, [execute, id])
 
-  const isOwned =
-    document?.price === 0 || document?.license?.status === DocumentLicenseStatus.ACTIVE || false
+  // Tài liệu 0đ KHÔNG còn mặc định sở hữu: phải qua popup để ghi nhận order + cấp license.
+  const isOwned = document?.license?.status === DocumentLicenseStatus.ACTIVE || false
+  const isFree = document?.price === 0
 
   const fileUrl = useMemo(() => resolveFileUrl(document), [document])
   const previewUrl = useMemo(() => resolvePreviewUrl(document), [document])
@@ -182,6 +183,42 @@ export const DocumentDetailPage = () => {
         }
 
         message.error(rawMessage)
+      }
+    })()
+  }
+
+  // Tài liệu 0đ: mở popup; xác nhận sẽ ghi nhận order + cấp license ngay.
+  const openFreeModal = () => {
+    if (!document) return
+    if (!isAuthenticated) {
+      const redirect = encodeURIComponent(window.location.pathname)
+      navigate(`${RouteConfig.LoginPage.path}?redirect=${redirect}`)
+      return
+    }
+    setCheckoutData({
+      checkoutUrl: '',
+      checkoutFields: { order_description: document.title, order_amount: 0, currency: 'VND' },
+      free: true,
+    })
+    setIsCheckoutModalOpen(true)
+  }
+
+  const handleConfirmFree = () => {
+    if (!document?.id) return
+    void (async () => {
+      try {
+        await executeCheckout({
+          documentId: document.id,
+          successUrl: `${window.location.origin}${RoutePath.DocumentOrderSuccessPage.path}`,
+          cancelUrl: `${window.location.origin}${RoutePath.DocumentOrderCancelPage.path}`,
+          errorUrl: `${window.location.origin}${RoutePath.DocumentOrderErrorPage.path}`,
+        })
+        setIsCheckoutModalOpen(false)
+        message.success('Đăng ký tài liệu thành công')
+        await execute(document.id)
+      } catch (nextError) {
+        const msg = nextError instanceof Error ? nextError.message : 'Đăng ký tài liệu thất bại.'
+        message.error(msg)
       }
     })()
   }
@@ -319,12 +356,12 @@ export const DocumentDetailPage = () => {
                 <Button
                   type="primary"
                   size="large"
-                  onClick={handlePurchase}
+                  onClick={isFree ? openFreeModal : handlePurchase}
                   loading={isCheckingOut}
                   block
                   className="h-12 font-semibold"
                 >
-                  Mua tài liệu
+                  {isFree ? 'Đăng ký miễn phí' : 'Mua tài liệu'}
                 </Button>
               )}
             </div>
@@ -380,11 +417,11 @@ export const DocumentDetailPage = () => {
             <Button
               type="primary"
               block
-              onClick={handlePurchase}
+              onClick={isFree ? openFreeModal : handlePurchase}
               loading={isCheckingOut}
               className="h-10 font-semibold"
             >
-              {document.price === 0 ? 'Tải về miễn phí' : 'Mua tài liệu'}
+              {isFree ? 'Đăng ký miễn phí' : 'Mua tài liệu'}
             </Button>
           )}
         </div>
@@ -398,7 +435,13 @@ export const DocumentDetailPage = () => {
         width={960}
         destroyOnClose
       >
-        {checkoutData ? <CheckoutModalContent checkoutData={checkoutData} /> : null}
+        {checkoutData ? (
+          <CheckoutModalContent
+            checkoutData={checkoutData}
+            onConfirmFree={handleConfirmFree}
+            confirmingFree={isCheckingOut}
+          />
+        ) : null}
       </Modal>
     </div>
   )
