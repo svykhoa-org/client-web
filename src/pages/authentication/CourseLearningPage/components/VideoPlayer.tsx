@@ -1,7 +1,7 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { LockOutlined } from '@ant-design/icons'
-import { Result, Spin } from 'antd'
+import { Result, Spin, message } from 'antd'
 import {
   MediaControlBar,
   MediaController,
@@ -18,6 +18,10 @@ import {
 import ReactPlayer from 'react-player'
 
 import { useLessonDetail, useLessonLearning, useUpdateWatchTime } from '@/lib/tanstack-query'
+
+import { IdlePrompt } from './IdlePrompt'
+import { ProctoringModal } from './ProctoringModal'
+import { useProctoring } from '../hooks/useProctoring'
 
 export interface VideoPlayerHandle {
   seekTo: (seconds: number) => void
@@ -38,6 +42,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
   const containerRef = useRef<HTMLDivElement>(null)
   const watchedSecondsRef = useRef(0)
   const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   useImperativeHandle(ref, () => ({
     seekTo: (seconds: number) => {
@@ -63,7 +68,55 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
     onCourseComplete: props.onCourseComplete,
   })
 
+  // Part A optimization: stop checking once the lesson is already passed.
+  const isCompleted = learningData?.progress?.status === 'completed'
+  const proctoringConfig = learningData?.proctoringConfig ?? null
+  const proctoringActive = !!(
+    proctoringConfig?.enabled &&
+    learningData?.isAccessible &&
+    !isCompleted
+  )
+
+  // ── Video element controls (used by proctoring) ──
+  const getVideoEl = useCallback(() => containerRef.current?.querySelector('video') ?? null, [])
+  const pauseVideo = useCallback(() => {
+    getVideoEl()?.pause()
+  }, [getVideoEl])
+  const playVideo = useCallback(() => {
+    void getVideoEl()
+      ?.play()
+      .catch(() => undefined)
+  }, [getVideoEl])
+  const getVideoPositionSeconds = useCallback(
+    () => Math.floor(getVideoEl()?.currentTime ?? 0),
+    [getVideoEl],
+  )
+
+  const proctoring = useProctoring({
+    lessonId: props.lessonId,
+    config: proctoringConfig,
+    active: proctoringActive,
+    isPlaying,
+    getVideoPositionSeconds,
+    pauseVideo,
+    playVideo,
+  })
+
+  // One-time consent notice when a proctored lesson is opened.
+  const consentShownRef = useRef<string | null>(null)
+  useEffect(() => {
+    if (proctoringActive && consentShownRef.current !== props.lessonId) {
+      consentShownRef.current = props.lessonId
+      message.info(
+        'Khoá học này được giám sát: hệ thống có thể yêu cầu bật camera trong quá trình học.',
+      )
+    }
+  }, [proctoringActive, props.lessonId])
+
   const startHeartbeat = () => {
+    setIsPlaying(true)
+    // Already-completed lessons no longer need watch-time tracking.
+    if (isCompleted) return
     if (heartbeatRef.current) return
     heartbeatRef.current = setInterval(() => {
       if (watchedSecondsRef.current > 0) {
@@ -73,11 +126,12 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
   }
 
   const stopHeartbeat = () => {
+    setIsPlaying(false)
     if (heartbeatRef.current) {
       clearInterval(heartbeatRef.current)
       heartbeatRef.current = null
     }
-    if (watchedSecondsRef.current > 0) {
+    if (!isCompleted && watchedSecondsRef.current > 0) {
       sendWatchTime(watchedSecondsRef.current)
     }
   }
@@ -170,6 +224,15 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
           <MediaFullscreenButton className="aspect-square" />
         </MediaControlBar>
       </MediaController>
+
+      <ProctoringModal
+        open={proctoring.presenceCheckOpen}
+        cameraRequired={proctoring.cameraRequired}
+        submitting={proctoring.submitting}
+        onSubmit={proctoring.submitPhoto}
+        onDecline={proctoring.declineCheck}
+      />
+      <IdlePrompt open={proctoring.idlePromptOpen} onContinue={proctoring.dismissIdlePrompt} />
     </div>
   )
 })

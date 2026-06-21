@@ -121,7 +121,26 @@ export interface WatchTimeResponse {
   progress: LessonProgressApi
   unlockedLessonId: string | null
   enrollmentProgress: number | null
+  pendingProctoring: boolean
 }
+
+// ── Proctoring (learning supervision) ──────────────────────────────────────────
+
+export interface ProctoringConfig {
+  enabled: boolean
+  cameraRequired: boolean
+  maxInactivitySeconds: number
+  presenceCheck: {
+    enabled: boolean
+    mode: 'fixed' | 'random'
+    intervalMinutes: number
+    randomMinMinutes: number
+    randomMaxMinutes: number
+    maxChecksPerVideo: number
+  }
+}
+
+export type ProctoringSnapshotStatus = 'submitted' | 'declined' | 'timeout'
 
 // ── LessonLearning ────────────────────────────────────────────────────────────
 
@@ -138,6 +157,7 @@ export interface LessonLearningResponse {
   progress: LessonProgressApi | null
   isAccessible: boolean
   prerequisite: LessonPrerequisite | null
+  proctoringConfig: ProctoringConfig | null
 }
 
 // ── LessonNote ────────────────────────────────────────────────────────────────

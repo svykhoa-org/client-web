@@ -1,4 +1,9 @@
-import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios'
 
 import type { ErrorResponse, SuccessResponse } from '@/common/interface/ServiceResponse'
 
@@ -100,9 +105,13 @@ class HttpClient {
     }
   }
 
-  async post<T>(url: string, data?: unknown): Promise<SuccessResponse<T>> {
+  async post<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<SuccessResponse<T>> {
     try {
-      const response = await this.client.post<SuccessResponse<T>>(url, data)
+      const response = await this.client.post<SuccessResponse<T>>(url, data, config)
       return response.data
     } catch (error) {
       throw this.handleError(error as AxiosError<ErrorResponse>)
