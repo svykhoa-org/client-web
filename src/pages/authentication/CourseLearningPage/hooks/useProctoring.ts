@@ -55,8 +55,14 @@ export function useProctoring({
 
   const presence = config?.presenceCheck
   const presenceEnabled = !!(active && config?.enabled && presence?.enabled)
-  const cameraRequired = !!config?.cameraRequired
-  const maxInactivity = config?.maxInactivitySeconds ?? 0
+  const cameraRequired = !!presence?.cameraRequired
+
+  // (1) Idle pause — độc lập với (2): có toggle + ngưỡng (phút) riêng.
+  const inactivity = config?.inactivityPause
+  const inactivityEnabled = !!(active && config?.enabled && inactivity?.enabled)
+  const maxInactivitySeconds = inactivityEnabled
+    ? minutesToSeconds(inactivity!.thresholdMinutes)
+    : 0
 
   const scheduleNextCheck = useCallback(() => {
     if (!presence) {
@@ -110,14 +116,18 @@ export function useProctoring({
 
       playSecondsRef.current += 1
 
-      // Idle watchdog — pause when the user hasn't interacted for too long.
-      if (maxInactivity > 0 && Date.now() - lastInteractionRef.current >= maxInactivity * 1000) {
+      // (1) Idle watchdog — pause when the user hasn't interacted for too long.
+      // Independent timer (wall-clock since last interaction), no webcam.
+      if (
+        maxInactivitySeconds > 0 &&
+        Date.now() - lastInteractionRef.current >= maxInactivitySeconds * 1000
+      ) {
         pauseVideo()
         setIdlePromptOpen(true)
         return
       }
 
-      // Presence check — pause and require a webcam photo.
+      // (2) Presence check — independent timer (accumulated play time), webcam photo.
       if (
         presenceEnabled &&
         nextCheckAtRef.current !== null &&
@@ -128,7 +138,7 @@ export function useProctoring({
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [active, maxInactivity, presenceEnabled, pauseVideo])
+  }, [active, maxInactivitySeconds, presenceEnabled, pauseVideo])
 
   const submitPhoto = useCallback(
     async (photo: Blob) => {

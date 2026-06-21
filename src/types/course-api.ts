@@ -128,10 +128,15 @@ export interface WatchTimeResponse {
 
 export interface ProctoringConfig {
   enabled: boolean
-  cameraRequired: boolean
-  maxInactivitySeconds: number
+  // (1) Tạm dừng khi không thao tác — chỉ pause, không chụp ảnh.
+  inactivityPause: {
+    enabled: boolean
+    thresholdMinutes: number
+  }
+  // (2) Kiểm tra hiện diện qua camera — nhịp riêng, thưa hơn (1).
   presenceCheck: {
     enabled: boolean
+    cameraRequired: boolean
     mode: 'fixed' | 'random'
     intervalMinutes: number
     randomMinMinutes: number
