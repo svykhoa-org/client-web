@@ -46,7 +46,6 @@ export const SubCategoryPage = () => {
   }, [setLeftSidebar, setRightSidebar, setBanner])
 
   const threads = threadsState.state.data?.items ?? []
-  const totalItems = threadsState.state.data?.pagination.totalItems ?? 0
   const totalPages = threadsState.state.data?.pagination.totalPages ?? 1
 
   return (

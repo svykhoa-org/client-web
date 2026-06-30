@@ -1,6 +1,5 @@
 import type { ForumThread } from '@/models/Forum'
-import { ThreadStatus } from '@/models/Forum'
-import { Eye, MessageSquare, Clock, Pin, Lock } from 'lucide-react'
+import { Eye, Clock, Pin, Lock } from 'lucide-react'
 import { useNavigate } from 'react-router'
 
 interface Props {
