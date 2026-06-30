@@ -23,6 +23,7 @@ import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage'
 import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage'
 import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
 import { ForumPage } from '@/pages/unauthentication/ForumPage'
+import { SubCategoryPage } from '@/pages/unauthentication/SubCategoryPage'
 import { JobDetailPage } from '@/pages/unauthentication/JobPage/JobDetailPage'
 import { JobListPage } from '@/pages/unauthentication/JobPage/JobListPage'
 import { ForgotPasswordPage } from '@/pages/unauthentication/ForgotPasswordPage/ForgotPasswordPage'
@@ -150,6 +151,10 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.ForumPage.path,
         element: <ForumPage />,
+      },
+      {
+        path: RouteConfig.ForumSubCategoryPage.path,
+        element: <SubCategoryPage />,
       },
 
       // Tuyển dụng

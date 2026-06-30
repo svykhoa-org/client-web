@@ -71,6 +71,9 @@ const RouteConfig = {
   ForumPage: {
     path: '/forum',
   },
+  ForumSubCategoryPage: {
+    path: '/forum/sub-categories/:id',
+  },
   // Tuyển dụng
   JobListPage: {
     path: '/jobs',
