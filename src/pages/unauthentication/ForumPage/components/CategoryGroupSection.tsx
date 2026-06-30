@@ -1,20 +1,22 @@
 import type { ForumCategoryGroup } from '@/models/Forum'
-import { SubCategoryCard } from './SubCategoryCard'
+import { SubCategoryRow } from './SubCategoryRow'
 
 interface Props {
   group: ForumCategoryGroup
 }
 
 export const CategoryGroupSection = ({ group }: Props) => (
-  <section>
-    <div className="mb-3 flex items-center gap-3">
-      <h2 className="text-sm font-bold uppercase tracking-wide text-neutral-5">{group.name}</h2>
-      <div className="flex-1 border-t border-neutral-3" />
+  <div className="overflow-hidden rounded-lg border border-neutral-3">
+    <div className="border-b border-neutral-3 bg-primary-1 px-4 py-2.5">
+      <h2 className="text-sm font-bold text-primary-8">{group.name}</h2>
     </div>
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="divide-y divide-neutral-2">
       {group.subCategories.map(sc => (
-        <SubCategoryCard key={sc.id} subCategory={sc} />
+        <SubCategoryRow key={sc.id} subCategory={sc} />
       ))}
+      {group.subCategories.length === 0 && (
+        <p className="px-4 py-6 text-center text-sm text-neutral-4">Chưa có danh mục nào.</p>
+      )}
     </div>
-  </section>
+  </div>
 )

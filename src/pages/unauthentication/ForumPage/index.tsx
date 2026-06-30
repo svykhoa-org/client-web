@@ -72,7 +72,7 @@ export const ForumPage = () => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
               {(forumState.state.data ?? []).map(group => (
                 <CategoryGroupSection key={group.id} group={group} />
               ))}
