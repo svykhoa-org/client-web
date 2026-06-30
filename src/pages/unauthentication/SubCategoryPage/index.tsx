@@ -66,7 +66,7 @@ export const SubCategoryPage = () => {
               setSort(e.target.value as ThreadSortOption)
               setPage(1)
             }}
-            className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm text-neutral-7 focus:outline-none"
+            className="rounded-lg border border-neutral-3 bg-white px-3 py-1.5 text-sm text-neutral-7 focus:outline-none"
           >
             {SORT_OPTIONS.map(o => (
               <option key={o.value} value={o.value}>
@@ -106,7 +106,7 @@ export const SubCategoryPage = () => {
                   <button
                     disabled={page <= 1}
                     onClick={() => setPage(p => p - 1)}
-                    className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm disabled:opacity-40"
+                    className="rounded-lg border border-neutral-3 bg-white px-3 py-1.5 text-sm disabled:opacity-40"
                   >
                     Trước
                   </button>
@@ -116,7 +116,7 @@ export const SubCategoryPage = () => {
                   <button
                     disabled={page >= totalPages}
                     onClick={() => setPage(p => p + 1)}
-                    className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm disabled:opacity-40"
+                    className="rounded-lg border border-neutral-3 bg-white px-3 py-1.5 text-sm disabled:opacity-40"
                   >
                     Sau
                   </button>

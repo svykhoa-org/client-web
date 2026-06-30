@@ -23,7 +23,7 @@ export const SubCategoryCard = ({ subCategory }: Props) => {
   return (
     <div
       onClick={() => navigate(`/forum/sub-categories/${subCategory.id}`)}
-      className="flex flex-col gap-2 rounded-lg border border-border bg-white p-4 cursor-pointer transition-shadow hover:shadow-sm"
+      className="flex flex-col gap-2 rounded-lg border border-neutral-3 bg-white p-4 cursor-pointer transition-shadow hover:shadow-sm"
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-semibold text-neutral-9 line-clamp-1">{subCategory.name}</h3>
@@ -45,7 +45,7 @@ export const SubCategoryCard = ({ subCategory }: Props) => {
       </div>
 
       {subCategory.latestThread && (
-        <div className="border-t border-border pt-2 mt-1">
+        <div className="border-t border-neutral-3 pt-2 mt-1">
           <p className="text-xs text-neutral-7 line-clamp-1 font-medium">
             {subCategory.latestThread.title}
           </p>

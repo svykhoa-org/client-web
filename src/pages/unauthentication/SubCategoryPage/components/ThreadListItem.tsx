@@ -18,7 +18,7 @@ export const ThreadListItem = ({ thread }: Props) => {
   return (
     <div
       onClick={() => navigate(`/forum/threads/${thread.id}`)}
-      className="flex items-start gap-3 rounded-lg border border-border bg-white p-4 cursor-pointer transition-shadow hover:shadow-sm"
+      className="flex items-start gap-3 rounded-lg border border-neutral-3 bg-white p-4 cursor-pointer transition-shadow hover:shadow-sm"
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
