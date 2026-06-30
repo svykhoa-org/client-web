@@ -36,8 +36,8 @@ export const ThreadListItem = ({ thread }: Props) => {
           )}
           {thread.prefixTag && (
             <span
-              className="rounded-md px-1.5 py-0.5 text-xs font-medium text-white"
-              style={{ backgroundColor: thread.prefixTag.colorHex }}
+              className="rounded-md px-1.5 py-0.5 text-xs font-medium text-white bg-[var(--badge-bg)]"
+              style={{ '--badge-bg': thread.prefixTag.colorHex } as React.CSSProperties}
             >
               {thread.prefixTag.name}
             </span>

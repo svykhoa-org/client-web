@@ -1,6 +1,7 @@
 import type { SubCategoryWithPreview } from '@/models/Forum'
 import { MessageSquare } from 'lucide-react'
 import { useNavigate } from 'react-router'
+import RouteConfig from '@/constants/RouteConfig'
 
 interface Props {
   subCategory: SubCategoryWithPreview
@@ -22,7 +23,7 @@ export const SubCategoryRow = ({ subCategory }: Props) => {
 
   return (
     <div
-      onClick={() => navigate(`/forum/sub-categories/${subCategory.id}`)}
+      onClick={() => navigate(RouteConfig.ForumSubCategoryPage.path.replace(':id', subCategory.id))}
       className="flex cursor-pointer items-center gap-4 bg-white px-4 py-3 transition-colors hover:bg-neutral-1"
     >
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-1">

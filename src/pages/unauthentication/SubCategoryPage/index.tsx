@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { ChevronLeft } from 'lucide-react'
 import { ThreadListItem } from './components/ThreadListItem'
+import RouteConfig from '@/constants/RouteConfig'
 
 const SORT_OPTIONS = [
   { label: 'Mới nhất', value: ThreadSortOption.LastReply },
@@ -53,7 +54,7 @@ export const SubCategoryPage = () => {
       <div className="container mx-auto px-4 pt-4">
         <div className="mb-4 flex items-center justify-between gap-3">
           <button
-            onClick={() => navigate('/forum')}
+            onClick={() => navigate(RouteConfig.ForumPage.path)}
             className="flex items-center gap-1 text-sm text-neutral-5 hover:text-neutral-7 transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
