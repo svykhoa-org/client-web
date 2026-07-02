@@ -8,6 +8,7 @@ import { DetailCoursePage } from '@/pages/authentication/CoursePage/DetailCourse
 import { ListCoursePage } from '@/pages/authentication/CoursePage/ListCoursePage'
 // import { CoursePlayerPage } from '@/pages/authentication/CoursePlayerPage/CoursePlayerPage';
 import CreatePostPage from '@/pages/authentication/CreatePostPage'
+import CreateThreadPage from '@/pages/authentication/CreateThreadPage'
 import { HomePage } from '@/pages/authentication/HomePage/HomePage'
 import { MedicalSearchPage } from '@/pages/authentication/MedicalSearchPage/MedicalSearchPage'
 import { MyCoursesPage } from '@/pages/authentication/MyCoursesPage/MyCoursesPage'
@@ -23,6 +24,7 @@ import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage'
 import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage'
 import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
 import { ForumPage } from '@/pages/unauthentication/ForumPage'
+import { ForumThreadDetailPage } from '@/pages/unauthentication/ForumThreadDetailPage'
 import { SubCategoryPage } from '@/pages/unauthentication/SubCategoryPage'
 import { JobDetailPage } from '@/pages/unauthentication/JobPage/JobDetailPage'
 import { JobListPage } from '@/pages/unauthentication/JobPage/JobListPage'
@@ -155,6 +157,14 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.ForumSubCategoryPage.path,
         element: <SubCategoryPage />,
+      },
+      {
+        path: RouteConfig.CreateThreadPage.path,
+        element: <CreateThreadPage />,
+      },
+      {
+        path: RouteConfig.ForumThreadDetailPage.path,
+        element: <ForumThreadDetailPage />,
       },
 
       // Tuyển dụng

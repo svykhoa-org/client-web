@@ -61,4 +61,23 @@ export interface ForumThread extends BaseModel {
   lastReplyAt: string | null
   lastReplyUserId: string | null
   lastReplyUser?: ForumAuthor | null
+  reactionCount?: number
+  hasReacted?: boolean
+}
+
+export interface ForumComment extends BaseModel {
+  threadId: string
+  content: string
+  authorId: string
+  author?: ForumAuthor
+  parentId?: string | null
+  isEdited?: boolean
+  replies?: ForumComment[]
+}
+
+export interface ForumSubCategory {
+  id: string
+  name: string
+  description?: string | null
+  group?: { id: string; name: string }
 }

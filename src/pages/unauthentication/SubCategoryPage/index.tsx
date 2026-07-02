@@ -1,15 +1,17 @@
+import { ProtectedButton } from '@/components/auth/ProtectedButton'
 import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import RouteConfig from '@/constants/RouteConfig'
 import { useAsyncState } from '@/hooks/useAsyncState'
 import { useLayout } from '@/hooks/useLayout'
 import type { ForumThread } from '@/models/Forum'
 import { ThreadSortOption } from '@/models/Forum'
 import type { ListResponseDataV2 } from '@/common/interface/ServiceResponse'
 import { getThreadsBySubCategory } from '@/services/forum/forumService'
+import { PlusOutlined } from '@ant-design/icons'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { ChevronLeft } from 'lucide-react'
 import { ThreadListItem } from './components/ThreadListItem'
-import RouteConfig from '@/constants/RouteConfig'
 
 const SORT_OPTIONS = [
   { label: 'Mới nhất', value: ThreadSortOption.LastReply },
@@ -61,20 +63,33 @@ export const SubCategoryPage = () => {
             Diễn đàn
           </button>
 
-          <select
-            value={sort}
-            onChange={e => {
-              setSort(e.target.value as ThreadSortOption)
-              setPage(1)
-            }}
-            className="rounded-lg border border-neutral-3 bg-white px-3 py-1.5 text-sm text-neutral-7 focus:outline-none"
-          >
-            {SORT_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2">
+            <select
+              value={sort}
+              onChange={e => {
+                setSort(e.target.value as ThreadSortOption)
+                setPage(1)
+              }}
+              className="rounded-lg border border-neutral-3 bg-white px-3 py-1.5 text-sm text-neutral-7 focus:outline-none"
+            >
+              {SORT_OPTIONS.map(o => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+
+            <ProtectedButton
+              type="primary"
+              icon={<PlusOutlined />}
+              size="small"
+              modalTitle="Yêu cầu đăng nhập"
+              modalContent="Bạn cần đăng nhập để đăng bài viết."
+              onClick={() => navigate(`${RouteConfig.CreateThreadPage.path}?subCategoryId=${id}`)}
+            >
+              Đăng bài
+            </ProtectedButton>
+          </div>
         </div>
 
         <AsyncLoading
