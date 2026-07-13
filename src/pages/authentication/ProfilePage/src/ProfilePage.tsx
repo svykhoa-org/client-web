@@ -21,7 +21,6 @@ import {
   Form,
   Input,
   Progress,
-  Select,
   Spin,
   Switch,
   Table,
@@ -46,6 +45,7 @@ import {
 } from '@/services/Document'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
+import { DoctorVerificationSection } from './DoctorVerificationSection'
 
 import './ProfilePage.css'
 
@@ -509,60 +509,14 @@ const ProfilePage: React.FC = () => {
 
   const renderTabMedical = () => (
     <Section>
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <SectionTitle>Thông tin chuyên môn</SectionTitle>
-        <span className="bg-warning-1 text-warning-3 shrink-0 rounded-md px-2 py-0.5 text-xs font-medium">
-          Sắp ra mắt
-        </span>
+      <div className="mb-6">
+        <SectionTitle>Xác minh bác sĩ</SectionTitle>
       </div>
       <p className="-mt-3 mb-6 text-sm text-neutral-6">
-        Khai báo thông tin hành nghề để nhận chứng chỉ CME hợp lệ. Phần này sẽ mở trong bản cập nhật
-        tới.
+        Khai báo thông tin hành nghề và tải lên giấy phép để quản trị viên xác minh, từ đó mở khoá
+        các khoá học dành riêng cho bác sĩ.
       </p>
-      <Form layout="vertical" disabled>
-        <div className="grid gap-x-6 sm:grid-cols-2">
-          <Form.Item label="Học hàm / Học vị">
-            <Select placeholder="Chọn học hàm/học vị" className="rounded-lg">
-              <Select.Option value="BS">BS – Bác sĩ</Select.Option>
-              <Select.Option value="BSCKI">BSCKI – Bác sĩ chuyên khoa I</Select.Option>
-              <Select.Option value="BSCKII">BSCKII – Bác sĩ chuyên khoa II</Select.Option>
-              <Select.Option value="ThS">ThS – Thạc sĩ</Select.Option>
-              <Select.Option value="TS">TS – Tiến sĩ</Select.Option>
-              <Select.Option value="PGS">PGS – Phó Giáo sư</Select.Option>
-              <Select.Option value="GS">GS – Giáo sư</Select.Option>
-              <Select.Option value="DN">Điều dưỡng</Select.Option>
-              <Select.Option value="DS">Dược sĩ</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item label="Chuyên khoa chính">
-            <Select placeholder="Chọn chuyên khoa">
-              <Select.Option value="noi">Nội khoa</Select.Option>
-              <Select.Option value="ngoai">Ngoại khoa</Select.Option>
-              <Select.Option value="sanphu">Sản phụ khoa</Select.Option>
-              <Select.Option value="nhi">Nhi khoa</Select.Option>
-              <Select.Option value="tim">Tim mạch</Select.Option>
-              <Select.Option value="than">Thần kinh</Select.Option>
-              <Select.Option value="da">Da liễu</Select.Option>
-              <Select.Option value="mat">Nhãn khoa</Select.Option>
-              <Select.Option value="tai">Tai mũi họng</Select.Option>
-              <Select.Option value="rang">Răng hàm mặt</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item label="Số chứng chỉ hành nghề (CCHN)">
-            <Input placeholder="Nhập số CCHN" className="rounded-lg" />
-          </Form.Item>
-
-          <Form.Item label="Nơi công tác">
-            <Input placeholder="Tên bệnh viện / phòng khám" className="rounded-lg" />
-          </Form.Item>
-
-          <Form.Item label="Khoa / Phòng ban" className="sm:col-span-2">
-            <Input placeholder="Tên khoa hoặc phòng ban" className="rounded-lg" />
-          </Form.Item>
-        </div>
-      </Form>
+      <DoctorVerificationSection />
     </Section>
   )
 

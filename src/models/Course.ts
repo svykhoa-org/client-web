@@ -89,6 +89,9 @@ export interface Course extends BaseModel {
   registrationStart: string | null
   registrationEnd: string | null
 
+  // Verified-doctors-only gate (orthogonal to price)
+  requiresVerification?: boolean
+
   // Enrollment limits
   maxEnrollments: number | null
   currentEnrollments: number

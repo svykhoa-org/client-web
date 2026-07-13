@@ -25,6 +25,7 @@ export interface CourseApiItem {
   shortCode: string
   status: CourseApiStatus
   selfPaced: boolean
+  requiresVerification?: boolean
   objectives: string[] | null
   requirements: string[] | null
   suitableFor: string[] | null

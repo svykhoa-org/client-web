@@ -4,10 +4,11 @@ import { useNavigate, useParams, useSearchParams } from 'react-router'
 import {
   ArrowLeftOutlined,
   PlayCircleOutlined,
+  SafetyCertificateOutlined,
   ShoppingCartOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Alert, Button, Col, Drawer, Modal, Row, Skeleton, message } from 'antd'
 
 import { getAccessToken } from '@/lib/axios'
@@ -15,6 +16,7 @@ import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQue
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
 import { CheckoutModalContent, type CheckoutData } from '@/components/payment'
 import { orderService } from '@/services/Order/checkoutCourse'
+import { getMyVerification } from '@/services/Verification'
 import RouteConfig from '@/constants/RouteConfig'
 
 import { CourseActions } from './components/CourseActions'
@@ -34,6 +36,14 @@ export const DetailCoursePage = () => {
 
   const { data, isLoading, isError } = useCourseWithCurriculum(id ?? '')
   const { data: enrollment, isLoading: isEnrollmentLoading } = useMyEnrollment(id ?? '')
+
+  // Only fetch verification status for verified-only courses (shared cache key
+  // with the profile page).
+  const { data: myVerification } = useQuery({
+    queryKey: ['verification', 'me'],
+    queryFn: getMyVerification,
+    enabled: isLoggedIn && !!data?.course?.requiresVerification,
+  })
 
   const checkoutMutation = useMutation({
     mutationFn: (courseId: string) => orderService.checkoutCourse(courseId),
@@ -145,6 +155,29 @@ export const DetailCoursePage = () => {
   const firstLesson = curriculum[0]?.lessons[0] ?? null
   const isEnrolled = enrollment?.status === 'active' || enrollment?.status === 'completed'
 
+  // Block enrolment on a verified-only course until the doctor is verified. Only
+  // block once the status is known so verified users never see a spurious popup;
+  // the server gate is the real enforcement.
+  const needsVerification =
+    !!course.requiresVerification &&
+    myVerification !== undefined &&
+    myVerification.status !== 'verified'
+
+  const guardVerified = (proceed: () => void) => {
+    if (needsVerification) {
+      Modal.confirm({
+        title: 'Cần xác minh bác sĩ',
+        content:
+          'Khoá học này chỉ dành cho bác sĩ đã được xác minh. Vui lòng gửi hồ sơ xác minh để tiếp tục.',
+        okText: 'Gửi hồ sơ xác minh',
+        cancelText: 'Để sau',
+        onOk: () => navigate(RouteConfig.ProfilePage.path + '?tab=medical'),
+      })
+      return
+    }
+    proceed()
+  }
+
   return (
     <div className="pb-16 lg:pb-0">
       <button
@@ -155,6 +188,13 @@ export const DetailCoursePage = () => {
         <ArrowLeftOutlined className="text-xs" />
         Quay lại danh sách
       </button>
+
+      {course.requiresVerification && !isEnrolled && (
+        <p className="mb-4 flex items-center gap-1.5 text-sm text-neutral-6">
+          <SafetyCertificateOutlined className="text-primary-6" />
+          Khoá học dành riêng cho bác sĩ đã xác minh
+        </p>
+      )}
 
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={16}>
@@ -177,8 +217,8 @@ export const DetailCoursePage = () => {
               enrollment={enrollment}
               isEnrollmentLoading={isEnrollmentLoading}
               isLoggedIn={isLoggedIn}
-              onPurchase={() => checkoutMutation.mutate(course.id)}
-              onFreeEnroll={() => openFreeModal(course.title)}
+              onPurchase={() => guardVerified(() => checkoutMutation.mutate(course.id))}
+              onFreeEnroll={() => guardVerified(() => openFreeModal(course.title))}
               isPurchaseLoading={checkoutMutation.isPending}
               isFreeEnrollLoading={confirmFreeMutation.isPending}
               firstLessonId={firstLesson?.id ?? null}
@@ -220,7 +260,7 @@ export const DetailCoursePage = () => {
               block
               onClick={
                 isLoggedIn
-                  ? () => openFreeModal(course.title)
+                  ? () => guardVerified(() => openFreeModal(course.title))
                   : () => navigate(RouteConfig.LoginPage.path)
               }
               loading={confirmFreeMutation.isPending}
@@ -235,7 +275,7 @@ export const DetailCoursePage = () => {
               icon={<ShoppingCartOutlined />}
               onClick={
                 isLoggedIn
-                  ? () => checkoutMutation.mutate(course.id)
+                  ? () => guardVerified(() => checkoutMutation.mutate(course.id))
                   : () => navigate(RouteConfig.LoginPage.path)
               }
               loading={checkoutMutation.isPending}
