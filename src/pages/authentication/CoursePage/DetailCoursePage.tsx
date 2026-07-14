@@ -22,6 +22,7 @@ import RouteConfig from '@/constants/RouteConfig'
 import { CourseActions } from './components/CourseActions'
 import { CourseInfo } from './components/CourseInfo'
 import { CourseModules } from './components/CourseModules'
+import { formatCohortDate, getCohortState, REGISTRATION_STATUS_LABEL } from './cohortState'
 
 export const DetailCoursePage = () => {
   const { id } = useParams<{ id: string }>()
@@ -154,6 +155,7 @@ export const DetailCoursePage = () => {
   const { course, curriculum, instructors = [] } = data
   const firstLesson = curriculum[0]?.lessons[0] ?? null
   const isEnrolled = enrollment?.status === 'active' || enrollment?.status === 'completed'
+  const cohort = getCohortState(course)
 
   // Block enrolment on a verified-only course until the doctor is verified. Only
   // block once the status is known so verified users never see a spurious popup;
@@ -214,6 +216,7 @@ export const DetailCoursePage = () => {
                 accessDurationDays: course.accessDurationDays,
                 cmeCredits: course.cmeCredits,
               }}
+              cohort={cohort}
               enrollment={enrollment}
               isEnrollmentLoading={isEnrollmentLoading}
               isLoggedIn={isLoggedIn}
@@ -241,18 +244,28 @@ export const DetailCoursePage = () => {
           {isEnrollmentLoading ? (
             <Button block disabled loading className="h-10 font-semibold" />
           ) : isEnrolled ? (
-            <Button
-              type="primary"
-              block
-              icon={<PlayCircleOutlined />}
-              disabled={!firstLesson}
-              onClick={() =>
-                firstLesson &&
-                navigate(RouteConfig.CourseLearningPage.getPath(course.id, firstLesson.id))
-              }
-              className="h-10 font-semibold"
-            >
-              Vào học ngay
+            cohort.isScheduled && !cohort.learningStarted ? (
+              <Button block disabled className="h-10 font-semibold">
+                Khai giảng: {formatCohortDate(cohort.startDate)}
+              </Button>
+            ) : (
+              <Button
+                type="primary"
+                block
+                icon={<PlayCircleOutlined />}
+                disabled={!firstLesson}
+                onClick={() =>
+                  firstLesson &&
+                  navigate(RouteConfig.CourseLearningPage.getPath(course.id, firstLesson.id))
+                }
+                className="h-10 font-semibold"
+              >
+                Vào học ngay
+              </Button>
+            )
+          ) : cohort.isScheduled && !cohort.canRegister ? (
+            <Button block disabled className="h-10 font-semibold">
+              {REGISTRATION_STATUS_LABEL[cohort.registrationStatus]}
             </Button>
           ) : course.price === 0 ? (
             <Button

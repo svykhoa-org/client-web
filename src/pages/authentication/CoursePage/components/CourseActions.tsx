@@ -14,6 +14,8 @@ import { Button } from 'antd'
 import RouteConfig from '@/constants/RouteConfig'
 import type { Enrollment } from '@/models/Enrollment'
 
+import { formatCohortDate, REGISTRATION_STATUS_LABEL, type CohortState } from '../cohortState'
+
 interface CourseActionsProps {
   course: {
     id: string
@@ -22,6 +24,7 @@ interface CourseActionsProps {
     accessDurationDays: number | null
     cmeCredits: number | null
   }
+  cohort: CohortState
   enrollment: Enrollment | null | undefined
   isEnrollmentLoading: boolean
   isLoggedIn: boolean
@@ -34,6 +37,7 @@ interface CourseActionsProps {
 
 export const CourseActions = ({
   course,
+  cohort,
   enrollment,
   isEnrollmentLoading,
   isLoggedIn,
@@ -53,6 +57,20 @@ export const CourseActions = ({
 
   const renderCTA = () => {
     if (isEnrolled) {
+      // Scheduled course not yet open: block learning until the class starts (BE-3).
+      if (cohort.isScheduled && !cohort.learningStarted) {
+        return (
+          <Button
+            size="large"
+            icon={<ClockCircleOutlined />}
+            disabled
+            block
+            className="h-12 text-base font-semibold"
+          >
+            Khai giảng: {formatCohortDate(cohort.startDate)}
+          </Button>
+        )
+      }
       return (
         <Button
           type="primary"
@@ -64,6 +82,15 @@ export const CourseActions = ({
           className="h-12 text-base font-semibold"
         >
           Vào học ngay
+        </Button>
+      )
+    }
+
+    // Scheduled course outside its registration window / full: block registration (BE-2).
+    if (cohort.isScheduled && !cohort.canRegister) {
+      return (
+        <Button size="large" disabled block className="h-12 text-base font-semibold">
+          {REGISTRATION_STATUS_LABEL[cohort.registrationStatus]}
         </Button>
       )
     }
@@ -126,6 +153,16 @@ export const CourseActions = ({
       <div className={isEnrollmentLoading ? 'pointer-events-none opacity-60' : ''}>
         {renderCTA()}
       </div>
+
+      {cohort.isScheduled &&
+        !isEnrolled &&
+        (cohort.registrationStart || cohort.registrationEnd) && (
+          <p className="mt-2 text-center text-xs text-neutral-5">
+            Thời gian đăng ký: {formatCohortDate(cohort.registrationStart) || '—'}
+            {' → '}
+            {formatCohortDate(cohort.registrationEnd) || '—'}
+          </p>
+        )}
 
       {!isEnrolled && course.price > 0 && (
         <p className="mt-2 text-center text-xs text-neutral-5">Thanh toán qua cổng SePay</p>

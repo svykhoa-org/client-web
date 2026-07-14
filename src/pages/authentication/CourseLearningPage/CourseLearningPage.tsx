@@ -10,10 +10,12 @@ import {
   RightOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons'
-import { Drawer, Result, Tabs } from 'antd'
+import { Button, Drawer, Result, Tabs } from 'antd'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
+
+import { formatCohortDate, getCohortState } from '../CoursePage/cohortState'
 
 import { CelebrationModal } from './components/CelebrationModal'
 import { DocumentViewer } from './components/DocumentViewer'
@@ -101,6 +103,30 @@ export const CourseLearningPage = () => {
           status="warning"
           title="Bài học không hợp lệ"
           subTitle="Vui lòng chọn một bài học từ danh sách."
+        />
+      </div>
+    )
+  }
+
+  // Scheduled course not yet open: block content until the class starts (mirrors
+  // the server gate BE-3, which 403s the content fetch). Preempts child fetches
+  // with a friendly state whichever way the learner arrived here.
+  const cohort = curriculumData?.course ? getCohortState(curriculumData.course) : null
+  if (cohort?.isScheduled && !cohort.learningStarted) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <Result
+          status="info"
+          title="Khoá học chưa tới ngày khai giảng"
+          subTitle={`Bạn có thể bắt đầu học từ ${formatCohortDate(cohort.startDate)}.`}
+          extra={
+            <Button
+              type="primary"
+              onClick={() => navigate(RouteConfig.CourseDetailPage.getPath(courseId))}
+            >
+              Về trang khoá học
+            </Button>
+          }
         />
       </div>
     )

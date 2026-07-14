@@ -84,6 +84,8 @@ export interface Course extends BaseModel {
   status: CourseStatus
 
   // Schedule
+  // Cohort (scheduled) course: when true the dates below gate registration/learning.
+  isScheduled: boolean
   startDate: string | null
   endDate: string | null
   registrationStart: string | null
