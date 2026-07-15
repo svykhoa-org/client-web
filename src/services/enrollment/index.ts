@@ -1,7 +1,7 @@
-import axiosInstance from '@/lib/axios'
 import type { Course } from '@/models/Course'
 import type { CourseApiItem } from '@/types/course-api'
 
+import { httpClient } from '../apiClient'
 import { getEnrolledCourses, isEnrolled } from './mockEnrollments'
 
 // Interface cho enrolled course
@@ -33,18 +33,14 @@ export const checkCourseEnrollment = async (courseId: string): Promise<boolean> 
 export { isEnrolled, getEnrolledCourses, enrollCourse, getCourseProgress } from './mockEnrollments'
 
 export const getMyCourses = async () => {
-  const response = await axiosInstance.get<{
-    statusCode: number
-    message: string
-    data: {
-      items: CourseApiItem[]
-      pagination: {
-        page: number
-        pageSize: number
-        totalItems: number
-        totalPages: number
-      }
+  const response = await httpClient.get<{
+    items: CourseApiItem[]
+    pagination: {
+      page: number
+      pageSize: number
+      totalItems: number
+      totalPages: number
     }
   }>('/enrollments/my')
-  return response.data.data.items
+  return (response.data as { items: CourseApiItem[] }).items
 }

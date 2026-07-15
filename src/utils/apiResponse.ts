@@ -1,3 +1,4 @@
+import type { SuccessResponse } from '@/common/interface/ServiceResponse'
 import type { ApiDetailResponse, ApiListData, ApiListResponse } from '@/shared/types/api'
 
 /**
@@ -27,6 +28,19 @@ export function unwrapDetail<T>(response: ApiDetailResponse<T>): T {
     throw new ApiResponseError(response.statusCode, response.message)
   }
   return response.data
+}
+
+/**
+ * Unwrap the envelope returned by `HttpClient` (`SuccessResponse<T>`), applying the same
+ * in-body 2xx `statusCode` guard as `unwrapDetail`. Use this when migrating a service from the
+ * raw `axiosInstance` (which handed back `ApiDetailResponse<T>`) onto `httpClient`, which returns
+ * `SuccessResponse<T>` — the two envelopes differ in shape but carry the same status/message/data.
+ */
+export function unwrapSuccess<T>(response: SuccessResponse<T>): T {
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    throw new ApiResponseError(response.statusCode, response.message)
+  }
+  return response.data as T
 }
 
 /**

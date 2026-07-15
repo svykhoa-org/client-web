@@ -1,7 +1,7 @@
-import axiosInstance from '@/lib/axios'
 import type { Document } from '@/models/Document'
-import type { ApiDetailResponse } from '@/shared/types/api'
-import { unwrapDetail } from '@/utils/apiResponse'
+import { unwrapSuccess } from '@/utils/apiResponse'
+
+import { httpClient } from '../apiClient'
 
 const DOCUMENT_ENDPOINT = '/documents'
 
@@ -14,9 +14,7 @@ export type GetDocumentDetailOutput = Document
 export async function getDocumentDetail(
   input: GetDocumentDetailInput,
 ): Promise<GetDocumentDetailOutput> {
-  const response = await axiosInstance.get<ApiDetailResponse<GetDocumentDetailOutput>>(
-    `${DOCUMENT_ENDPOINT}/${input.id}`,
-  )
+  const response = await httpClient.get<GetDocumentDetailOutput>(`${DOCUMENT_ENDPOINT}/${input.id}`)
 
-  return unwrapDetail(response.data)
+  return unwrapSuccess(response)
 }

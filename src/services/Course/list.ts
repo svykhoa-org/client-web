@@ -1,6 +1,6 @@
-import axiosInstance from '@/lib/axios'
-
 import type { CourseApiItem, CoursePaginationMeta } from '@/types/course-api'
+
+import { httpClient } from '../apiClient'
 
 const COURSE_ENDPOINT = '/courses'
 
@@ -33,11 +33,7 @@ export async function listCourses(input: ListCourseInput = {}): Promise<ListCour
 
   params['sort[createdAt]'] = input.sortCreatedAt ?? 'DESC'
 
-  const response = await axiosInstance.get<{
-    statusCode: number
-    message: string
-    data: ListCourseOutput
-  }>(COURSE_ENDPOINT, { params })
+  const response = await httpClient.get<ListCourseOutput>(COURSE_ENDPOINT, params)
 
-  return response.data.data
+  return response.data as ListCourseOutput
 }

@@ -1,8 +1,9 @@
-import axiosInstance from '@/lib/axios'
 import type { DocumentClassify } from '@/models/DocumentClassify'
-import type { ApiListData, ApiListResponse } from '@/shared/types/api'
-import { unwrapList } from '@/utils/apiResponse'
+import type { ApiListData } from '@/shared/types/api'
+import { unwrapSuccess } from '@/utils/apiResponse'
 import { buildQuery, type QueryInput } from '@/utils/buildQuery'
+
+import { httpClient } from '../apiClient'
 
 const DOCUMENT_CLASSIFY_ENDPOINT = '/document-classify'
 
@@ -19,10 +20,10 @@ export type ListDocumentClassifyOutput = ApiListData<DocumentClassify>
 export async function listDocumentClassify(
   input?: ListDocumentClassifyInput,
 ): Promise<ListDocumentClassifyOutput> {
-  const response = await axiosInstance.get<ApiListResponse<DocumentClassify>>(
+  const response = await httpClient.get<ApiListData<DocumentClassify>>(
     DOCUMENT_CLASSIFY_ENDPOINT,
-    { params: input ? buildQuery(input) : undefined },
+    input ? buildQuery(input) : undefined,
   )
 
-  return unwrapList(response.data)
+  return unwrapSuccess(response)
 }

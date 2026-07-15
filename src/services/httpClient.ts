@@ -1,5 +1,5 @@
 import axios, {
-  AxiosError,
+  type AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
   type AxiosResponse,
@@ -19,7 +19,26 @@ export class ApiError extends Error {
   }
 }
 import { apiConfig } from '@/config/api'
-import { getAuthState } from '@/stores/authStore'
+import { clearTokens, getRefreshToken, setTokens } from '@/lib/axios'
+import { getAuthState, useAuthStore } from '@/stores/authStore'
+
+// Auth endpoints return 401/403 for genuine credential / refresh-token failures, not an expired
+// access token — never run the refresh-and-retry flow for them (else a wrong-password login 401
+// would fire a spurious POST /auth/refresh with a null token → 400 refreshToken should not be empty).
+const AUTH_ENDPOINTS = ['/auth/login', '/auth/refresh', '/auth/logout']
+
+// Module-level so all HttpClient instances share one in-flight refresh (avoids a refresh storm
+// when several requests 401 at once). Mirrors the flow in src/lib/axios/index.ts.
+let isRefreshing = false
+let refreshQueue: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = []
+
+const processRefreshQueue = (error: unknown, token: string | null) => {
+  refreshQueue.forEach(({ resolve, reject }) => {
+    if (token) resolve(token)
+    else reject(error)
+  })
+  refreshQueue = []
+}
 
 class HttpClient {
   private client: AxiosInstance
@@ -77,14 +96,65 @@ class HttpClient {
       (response: AxiosResponse<SuccessResponse<unknown>>) => {
         return response
       },
-      (error: AxiosError<ErrorResponse>) => {
-        if (error.response?.status === 401) {
-          // Handle unauthorized - redirect to login
-          // Sử dụng authStore.logout() sau này, nhưng không thể sử dụng hooks ở đây
-          // Vì vậy, chỉ chuyển hướng đến trang đăng nhập
-          window.location.href = '/login'
+      async (error: AxiosError<ErrorResponse>) => {
+        const original = error.config as (typeof error.config & { _retry?: boolean }) | undefined
+
+        const isAuthEndpoint = AUTH_ENDPOINTS.some(path => original?.url?.includes(path))
+        if (error.response?.status !== 401 || !original || original._retry || isAuthEndpoint) {
+          return Promise.reject(error)
         }
-        return Promise.reject(error)
+
+        original._retry = true
+
+        // No refresh token → not authenticated; don't POST a null token (server rejects it 400).
+        const refreshToken = getRefreshToken()
+        if (!refreshToken) {
+          clearTokens()
+          window.location.href = '/login'
+          return Promise.reject(error)
+        }
+
+        // A refresh is already in flight — queue this request and retry it with the new token.
+        if (isRefreshing) {
+          return new Promise<string>((resolve, reject) => {
+            refreshQueue.push({ resolve, reject })
+          }).then(token => {
+            original.headers.Authorization = `Bearer ${token}`
+            return this.client(original)
+          })
+        }
+
+        isRefreshing = true
+
+        try {
+          // Bare axios (not this.client) so the refresh call itself can't recurse through this
+          // interceptor. Hits the auth server regardless of a custom baseURL on this instance.
+          const { data } = await axios.post<{
+            data: { accessToken: string; refreshToken: string }
+          }>(
+            `${apiConfig.apiBaseURL}/auth/refresh`,
+            { refreshToken },
+            { headers: { 'Content-Type': 'application/json', 'x-api-key': apiConfig.apiKey } },
+          )
+          const newAccess = data.data.accessToken
+          const newRefresh = data.data.refreshToken
+          setTokens(newAccess, newRefresh)
+          // Push the new access token into the zustand store too: the request interceptor reads
+          // getAuthState().token, so without this every later request would reuse the stale token.
+          useAuthStore.getState().setToken(newAccess)
+          processRefreshQueue(null, newAccess)
+          original.headers.Authorization = `Bearer ${newAccess}`
+          return this.client(original)
+        } catch (refreshError) {
+          // Refresh failed (invalid/rotated refresh token → 403) — flush queued requests so they
+          // reject instead of hanging forever, then bounce to login.
+          processRefreshQueue(refreshError, null)
+          clearTokens()
+          window.location.href = '/login'
+          return Promise.reject(error)
+        } finally {
+          isRefreshing = false
+        }
       },
     )
   }

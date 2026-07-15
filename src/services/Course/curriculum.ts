@@ -1,6 +1,6 @@
 import type { CourseApiItem, CourseInstructor, CourseModuleWithLessons } from '@/types/course-api'
 
-import axiosInstance from '@/lib/axios'
+import { httpClient } from '../apiClient'
 
 export interface CourseCurriculum {
   course: CourseApiItem
@@ -9,11 +9,7 @@ export interface CourseCurriculum {
 }
 
 export async function getCourseWithCurriculum(courseId: string): Promise<CourseCurriculum> {
-  const response = await axiosInstance.get<{
-    statusCode: number
-    message: string
-    data: CourseCurriculum
-  }>(`/courses/${courseId}/curriculum`)
+  const response = await httpClient.get<CourseCurriculum>(`/courses/${courseId}/curriculum`)
 
-  return response.data.data
+  return response.data as CourseCurriculum
 }

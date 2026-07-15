@@ -1,8 +1,9 @@
-import axiosInstance from '@/lib/axios'
 import type { Document } from '@/models/Document'
-import type { ApiListData, ApiListResponse } from '@/shared/types/api'
-import { unwrapList } from '@/utils/apiResponse'
+import type { ApiListData } from '@/shared/types/api'
+import { unwrapSuccess } from '@/utils/apiResponse'
 import { buildQuery, type QueryInput } from '@/utils/buildQuery'
+
+import { httpClient } from '../apiClient'
 
 const DOCUMENT_ENDPOINT = '/documents'
 
@@ -13,9 +14,10 @@ export type ListDocumentInput = QueryInput<DocumentSearchFields, DocumentSortFie
 export type ListDocumentOutput = ApiListData<Document>
 
 export async function listDocument(input?: ListDocumentInput): Promise<ListDocumentOutput> {
-  const response = await axiosInstance.get<ApiListResponse<Document>>(DOCUMENT_ENDPOINT, {
-    params: input ? buildQuery(input) : undefined,
-  })
+  const response = await httpClient.get<ApiListData<Document>>(
+    DOCUMENT_ENDPOINT,
+    input ? buildQuery(input) : undefined,
+  )
 
-  return unwrapList(response.data)
+  return unwrapSuccess(response)
 }

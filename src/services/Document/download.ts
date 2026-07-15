@@ -1,7 +1,7 @@
-import axiosInstance from '@/lib/axios'
 import { AppConfig } from '@/constants/AppConfig'
-import type { ApiDetailResponse } from '@/shared/types/api'
-import { unwrapDetail } from '@/utils/apiResponse'
+import { unwrapSuccess } from '@/utils/apiResponse'
+
+import { httpClient } from '../apiClient'
 
 const DOCUMENT_LICENSE_ENDPOINT = '/document-license/download'
 
@@ -30,11 +30,11 @@ const buildDownloadUrl = (presignUrl: string) => {
 export async function getDocumentDownloadUrl(
   input: GetDocumentDownloadInput,
 ): Promise<GetDocumentDownloadOutput> {
-  const response = await axiosInstance.post<ApiDetailResponse<GetDocumentDownloadApiOutput>>(
+  const response = await httpClient.post<GetDocumentDownloadApiOutput>(
     `${DOCUMENT_LICENSE_ENDPOINT}/${input.documentId}`,
   )
 
-  const data = unwrapDetail(response.data)
+  const data = unwrapSuccess(response)
 
   return {
     ...data,

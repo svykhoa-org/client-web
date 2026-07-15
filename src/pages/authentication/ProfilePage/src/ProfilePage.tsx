@@ -33,7 +33,7 @@ import type { ColumnsType } from 'antd/es/table'
 
 import { useRequest } from '@/hooks'
 import { useAuth } from '@/hooks/useAuth'
-import axiosInstance from '@/lib/axios'
+import { httpClient } from '@/services/apiClient'
 import { cn } from '@/lib/utils'
 import { FileSize } from '@/models/enum/FileSize'
 import RouteConfig from '@/constants/RouteConfig'
@@ -94,18 +94,18 @@ interface MyOrder {
 // ─── Inline Service Functions ─────────────────────────────────────────────────
 
 const fetchMyEnrollments = async (): Promise<Enrollment[]> => {
-  const res = await axiosInstance.get<{ data: Enrollment[] }>('/enrollments/my')
-  return res.data.data ?? []
+  const res = await httpClient.get<Enrollment[]>('/enrollments/my')
+  return (res.data as Enrollment[]) ?? []
 }
 
 const fetchMyCertificates = async (): Promise<MyCertificate[]> => {
-  const res = await axiosInstance.get<{ data: MyCertificate[] }>('/certificates/my')
-  return Array.isArray(res.data.data) ? res.data.data : []
+  const res = await httpClient.get<MyCertificate[]>('/certificates/my')
+  return Array.isArray(res.data) ? (res.data as MyCertificate[]) : []
 }
 
 const fetchMyOrders = async (): Promise<MyOrder[]> => {
-  const res = await axiosInstance.get<{ data: { items: MyOrder[] } }>('/orders/my')
-  return res.data.data?.items ?? []
+  const res = await httpClient.get<{ items: MyOrder[] }>('/orders/my')
+  return (res.data as { items: MyOrder[] })?.items ?? []
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

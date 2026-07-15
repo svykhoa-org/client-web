@@ -1,18 +1,12 @@
-import axiosInstance from '@/lib/axios'
-
 import type { CourseLesson } from '@/types/course-api'
 
-export async function getModuleLessons(moduleId: string): Promise<CourseLesson[]> {
-  const response = await axiosInstance.get<{
-    statusCode: number
-    message: string
-    data: {
-      items: CourseLesson[]
-      pagination: unknown
-    }
-  }>(`/modules/${moduleId}/lessons`, {
-    params: { 'sort[order]': 'ASC', limit: 200 },
-  })
+import { httpClient } from '../apiClient'
 
-  return response.data.data.items
+export async function getModuleLessons(moduleId: string): Promise<CourseLesson[]> {
+  const response = await httpClient.get<{ items: CourseLesson[]; pagination: unknown }>(
+    `/modules/${moduleId}/lessons`,
+    { 'sort[order]': 'ASC', limit: 200 },
+  )
+
+  return (response.data as { items: CourseLesson[]; pagination: unknown }).items
 }

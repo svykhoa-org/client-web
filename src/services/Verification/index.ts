@@ -1,26 +1,21 @@
-import axiosInstance from '@/lib/axios'
 import type {
   DoctorVerification,
   MyVerification,
   SubmitVerificationInput,
 } from '@/models/DoctorVerification'
 
-interface Envelope<T> {
-  statusCode: number
-  message: string
-  data: T
-}
+import { httpClient } from '../apiClient'
 
 export async function getMyVerification(): Promise<MyVerification> {
-  const response = await axiosInstance.get<Envelope<MyVerification>>('/verification/me')
-  return response.data.data
+  const response = await httpClient.get<MyVerification>('/verification/me')
+  return response.data as MyVerification
 }
 
 export async function submitVerification(
   input: SubmitVerificationInput,
 ): Promise<DoctorVerification> {
-  const response = await axiosInstance.post<Envelope<DoctorVerification>>('/verification', input)
-  return response.data.data
+  const response = await httpClient.post<DoctorVerification>('/verification', input)
+  return response.data as DoctorVerification
 }
 
 // Upload the licence scan through the asset pipeline; returns the asset id to
@@ -28,10 +23,8 @@ export async function submitVerification(
 export async function uploadLicenseFile(file: File): Promise<string> {
   const form = new FormData()
   form.append('file', file)
-  const response = await axiosInstance.post<Envelope<{ id: string }>>(
-    '/verification/upload',
-    form,
-    { headers: { 'Content-Type': 'multipart/form-data' } },
-  )
-  return response.data.data.id
+  const response = await httpClient.post<{ id: string }>('/verification/upload', form, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return (response.data as { id: string }).id
 }

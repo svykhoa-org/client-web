@@ -10,7 +10,9 @@ level up in the `production/` runner and is loaded from its `CLAUDE.md`. Dev ser
 - **Routing**: `react-router` v7.
 - **Styling**: Tailwind CSS v4, **Ant Design `antd` v5** (with `@ant-design/v5-patch-for-react-19`).
 - **Data fetching**: **TanStack Query** (`@tanstack/react-query`) over `axios`. Query client in
-  `src/lib/tanstack-query/`, axios instance in `src/lib/axios/`.
+  `src/lib/tanstack-query/`; single shared HTTP client `httpClient` in `src/services/httpClient.ts`
+  (default instance exported from `src/services/apiClient.ts`) — owns the auth/refresh interceptor.
+  `src/lib/axios/` is now just localStorage token helpers (`getAccessToken`/`setTokens`/…).
 - **State**: `zustand` (`src/stores/`) for client state; server state stays in TanStack Query.
 - **Forms**: `react-hook-form` + `zod` (`@hookform/resolvers`).
 - **i18n**: `i18next` (`src/i18n/locales/`). **Media**: `react-pdf` (PdfViewer), `@vidstack/react` /
@@ -28,8 +30,9 @@ level up in the `production/` runner and is loaded from its `CLAUDE.md`. Dev ser
 - **Pages**: split by auth context — `src/pages/authentication/`, `src/pages/unauthentication/`,
   `src/pages/public/`.
 - **Services**: one folder per domain under `src/services/` (`Course/`, `Order/`, `post/`, `auth/`,
-  `comment/`, `enrollment/`, …), each wrapping the shared `axios` instance. New API call → add a
-  function beside the nearest domain service; never call `axios`/`fetch` ad-hoc from a component.
+  `comment/`, `enrollment/`, …), each calling the shared `httpClient` (`src/services/apiClient.ts`).
+  New API call → add a function beside the nearest domain service; never call `axios`/`fetch` ad-hoc
+  from a component.
 - **Data fetching**: wrap service calls in TanStack Query hooks (`useQuery`/`useMutation`); shared
   hooks live in `src/hooks/` (`useCRUD`, `useDebounce`, `request/`). Don't hold server data in
   `zustand` — that's TanStack Query's job.
@@ -52,9 +55,10 @@ level up in the `production/` runner and is loaded from its `CLAUDE.md`. Dev ser
 - **Verify.** Exercise the path in the running app (`:5173`), not just typecheck.
 
 <!-- gitnexus:start -->
+
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **svykhoa-client** (2823 symbols, 4429 relationships, 111 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **svykhoa-client** (2830 symbols, 4452 relationships, 112 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -75,22 +79,22 @@ This project is indexed by GitNexus as **svykhoa-client** (2823 symbols, 4429 re
 
 ## Resources
 
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/svykhoa-client/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/svykhoa-client/clusters` | All functional areas |
-| `gitnexus://repo/svykhoa-client/processes` | All execution flows |
-| `gitnexus://repo/svykhoa-client/process/{name}` | Step-by-step execution trace |
+| Resource                                        | Use for                                  |
+| ----------------------------------------------- | ---------------------------------------- |
+| `gitnexus://repo/svykhoa-client/context`        | Codebase overview, check index freshness |
+| `gitnexus://repo/svykhoa-client/clusters`       | All functional areas                     |
+| `gitnexus://repo/svykhoa-client/processes`      | All execution flows                      |
+| `gitnexus://repo/svykhoa-client/process/{name}` | Step-by-step execution trace             |
 
 ## CLI
 
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
+| Task                                         | Read this skill file                                        |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
+| Blast radius / "What breaks if I change X?"  | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?"             | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
+| Rename / extract / split / refactor          | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
+| Tools, resources, schema reference           | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
+| Index, status, clean, wiki CLI commands      | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
 
 <!-- gitnexus:end -->

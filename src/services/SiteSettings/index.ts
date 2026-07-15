@@ -1,4 +1,4 @@
-import axiosInstance from '@/lib/axios'
+import { httpClient } from '../apiClient'
 
 export interface SiteSettings {
   siteName: string | null
@@ -18,11 +18,7 @@ export interface SiteSettings {
 }
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {
-  const response = await axiosInstance.get<{
-    statusCode: number
-    message: string
-    data: SiteSettings
-  }>('/site-settings')
+  const response = await httpClient.get<SiteSettings>('/site-settings')
 
-  return response.data.data
+  return response.data as SiteSettings
 }
