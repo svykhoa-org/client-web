@@ -55,10 +55,9 @@ level up in the `production/` runner and is loaded from its `CLAUDE.md`. Dev ser
 - **Verify.** Exercise the path in the running app (`:5173`), not just typecheck.
 
 <!-- gitnexus:start -->
-
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **svykhoa-client** (2830 symbols, 4452 relationships, 112 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **svykhoa-client** (2827 symbols, 4448 relationships, 113 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -79,22 +78,22 @@ This project is indexed by GitNexus as **svykhoa-client** (2830 symbols, 4452 re
 
 ## Resources
 
-| Resource                                        | Use for                                  |
-| ----------------------------------------------- | ---------------------------------------- |
-| `gitnexus://repo/svykhoa-client/context`        | Codebase overview, check index freshness |
-| `gitnexus://repo/svykhoa-client/clusters`       | All functional areas                     |
-| `gitnexus://repo/svykhoa-client/processes`      | All execution flows                      |
-| `gitnexus://repo/svykhoa-client/process/{name}` | Step-by-step execution trace             |
+| Resource | Use for |
+|----------|---------|
+| `gitnexus://repo/svykhoa-client/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/svykhoa-client/clusters` | All functional areas |
+| `gitnexus://repo/svykhoa-client/processes` | All execution flows |
+| `gitnexus://repo/svykhoa-client/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 
-| Task                                         | Read this skill file                                        |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
-| Blast radius / "What breaks if I change X?"  | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?"             | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
-| Rename / extract / split / refactor          | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
-| Tools, resources, schema reference           | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
-| Index, status, clean, wiki CLI commands      | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
+| Task | Read this skill file |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
+| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
+| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->
