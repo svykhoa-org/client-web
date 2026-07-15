@@ -33,6 +33,7 @@ export const getCourse = bindStage<string, GetCourseDetailData>({
         categoryId: null,
         category: null,
         tags: null,
+        isScheduled: false,
         startDate: null,
         endDate: null,
         registrationStart: null,

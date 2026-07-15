@@ -52,6 +52,7 @@ const RouteConfig = {
   },
   CourseDetailPage: {
     path: '/courses/:id',
+    getPath: (id: string) => `/courses/${id}`,
   },
   CoursePlayerPage: {
     path: '/course-player/:id',

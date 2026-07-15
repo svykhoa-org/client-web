@@ -32,6 +32,7 @@ export interface CourseApiItem {
   instructorIds: string[]
   tags: CourseTag[] | null
   category: CourseCategory | null
+  isScheduled: boolean
   currentEnrollments: number
   maxEnrollments: number | null
   totalDurationMinutes: number | null

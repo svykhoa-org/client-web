@@ -71,7 +71,8 @@ export function getCohortState(course: CohortInput, now: Date = new Date()): Coh
   }
 }
 
-export const REGISTRATION_STATUS_LABEL: Record<Exclude<RegistrationStatus, 'open'>, string> = {
+export const REGISTRATION_STATUS_LABEL: Record<RegistrationStatus, string> = {
+  open: 'Đang mở đăng ký',
   not_open: 'Chưa mở đăng ký',
   closed: 'Đã đóng đăng ký',
   full: 'Đã đủ số lượng',
