@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Alert, Button, Form, Input, Typography } from 'antd'
+import { Alert, Button, Divider, Form, Input, Typography } from 'antd'
 import { isAxiosError } from 'axios'
 
 import authImage from '@/assets/images/auth.jpg'
+import { GoogleAuthButton } from '@/components/auth'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -136,6 +137,22 @@ export const LoginPage = () => {
                 Đăng nhập
               </Button>
             </Form.Item>
+
+            <Divider plain className="!text-gray-400">
+              hoặc
+            </Divider>
+
+            <div className="mb-6">
+              <GoogleAuthButton
+                onSuccess={() => {
+                  if (postId) {
+                    navigate(`/post/${postId}`)
+                  } else {
+                    navigate(redirect)
+                  }
+                }}
+              />
+            </div>
 
             <div className="text-center">
               <Text className="text-gray-500">Bạn chưa có tài khoản? </Text>

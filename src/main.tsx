@@ -2,7 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { pdfjs } from 'react-pdf'
 
+import { GoogleOAuthProvider } from '@react-oauth/google'
+
 import App from './App'
+import { AppConfig } from './constants/AppConfig'
 import './styles/globals.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -12,6 +15,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId={AppConfig.GOOGLE_CLIENT_ID}>
+      <App />
+    </GoogleOAuthProvider>
   </StrictMode>,
 )

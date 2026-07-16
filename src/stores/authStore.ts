@@ -1,7 +1,12 @@
 import { clearTokens, getRefreshToken, setAccessToken, setTokens } from '@/lib/axios'
 import type { User } from '@/models/User'
 import type { AuthResponseData, LoginRequest, RegisterRequest } from '@/services/auth'
-import { login as authLogin, logout as authLogout, register as authRegister } from '@/services/auth'
+import {
+  googleLogin as authGoogleLogin,
+  login as authLogin,
+  logout as authLogout,
+  register as authRegister,
+} from '@/services/auth'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
@@ -17,6 +22,7 @@ interface AuthState {
 
 interface AuthActions {
   login: (email: string, password: string) => Promise<void>
+  loginWithGoogle: (credential: string) => Promise<void>
   register: (data: RegisterRequest) => Promise<void>
   logout: () => void
   setToken: (token: string) => void
@@ -130,6 +136,62 @@ export const useAuthStore = create<AuthStore>()(
               isTwoFactorRequired: false,
               tempToken: null,
               error: normalizeAuthError(error, 'Dang nhap that bai'),
+            },
+          }))
+
+          throw error
+        }
+      },
+
+      loginWithGoogle: async (credential: string) => {
+        set(prev => ({
+          state: {
+            ...prev.state,
+            isLoggingIn: true,
+            error: null,
+          },
+        }))
+
+        try {
+          const data = await authGoogleLogin(credential)
+
+          if (data.isTwoFactorRequired && data.tempToken) {
+            clearTokens()
+            set(prev => ({
+              state: {
+                ...prev.state,
+                isLoggingIn: false,
+                token: null,
+                isAuthenticated: false,
+                isTwoFactorRequired: true,
+                tempToken: data.tempToken ?? null,
+                user: data.user,
+                error: null,
+              },
+            }))
+            return
+          }
+
+          set(prev => ({
+            state: {
+              ...prev.state,
+              isLoggingIn: false,
+              ...applyAuthenticatedSession(data),
+              error: null,
+            },
+          }))
+        } catch (error) {
+          clearTokens()
+          set(prev => ({
+            state: {
+              ...prev.state,
+              isLoggingIn: false,
+              token: null,
+              user: null,
+              isAuthenticated: false,
+              isTwoFactorRequired: false,
+              tempToken: null,
+              error: normalizeAuthError(error, 'Dang nhap Google that bai'),
             },
           }))
 

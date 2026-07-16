@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
-import { Alert, Button, Form, Input, Typography } from 'antd'
+import { Alert, Button, Divider, Form, Input, Typography } from 'antd'
 
 import authImage from '@/assets/images/auth.jpg'
+import { GoogleAuthButton } from '@/components/auth'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -162,6 +163,14 @@ const RegisterPage = () => {
                 Đăng ký
               </Button>
             </Form.Item>
+
+            <Divider plain className="!text-gray-400">
+              hoặc
+            </Divider>
+
+            <div className="mb-6">
+              <GoogleAuthButton onSuccess={() => navigate(redirect)} />
+            </div>
 
             <div className="text-center">
               <Text className="text-gray-500">Bạn đã có tài khoản? </Text>
