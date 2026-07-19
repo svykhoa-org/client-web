@@ -18,12 +18,7 @@ interface ResourceRailProps {
   ready: boolean
 }
 
-const resolveDocThumbnail = (document: Document) => {
-  const thumb = document.thumbnail
-  if (!thumb) return undefined
-  if (thumb.url?.startsWith('http')) return thumb.url
-  return getPublicUrl(thumb)
-}
+const resolveDocThumbnail = (document: Document) => getPublicUrl(document.thumbnail)
 
 const formatPrice = (price: number) =>
   price === 0 ? 'Miễn phí' : `${price.toLocaleString('vi-VN')}đ`

@@ -22,35 +22,11 @@ import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
 
-const resolveFileUrl = (document?: Document | null) => {
-  if (!document?.file) return undefined
+const resolveFileUrl = (document?: Document | null) => getPublicUrl(document?.file)
 
-  if (document.file.url?.startsWith('http')) {
-    return document.file.url
-  }
+const resolvePreviewUrl = (document?: Document | null) => getPublicUrl(document?.preview)
 
-  return getPublicUrl(document.file)
-}
-
-const resolvePreviewUrl = (document?: Document | null) => {
-  if (!document?.preview) return undefined
-
-  if (document.preview.url?.startsWith('http')) {
-    return document.preview.url
-  }
-
-  return getPublicUrl(document.preview)
-}
-
-const resolveThumbnailUrl = (document?: Document | null) => {
-  if (!document?.thumbnail) return undefined
-
-  if (document.thumbnail.url?.startsWith('http')) {
-    return document.thumbnail.url
-  }
-
-  return getPublicUrl(document.thumbnail)
-}
+const resolveThumbnailUrl = (document?: Document | null) => getPublicUrl(document?.thumbnail)
 
 export const DocumentDetailPage = () => {
   const { id } = useParams<{ id: string }>()

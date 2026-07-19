@@ -13,12 +13,7 @@ interface DocumentCardProps {
   document: Document
 }
 
-const resolveThumbnail = (document: Document) => {
-  const thumb = document.thumbnail
-  if (!thumb) return undefined
-  if (thumb.url?.startsWith('http')) return thumb.url
-  return getPublicUrl(thumb)
-}
+const resolveThumbnail = (document: Document) => getPublicUrl(document.thumbnail)
 
 export const DocumentCard = ({ document }: DocumentCardProps) => {
   const href = RoutePath.DocumentDetailPage.getPath(document.id)

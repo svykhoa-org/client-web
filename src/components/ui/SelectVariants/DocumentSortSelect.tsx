@@ -1,7 +1,11 @@
 import { Select } from 'antd'
 
 export type DocumentSortValue =
-  'updatedAt:desc' | 'createdAt:asc' | 'price:asc' | 'price:desc' | 'title:asc'
+  | 'updatedAt:desc'
+  | 'createdAt:asc'
+  | 'price:asc'
+  | 'price:desc'
+  | 'title:asc'
 
 interface DocumentSortSelectProps {
   value: DocumentSortValue
