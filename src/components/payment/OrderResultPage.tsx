@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 
+import { useQuery } from '@tanstack/react-query'
 import { Button } from 'antd'
+
+import { getOrderPaymentStatus } from '@/services/Order/paymentStatus'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -13,6 +16,7 @@ export interface OrderResultPageProps {
   primaryPath: string
   secondaryPath?: string
   secondaryLabel?: string
+  verifyPayment?: boolean
 }
 
 // ─── Status config ────────────────────────────────────────────────────────────
@@ -36,6 +40,12 @@ const STATUS_CONFIG = {
     badgeLabel: 'Thất bại',
     hint: 'Vui lòng thử lại hoặc liên hệ hỗ trợ nếu vấn đề tiếp diễn.',
   },
+  processing: {
+    bar: 'bg-primary',
+    badge: 'bg-primary-1 text-primary',
+    badgeLabel: 'Đang xử lý',
+    hint: 'Trang sẽ tự cập nhật khi hệ thống xác nhận thanh toán và cấp quyền.',
+  },
 } as const
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -48,9 +58,64 @@ export const OrderResultPage = ({
   primaryPath,
   secondaryPath = '/',
   secondaryLabel = 'Về trang chủ',
+  verifyPayment = false,
 }: OrderResultPageProps) => {
   const navigate = useNavigate()
-  const config = STATUS_CONFIG[status]
+  const [searchParams] = useSearchParams()
+  const orderId = searchParams.get('orderId')
+  const [startedAt] = useState(() => Date.now())
+  const paymentQuery = useQuery({
+    queryKey: ['order-payment-status', orderId],
+    queryFn: () => getOrderPaymentStatus(orderId!),
+    enabled: verifyPayment && !!orderId,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchInterval: query => {
+      const payment = query.state.data
+      if (
+        payment?.fulfillment.status === 'FULFILLED' ||
+        payment?.fulfillment.status === 'FAILED' ||
+        payment?.payment.status === 'EXPIRED' ||
+        payment?.payment.status === 'CANCELLED'
+      ) {
+        return false
+      }
+      if (document.hidden || !navigator.onLine) return false
+      return Date.now() - startedAt < 30_000 ? 2_000 : 5_000 + Math.floor(Math.random() * 1_000)
+    },
+  })
+  const authoritative = paymentQuery.data
+  const confirmed = authoritative?.fulfillment.status === 'FULFILLED'
+  const failed =
+    !orderId ||
+    paymentQuery.isError ||
+    authoritative?.fulfillment.status === 'FAILED' ||
+    authoritative?.payment.status === 'EXPIRED' ||
+    authoritative?.payment.status === 'CANCELLED'
+  const displayStatus = verifyPayment
+    ? confirmed
+      ? 'success'
+      : failed
+        ? 'error'
+        : 'processing'
+    : status
+  const config = STATUS_CONFIG[displayStatus]
+  const displayTitle = verifyPayment
+    ? confirmed
+      ? title
+      : failed
+        ? 'Không thể hoàn tất đơn hàng'
+        : authoritative?.payment.status === 'PAID'
+          ? 'Đã nhận thanh toán, đang cấp quyền'
+          : 'Đang xác nhận thanh toán'
+    : title
+  const displaySubTitle = verifyPayment
+    ? confirmed
+      ? subTitle
+      : orderId
+        ? `Đơn hàng ${authoritative?.order.orderCode ?? orderId} chưa hoàn tất. Vui lòng giữ trang này mở.`
+        : 'Thiếu mã đơn hàng để xác minh. Vui lòng mở lịch sử đơn hàng hoặc liên hệ hỗ trợ.'
+    : subTitle
 
   // Entrance animation
   const [visible, setVisible] = useState(false)
@@ -85,11 +150,11 @@ export const OrderResultPage = ({
 
             {/* Title */}
             <h2 className="mt-4 text-[22px] font-bold leading-snug tracking-tight text-slate-900">
-              {title}
+              {displayTitle}
             </h2>
 
             {/* Sub */}
-            <p className="mt-2 text-sm leading-relaxed text-slate-500">{subTitle}</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-500">{displaySubTitle}</p>
 
             {/* Hint line */}
             <p className="mt-1 text-xs text-slate-400">{config.hint}</p>

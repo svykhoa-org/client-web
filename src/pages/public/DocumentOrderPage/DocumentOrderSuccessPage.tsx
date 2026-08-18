@@ -8,5 +8,6 @@ export const DocumentOrderSuccessPage = () => (
     subTitle="Tài liệu đã được kích hoạt trong tài khoản của bạn. Bạn có thể quay lại trang chi tiết để tải xuống ngay."
     primaryLabel="Xem danh sách tài liệu"
     primaryPath={RoutePath.DocumentListPage.path}
+    verifyPayment
   />
 )

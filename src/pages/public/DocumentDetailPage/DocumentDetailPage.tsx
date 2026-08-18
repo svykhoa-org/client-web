@@ -18,11 +18,10 @@ import {
   getDocumentDetail,
   getDocumentDownloadUrl,
 } from '@/services/Document'
+import { waitForOrderFulfillment } from '@/services/Order/paymentStatus'
 import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
-
-const resolveFileUrl = (document?: Document | null) => getPublicUrl(document?.file)
 
 const resolvePreviewUrl = (document?: Document | null) => getPublicUrl(document?.preview)
 
@@ -62,7 +61,6 @@ export const DocumentDetailPage = () => {
   const isOwned = document?.license?.status === DocumentLicenseStatus.ACTIVE || false
   const isFree = document?.price === 0
 
-  const fileUrl = useMemo(() => resolveFileUrl(document), [document])
   const previewUrl = useMemo(() => resolvePreviewUrl(document), [document])
   const thumbnailUrl = useMemo(() => resolveThumbnailUrl(document), [document])
 
@@ -76,13 +74,11 @@ export const DocumentDetailPage = () => {
       try {
         const response = await executeDownloadUrl({ documentId: document.id })
 
+        // Only the watermarked, license-gated copy from the server is a valid
+        // download. There is intentionally no fallback to the original file url
+        // — the server no longer exposes it (watermark/trace would be bypassed).
         if (response.downloadUrl) {
           window.open(response.downloadUrl, '_blank', 'noopener,noreferrer')
-          return
-        }
-
-        if (fileUrl) {
-          window.open(fileUrl, '_blank', 'noopener,noreferrer')
           return
         }
 
@@ -183,12 +179,21 @@ export const DocumentDetailPage = () => {
     if (!document?.id) return
     void (async () => {
       try {
-        await executeCheckout({
+        const checkout = await executeCheckout({
           documentId: document.id,
           successUrl: `${window.location.origin}${RoutePath.DocumentOrderSuccessPage.path}`,
           cancelUrl: `${window.location.origin}${RoutePath.DocumentOrderCancelPage.path}`,
           errorUrl: `${window.location.origin}${RoutePath.DocumentOrderErrorPage.path}`,
         })
+        const orderId = checkout.order?.id
+        if (orderId) {
+          const status = await waitForOrderFulfillment(orderId)
+          if (status.fulfillment.status !== 'FULFILLED') {
+            setIsCheckoutModalOpen(false)
+            message.info('Đơn hàng đang được xử lý. Quyền tải sẽ được cập nhật sau ít phút.')
+            return
+          }
+        }
         setIsCheckoutModalOpen(false)
         message.success('Đăng ký tài liệu thành công')
         await execute(document.id)

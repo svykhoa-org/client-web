@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Button } from 'antd'
 
+import type { PaymentCheckoutContract } from '@/models/PaymentDomain'
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /** Các field Sepay trả về trong checkoutFields */
@@ -22,7 +24,7 @@ export interface SepayCheckoutFields extends Record<
   signature?: string
 }
 
-export interface CheckoutData {
+export interface CheckoutData extends Partial<Omit<PaymentCheckoutContract, 'checkoutFields'>> {
   checkoutUrl: string
   checkoutFields: SepayCheckoutFields
   /** Đơn 0đ: bấm "Thanh toán ngay" sẽ ghi nhận order + cấp quyền ngay, không qua SePay. */

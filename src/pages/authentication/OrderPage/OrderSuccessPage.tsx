@@ -9,5 +9,6 @@ export const OrderSuccessPage = () => (
     subTitle="Cảm ơn bạn đã mua khoá học. Bạn có thể bắt đầu học ngay bây giờ."
     primaryLabel="Xem khoá học của tôi"
     primaryPath={RouteConfig.CoursePage.path}
+    verifyPayment
   />
 )

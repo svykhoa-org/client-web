@@ -16,6 +16,7 @@ import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQue
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
 import { CheckoutModalContent, type CheckoutData } from '@/components/payment'
 import { orderService } from '@/services/Order/checkoutCourse'
+import { waitForOrderFulfillment } from '@/services/Order/paymentStatus'
 import { getMyVerification } from '@/services/Verification'
 import RouteConfig from '@/constants/RouteConfig'
 
@@ -75,10 +76,27 @@ export const DetailCoursePage = () => {
 
   const confirmFreeMutation = useMutation({
     mutationFn: (courseId: string) => orderService.checkoutCourse(courseId),
-    onSuccess: response => {
+    onSuccess: async response => {
       if (response.statusCode !== 201) {
         void message.error(response.message || 'Không thể đăng ký khoá học')
         return
+      }
+      const orderId = response.data.order?.id
+      if (orderId) {
+        try {
+          const status = await waitForOrderFulfillment(orderId)
+          if (status.fulfillment.status !== 'FULFILLED') {
+            setIsPaymentModalOpen(false)
+            void message.info('Đơn hàng đang được xử lý. Quyền học sẽ được cập nhật sau ít phút.')
+            return
+          }
+        } catch {
+          setIsPaymentModalOpen(false)
+          void message.error(
+            'Không thể xác nhận quyền học. Vui lòng kiểm tra lại lịch sử đơn hàng.',
+          )
+          return
+        }
       }
       setIsPaymentModalOpen(false)
       void queryClient.invalidateQueries({ queryKey: ['enrollment'] })
