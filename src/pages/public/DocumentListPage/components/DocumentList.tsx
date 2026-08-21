@@ -1,36 +1,39 @@
-import { type RefObject } from 'react'
+import { ReloadOutlined } from '@ant-design/icons'
+import { Alert, Button } from 'antd'
 
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons'
-import { Alert, Button, Spin } from 'antd'
-
+import Pagination from '@/components/ui/Pagination'
 import type { Document } from '@/models/Document'
 
 import { DocumentCard } from './DocumentCard'
 import { DocumentListEmpty } from './DocumentListEmpty'
 import { DocumentListSkeleton } from './DocumentListSkeleton'
 
-interface DocumentInfiniteListProps {
+interface DocumentListProps {
   documents: Document[]
-  loadingInitial: boolean
-  loadingMore: boolean
-  hasNextPage: boolean
+  loading: boolean
   errorMessage: string | null
   searchKeyword: string
-  sentinelRef: RefObject<HTMLDivElement | null>
+  page: number
+  pageSize: number
+  totalItems: number
+  onPageChange: (page: number) => void
   onRetry: () => void
 }
 
-export const DocumentInfiniteList = ({
+export const DocumentList = ({
   documents,
-  loadingInitial,
-  loadingMore,
-  hasNextPage,
+  loading,
   errorMessage,
   searchKeyword,
-  sentinelRef,
+  page,
+  pageSize,
+  totalItems,
+  onPageChange,
   onRetry,
-}: DocumentInfiniteListProps) => {
-  if (loadingInitial) {
+}: DocumentListProps) => {
+  // Skeleton chỉ khi chưa có dữ liệu (initial / đổi filter về rỗng); khi đổi
+  // trang, danh sách cũ được giữ tới khi trang mới về để tránh nháy layout.
+  if (loading && documents.length === 0) {
     return <DocumentListSkeleton count={5} />
   }
 
@@ -56,15 +59,17 @@ export const DocumentInfiniteList = ({
 
   return (
     <div className="space-y-4">
-      {documents.map(document => (
-        <DocumentCard key={document.id} document={document} />
-      ))}
+      <div className={`space-y-4 transition-opacity ${loading ? 'opacity-60' : ''}`}>
+        {documents.map(document => (
+          <DocumentCard key={document.id} document={document} />
+        ))}
+      </div>
 
       {errorMessage ? (
         <Alert
           type="warning"
           showIcon
-          message="Có lỗi khi tải thêm dữ liệu"
+          message="Có lỗi khi tải dữ liệu"
           description={errorMessage}
           action={
             <Button size="small" onClick={onRetry}>
@@ -74,19 +79,16 @@ export const DocumentInfiniteList = ({
         />
       ) : null}
 
-      {loadingMore ? (
-        <div className="flex items-center justify-center py-3 text-neutral-6">
-          <Spin indicator={<LoadingOutlined spin />} />
-          <span className="ml-2 text-sm">Đang tải thêm tài liệu...</span>
+      {totalItems > 0 ? (
+        <div className="flex justify-center pt-2">
+          <Pagination
+            current={page}
+            pageSize={pageSize}
+            total={totalItems}
+            onChange={onPageChange}
+            showSizeChanger={false}
+          />
         </div>
-      ) : null}
-
-      <div ref={sentinelRef} className="h-1 w-full" />
-
-      {!hasNextPage && documents.length > 0 ? (
-        <p className="py-2 text-center text-sm text-neutral-5">
-          Bạn đã xem hết danh sách tài liệu.
-        </p>
       ) : null}
     </div>
   )

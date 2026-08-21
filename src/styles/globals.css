@@ -1,7 +1,6 @@
-@font-face {
-  font-family: 'Be Vietnam Pro';
-  src: url('../assets/fonts/BeVietnamPro-Regular.ttf') format('truetype');
-}
+/* Be Vietnam Pro is loaded from Google Fonts in index.html (weights 300–700,
+   real glyph weights). The prior local @font-face shipped only Regular (400),
+   forcing faux-bold/faux-light for every 500/600/700/300 usage. */
 
 @import 'tailwindcss';
 @import './antd.css';
@@ -267,4 +266,11 @@ body {
 /* Video Player Custom Styles */
 .shadow-text {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Document-list search: slimmer focus outline than antd default (2px glow → 1px). */
+.doc-search.ant-input-affix-wrapper-focused,
+.doc-search.ant-input-affix-wrapper:focus-within {
+  box-shadow: 0 0 0 1px var(--color-primary-4);
+  border-color: var(--color-primary-5);
 }

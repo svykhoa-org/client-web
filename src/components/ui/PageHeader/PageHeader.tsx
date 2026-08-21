@@ -4,7 +4,9 @@ import { Breadcrumb, Button, Typography, type BreadcrumbProps } from 'antd'
 const { Title } = Typography
 
 interface PageHeaderProps {
-  title: string
+  /** Optional — omit to render a breadcrumb-only header (e.g. when the page
+   *  renders its own title inside the content, like DocumentDetailPage). */
+  title?: string
   breadcrumbItems: BreadcrumbProps['items']
   showBackButton?: boolean
   onBack?: () => void
@@ -30,11 +32,13 @@ export const PageHeader = ({
         ) : null}
       </div>
 
-      <div className="flex items-center justify-between gap-4">
-        <Title level={2} className="mb-0!">
-          {title}
-        </Title>
-      </div>
+      {title ? (
+        <div className="flex items-center justify-between gap-4">
+          <Title level={2} className="mb-0!">
+            {title}
+          </Title>
+        </div>
+      ) : null}
     </div>
   )
 }

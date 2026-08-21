@@ -1,8 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, type SyntheticEvent } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { DownloadOutlined, FileTextOutlined, LockOutlined } from '@ant-design/icons'
-import { Alert, Button, Modal, Skeleton, Tag, message } from 'antd'
+import {
+  CheckCircleFilled,
+  DownloadOutlined,
+  LockOutlined,
+  SafetyCertificateOutlined,
+} from '@ant-design/icons'
+import { Alert, Button, Modal, Skeleton, message } from 'antd'
+import dayjs from 'dayjs'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { PageHeader } from '@/components/ui/PageHeader'
@@ -23,9 +29,21 @@ import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { formatFileSize } from '@/utils/file/formatFileSize'
 import { getPublicUrl } from '@/utils/getPublicUrl'
 
+// Fallback bìa tài liệu — asset tĩnh trong public/, dùng khi thiếu thumbnail
+// hoặc ảnh lỗi (đồng bộ với DocumentCard ở trang list).
+const PLACEHOLDER_THUMBNAIL = '/document-placeholder.png'
+
 const resolvePreviewUrl = (document?: Document | null) => getPublicUrl(document?.preview)
 
-const resolveThumbnailUrl = (document?: Document | null) => getPublicUrl(document?.thumbnail)
+const resolveThumbnailUrl = (document?: Document | null) =>
+  getPublicUrl(document?.thumbnail) ?? PLACEHOLDER_THUMBNAIL
+
+const handleThumbnailError = (event: SyntheticEvent<HTMLImageElement>) => {
+  const img = event.currentTarget
+  if (img.dataset.fallback) return
+  img.dataset.fallback = 'true'
+  img.src = PLACEHOLDER_THUMBNAIL
+}
 
 export const DocumentDetailPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -232,10 +250,10 @@ export const DocumentDetailPage = () => {
   return (
     <div className="pb-16 lg:pb-0">
       <PageHeader
-        title={document.title}
         breadcrumbItems={[
           { key: 'home', title: 'Trang chủ', href: '/' },
           { key: 'documents', title: 'Tài liệu', href: RoutePath.DocumentListPage.path },
+          ...(document.category?.name ? [{ key: 'category', title: document.category.name }] : []),
         ]}
         showBackButton
         onBack={() => navigate(-1)}
@@ -246,37 +264,47 @@ export const DocumentDetailPage = () => {
           {/* Overview */}
           <div className="rounded-xl border border-neutral-3 bg-white p-6">
             <div className="flex flex-col gap-5 sm:flex-row">
-              <div className="bg-primary-1 mx-auto aspect-[3/4] w-40 shrink-0 overflow-hidden rounded-lg sm:mx-0">
-                {thumbnailUrl ? (
-                  <img
-                    src={thumbnailUrl}
-                    alt={`Bìa tài liệu ${document.title}`}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <FileTextOutlined className="text-primary-5 text-3xl" />
-                  </div>
-                )}
+              <div className="bg-primary-1 mx-auto aspect-square w-40 shrink-0 overflow-hidden rounded-lg sm:mx-0">
+                <img
+                  src={thumbnailUrl}
+                  alt={`Bìa tài liệu ${document.title}`}
+                  onError={handleThumbnailError}
+                  className="h-full w-full object-cover"
+                />
               </div>
 
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap gap-2">
-                  {document.category?.name ? (
-                    <Tag className="mr-0 rounded-md">{document.category.name}</Tag>
-                  ) : null}
-                  <Tag className="mr-0 rounded-md">
+                <h1 className="text-2xl font-bold leading-snug text-neutral-10">
+                  {document.title}
+                </h1>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold tabular-nums">
                     {formatFileSize({ bytes: document.fileSize ?? 0, toUnit: FileSize.MB })}
-                  </Tag>
+                  </span>
                   {document.totalPages ? (
-                    <Tag className="mr-0 rounded-md">{document.totalPages} trang</Tag>
+                    <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold tabular-nums">
+                      {document.totalPages} trang
+                    </span>
                   ) : null}
+                  <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold">
+                    PDF
+                  </span>
                 </div>
-                <p className="mt-4 max-w-prose leading-relaxed text-neutral-7 text-pretty">
-                  {document.description || 'Tài liệu chưa có mô tả chi tiết.'}
-                </p>
+
+                <dl className="mt-4 flex gap-2 text-sm">
+                  <dt className="text-neutral-5">Ngày phát hành:</dt>
+                  <dd className="font-medium text-neutral-8 tabular-nums">
+                    {dayjs(document.createdAt).format('DD/MM/YYYY')}
+                  </dd>
+                </dl>
               </div>
             </div>
+
+            {/* Description — full width below */}
+            <p className="mt-5 font-light leading-relaxed text-neutral-7 text-pretty">
+              {document.description || 'Tài liệu chưa có mô tả chi tiết.'}
+            </p>
           </div>
 
           {/* Preview */}
@@ -309,9 +337,9 @@ export const DocumentDetailPage = () => {
               </div>
             ) : null}
 
-            <div className="mb-5">
+            <div className="mb-1">
               <p className="text-sm text-neutral-5">Giá tài liệu</p>
-              {document.price === 0 ? (
+              {isFree ? (
                 <p className="text-success-3 mt-1 text-3xl font-bold">Miễn phí</p>
               ) : (
                 <p className="mt-1 text-3xl font-bold tabular-nums text-neutral-10">
@@ -319,6 +347,11 @@ export const DocumentDetailPage = () => {
                 </p>
               )}
             </div>
+            <p className="mb-5 text-xs text-neutral-5">
+              {isFree
+                ? 'Đăng ký một lần • Truy cập trọn đời'
+                : 'Thanh toán một lần • Sở hữu trọn đời'}
+            </p>
 
             <div className="mb-6">
               {isOwned ? (
@@ -347,23 +380,21 @@ export const DocumentDetailPage = () => {
               )}
             </div>
 
-            <div className="space-y-2.5 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-6">Dung lượng</span>
-                <span className="font-medium tabular-nums text-neutral-9">
-                  {formatFileSize({ bytes: document.fileSize ?? 0, toUnit: FileSize.MB })}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-6">Số trang</span>
-                <span className="font-medium tabular-nums text-neutral-9">
-                  {document.totalPages || 0} trang
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-6">Định dạng</span>
-                <span className="font-medium text-neutral-9">PDF</span>
-              </div>
+            {/* Value props — bám hành vi thật: download watermarked, sở hữu vĩnh viễn */}
+            <ul className="space-y-2.5 text-[13px] text-neutral-7">
+              <li className="flex items-start gap-2.5">
+                <CheckCircleFilled className="text-success-3 mt-0.5 shrink-0" />
+                <span>PDF có watermark bảo vệ bản quyền</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <CheckCircleFilled className="text-success-3 mt-0.5 shrink-0" />
+                <span>Truy cập &amp; tải lại trọn đời</span>
+              </li>
+            </ul>
+
+            <div className="mt-5 flex items-center gap-2 border-t border-neutral-2 pt-4 text-xs text-neutral-5">
+              <SafetyCertificateOutlined className="text-primary-6" />
+              <span>Thanh toán an toàn qua SePay</span>
             </div>
           </div>
         </aside>

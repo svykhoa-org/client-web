@@ -1,17 +1,33 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { CaretRightOutlined, FileTextOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+  CaretRightOutlined,
+  ControlOutlined,
+  FileTextOutlined,
+  SearchOutlined,
+} from '@ant-design/icons'
 import { Input } from 'antd'
 
 import { DocumentSortSelect, type DocumentSortValue } from '@/components/ui/SelectVariants'
-import { useInfiniteList, useList } from '@/hooks'
+import { useList } from '@/hooks'
 import { useDebounceValue } from '@/hooks/useDebounce'
 import type { Document } from '@/models/Document'
 import type { DocumentClassify } from '@/models/DocumentClassify'
 import { type ListDocumentInput, listDocument } from '@/services/Document'
 import { type ListDocumentClassifyInput, listDocumentClassify } from '@/services/DocumentClassify'
 
-import { DocumentInfiniteList } from './components/DocumentInfiniteList'
+import { DocumentList } from './components/DocumentList'
+import { DocumentFilterDrawer } from './components/DocumentFilterDrawer'
+import {
+  DEFAULT_FILTERS,
+  type DocumentFilterValues,
+  OLDER_THAN_YEAR,
+  PAGES_MAX,
+  PAGES_MIN,
+  PRICE_MAX,
+  PRICE_MIN,
+  countActiveFilters,
+} from './components/documentFilters'
 
 interface SidebarCategoryNode {
   id: string
@@ -46,24 +62,27 @@ export const DocumentListPage = () => {
   const [categoryFilter, setCategoryFilter] = useState('')
   const [expandedCategoryIds, setExpandedCategoryIds] = useState<string[]>([])
   const [sortValue, setSortValue] = useState<DocumentSortValue>('updatedAt:desc')
+  const [filterValues, setFilterValues] = useState<DocumentFilterValues>(DEFAULT_FILTERS)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
+  const activeFilterCount = countActiveFilters(filterValues)
   const debouncedSearchKeyword = useDebounceValue(searchKeyword, 400)
-  const sentinelRef = useRef<HTMLDivElement | null>(null)
 
   const {
     items: documents,
-    page,
-    totalItems,
-    hasNextPage,
-    isLoadingInitial: loadingInitial,
-    isLoadingMore: loadingMore,
+    data: documentData,
+    isLoading: loadingDocuments,
     error,
+    params: documentParams,
     setParams: setDocumentParams,
-    loadMore,
+    setParam: setDocumentParam,
     refresh,
-  } = useInfiniteList<Document, ListDocumentInput>(listDocument, {
+  } = useList<Document, ListDocumentInput>(listDocument, {
     initialParams: INITIAL_DOCUMENT_PARAMS,
   })
+
+  const totalItems = documentData?.pagination.totalItems ?? 0
+  const currentPage = documentParams.page ?? 1
 
   const { items: categories } = useList<DocumentClassify, ListDocumentClassifyInput>(
     listDocumentClassify,
@@ -143,6 +162,26 @@ export const DocumentListPage = () => {
         }
       }
 
+      // Giá: freeOnly (price=0) đè lên range; ngược lại chỉ gửi khi range khác mặc định.
+      if (filterValues.freeOnly) {
+        searcher.price = { operator: 'eq', value: 0 }
+      } else if (filterValues.priceRange[0] > PRICE_MIN || filterValues.priceRange[1] < PRICE_MAX) {
+        searcher.price = { operator: 'between', value: filterValues.priceRange }
+      }
+
+      // Số trang: chỉ gửi khi range khác mặc định.
+      if (filterValues.pagesRange[0] > PAGES_MIN || filterValues.pagesRange[1] < PAGES_MAX) {
+        searcher.totalPages = { operator: 'between', value: filterValues.pagesRange }
+      }
+
+      // Năm phát hành: pseudo-field server dịch sang EXTRACT(YEAR) IN / < (xem list.ts).
+      if (filterValues.years.length) {
+        searcher.releaseYear = { operator: 'in', value: filterValues.years }
+      }
+      if (filterValues.olderThan) {
+        searcher.releaseYearBefore = { operator: 'eq', value: OLDER_THAN_YEAR }
+      }
+
       const [field, direction] = sortValue.split(':') as [
         NonNullable<ListDocumentInput['sorter']> extends { field: infer F } | Array<infer _>
           ? Extract<F, string>
@@ -160,47 +199,24 @@ export const DocumentListPage = () => {
         },
       }
     },
-    [categoryFilter, debouncedSearchKeyword, sortValue],
+    [categoryFilter, debouncedSearchKeyword, filterValues, sortValue],
   )
 
   useEffect(() => {
     setDocumentParams(buildListInput(1))
   }, [buildListInput, setDocumentParams])
 
-  useEffect(() => {
-    if (!hasNextPage) return
-    if (loadingInitial || loadingMore) return
-
-    const sentinelElement = sentinelRef.current
-    if (!sentinelElement) return
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (!entries[0]?.isIntersecting) return
-        loadMore()
-      },
-      {
-        root: null,
-        rootMargin: '180px',
-        threshold: 0,
-      },
-    )
-
-    observer.observe(sentinelElement)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [hasNextPage, loadMore, loadingInitial, loadingMore, page])
+  const handlePageChange = useCallback(
+    (nextPage: number) => {
+      setDocumentParam('page', nextPage)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
+    [setDocumentParam],
+  )
 
   const handleRetry = useCallback(() => {
-    if (documents.length === 0) {
-      refresh()
-      return
-    }
-
-    loadMore()
-  }, [documents.length, loadMore, refresh])
+    refresh()
+  }, [refresh])
 
   useEffect(() => {
     if (!categoryTree.length) {
@@ -264,10 +280,10 @@ export const DocumentListPage = () => {
             <button
               type="button"
               onClick={() => setCategoryFilter(node.id)}
-              className={`flex-1 rounded-md px-3 py-2 text-left text-sm transition-colors ${
+              className={`flex-1 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                 isSelected
-                  ? 'bg-primary-1 text-primary-9 font-semibold'
-                  : 'hover:bg-neutral-1 text-neutral-7 hover:text-neutral-9'
+                  ? 'bg-primary-1 text-primary-8 font-semibold'
+                  : 'hover:bg-neutral-1 text-neutral-7 font-medium hover:text-neutral-9'
               }`}
             >
               {node.name}
@@ -288,7 +304,7 @@ export const DocumentListPage = () => {
           </div>
 
           {hasChildren && isExpanded ? (
-            <div className="mt-1 ml-3 space-y-1 border-l border-neutral-2 pl-3">
+            <div className="mt-0.5 ml-3 space-y-0.5 border-l border-neutral-2 pl-3">
               {node.children.map(child => renderCategoryNode(child))}
             </div>
           ) : null}
@@ -300,19 +316,19 @@ export const DocumentListPage = () => {
 
   return (
     <div className="flex w-full gap-6">
-      <aside className="sticky top-20 hidden w-60 shrink-0 self-start rounded-xl border border-neutral-3 bg-white p-4 lg:block">
-        <h2 className="mb-3 px-1 text-xs font-semibold uppercase tracking-wider text-neutral-5">
+      <aside className="sticky top-20 hidden w-64 shrink-0 self-start rounded-xl border border-neutral-3 bg-white p-3 lg:block">
+        <h2 className="mb-2 px-3 pt-1 text-[11px] font-semibold uppercase tracking-wider text-neutral-4">
           Danh mục tài liệu
         </h2>
 
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           <button
             type="button"
             onClick={() => setCategoryFilter('')}
-            className={`w-full rounded-md px-3 py-2 text-left text-sm transition-colors ${
+            className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
               categoryFilter === ''
-                ? 'bg-primary-1 text-primary-9 font-semibold'
-                : 'hover:bg-neutral-1 text-neutral-7 hover:text-neutral-9'
+                ? 'bg-primary-1 text-primary-8 font-semibold'
+                : 'hover:bg-neutral-1 text-neutral-7 font-medium hover:text-neutral-9'
             }`}
           >
             Tất cả danh mục
@@ -341,7 +357,7 @@ export const DocumentListPage = () => {
                   Thư viện tài liệu
                 </h1>
                 <p className="mt-0.5 text-sm text-neutral-6">
-                  Tài liệu y khoa chọn lọc, tải về dạng PDF
+                  Tài liệu y khoa chọn lọc, tải về dễ dàng
                 </p>
               </div>
             </div>
@@ -353,38 +369,62 @@ export const DocumentListPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-neutral-2 px-5 py-4 sm:flex-row sm:items-center sm:px-6">
+          <div className="border-t border-neutral-2 px-5 py-4 sm:px-6">
             <Input
               value={searchKeyword}
               onChange={event => setSearchKeyword(event.target.value)}
               prefix={<SearchOutlined className="text-neutral-5" />}
               placeholder="Tìm kiếm tài liệu theo tên..."
-              className="rounded-lg sm:flex-1"
+              className="doc-search rounded-lg"
               size="large"
               allowClear
+              suffix={
+                <button
+                  type="button"
+                  onClick={() => setIsFilterOpen(true)}
+                  aria-label="Bộ lọc tài liệu"
+                  className="hover:text-primary-7 -mr-1 flex items-center gap-1.5 border-l border-neutral-3 pl-2.5 text-lg text-neutral-6 transition-colors"
+                >
+                  <ControlOutlined />
+                  {activeFilterCount > 0 ? (
+                    <span className="bg-primary-6 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold text-white tabular-nums">
+                      {activeFilterCount}
+                    </span>
+                  ) : null}
+                </button>
+              }
             />
-            <div className="flex items-center gap-2">
-              <span className="hidden shrink-0 text-sm text-neutral-6 sm:inline">Sắp xếp</span>
-              <DocumentSortSelect
-                className="w-full sm:w-44"
-                value={sortValue}
-                onChange={setSortValue}
-              />
-            </div>
           </div>
         </header>
 
-        <DocumentInfiniteList
+        {/* Toolbar: sort đứng đầu list, không nhãn */}
+        <div className="mb-4 flex justify-end">
+          <DocumentSortSelect className="w-40" value={sortValue} onChange={setSortValue} />
+        </div>
+
+        <DocumentList
           documents={documents}
-          loadingInitial={loadingInitial}
-          loadingMore={loadingMore}
-          hasNextPage={hasNextPage}
+          loading={loadingDocuments}
           errorMessage={errorMessage}
           searchKeyword={debouncedSearchKeyword}
-          sentinelRef={sentinelRef}
+          page={currentPage}
+          pageSize={PAGE_SIZE}
+          totalItems={totalItems}
+          onPageChange={handlePageChange}
           onRetry={handleRetry}
         />
       </main>
+
+      <DocumentFilterDrawer
+        open={isFilterOpen}
+        value={filterValues}
+        onClose={() => setIsFilterOpen(false)}
+        onApply={next => {
+          setFilterValues(next)
+          setIsFilterOpen(false)
+        }}
+        onReset={() => setFilterValues(DEFAULT_FILTERS)}
+      />
     </div>
   )
 }

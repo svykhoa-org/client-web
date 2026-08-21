@@ -7,7 +7,17 @@ import { httpClient } from '../apiClient'
 
 const DOCUMENT_ENDPOINT = '/documents'
 
-type DocumentSearchFields = 'title' | 'slug' | 'status' | 'categoryId'
+// `releaseYear`/`releaseYearBefore` are pseudo-fields the server intercepts and
+// translates to EXTRACT(YEAR FROM created_at) IN / < (see document.controller).
+type DocumentSearchFields =
+  | 'title'
+  | 'slug'
+  | 'status'
+  | 'categoryId'
+  | 'price'
+  | 'totalPages'
+  | 'releaseYear'
+  | 'releaseYearBefore'
 type DocumentSortFields = 'title' | 'price' | 'createdAt' | 'updatedAt'
 
 export type ListDocumentInput = QueryInput<DocumentSearchFields, DocumentSortFields>
