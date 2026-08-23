@@ -46,6 +46,7 @@ export const ThreadListItem = ({ thread }: Props) => {
         </div>
         <p className="mt-1 text-xs text-neutral-5">
           {thread.author?.fullName ?? 'Ẩn danh'}
+          {thread.subCategory?.name && ` · ${thread.subCategory.name}`}
           {thread.lastReplyAt && ` · Trả lời lần cuối ${formatDate(thread.lastReplyAt)}`}
         </p>
       </div>

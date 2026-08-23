@@ -24,6 +24,7 @@ import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage'
 import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage'
 import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
 import { ForumPage } from '@/pages/unauthentication/ForumPage'
+import { ForumSearchPage } from '@/pages/unauthentication/ForumSearchPage'
 import { ForumThreadDetailPage } from '@/pages/unauthentication/ForumThreadDetailPage'
 import { SubCategoryPage } from '@/pages/unauthentication/SubCategoryPage'
 import { JobDetailPage } from '@/pages/unauthentication/JobPage/JobDetailPage'
@@ -153,6 +154,10 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.ForumPage.path,
         element: <ForumPage />,
+      },
+      {
+        path: RouteConfig.ForumSearchPage.path,
+        element: <ForumSearchPage />,
       },
       {
         path: RouteConfig.ForumSubCategoryPage.path,

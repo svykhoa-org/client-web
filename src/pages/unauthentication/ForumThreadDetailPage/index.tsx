@@ -9,9 +9,21 @@ import {
   getSubCategoryById,
   getThreadById,
   getThreadComments,
+  setAcceptedAnswer,
+  toggleCommentReaction,
   toggleThreadReaction,
 } from '@/services/forum/forumService'
-import { ArrowLeft, CornerDownRight, Eye, Lock, MessageSquare, Send, ThumbsUp } from 'lucide-react'
+import { sanitizeHtml } from '@/utils/sanitizeHtml'
+import {
+  ArrowLeft,
+  CheckCircle2,
+  CornerDownRight,
+  Eye,
+  Lock,
+  MessageSquare,
+  Send,
+  ThumbsUp,
+} from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 
@@ -188,6 +200,13 @@ const ThreadArticle = ({ thread }: { thread: ForumThread }) => (
       </span>
     )}
 
+    {thread.isSolved && (
+      <span className="mb-3.5 ml-2 inline-flex items-center gap-1 rounded-md bg-success-1 px-2 py-0.5 text-xs font-medium text-success-7">
+        <CheckCircle2 className="h-3.5 w-3.5" />
+        Đã giải quyết
+      </span>
+    )}
+
     <h1 className="mb-5 text-[30px] font-bold leading-[1.25] tracking-tight text-neutral-9">
       {thread.title}
     </h1>
@@ -214,7 +233,7 @@ const ThreadArticle = ({ thread }: { thread: ForumThread }) => (
     <div
       className="prose max-w-none"
       style={{ fontSize: 15, lineHeight: 1.8 }}
-      dangerouslySetInnerHTML={{ __html: thread.content }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(thread.content) }}
     />
 
     <ReactionBar thread={thread} />
@@ -302,6 +321,9 @@ const CommentNode = ({
   expandedIds,
   onToggleExpand,
   onReplied,
+  acceptedCommentId,
+  canAccept,
+  onAccept,
 }: {
   comment: ForumComment
   threadId: string
@@ -309,12 +331,37 @@ const CommentNode = ({
   expandedIds: Set<string>
   onToggleExpand: (id: string) => void
   onReplied: (parentId: string) => void
+  acceptedCommentId: string | null
+  canAccept: boolean
+  onAccept: (commentId: string | null) => void
 }) => {
   const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const [replying, setReplying] = useState(false)
   const replies = comment.replies ?? []
   const isExpanded = expandedIds.has(comment.id)
+  const isAccepted = !comment.isDeleted && comment.id === acceptedCommentId
+  const [reacted, setReacted] = useState(!!comment.hasReacted)
+  const [reactCount, setReactCount] = useState(comment.reactionCount ?? 0)
+  const [reactBusy, setReactBusy] = useState(false)
+
+  const handleLike = async () => {
+    if (!isAuthenticated) {
+      navigate(loginRedirect())
+      return
+    }
+    if (reactBusy) return
+    setReactBusy(true)
+    try {
+      const r = await toggleCommentReaction(comment.id)
+      setReacted(r.reacted)
+      setReactCount(r.count)
+    } catch {
+      // ignore
+    } finally {
+      setReactBusy(false)
+    }
+  }
 
   // Cấp 3 (depth 2): reply flatten thành sibling — parent là ancestor cấp 2,
   // prefill @mention người được trả lời (kiểu Facebook).
@@ -332,41 +379,79 @@ const CommentNode = ({
 
   return (
     <div>
-      <div className="flex gap-3 border-t border-neutral-2 px-1 py-[18px] first:border-t-0">
+      <div
+        className={`flex gap-3 border-t border-neutral-2 px-1 py-[18px] first:border-t-0 ${
+          isAccepted ? 'rounded-lg border-t-0 bg-success-1 px-3' : ''
+        }`}
+      >
         <Avatar name={comment.author?.fullName} src={comment.author?.avatar} size={32} />
         <div className="min-w-0 flex-1">
-          <div className="mb-1 flex flex-wrap items-center gap-2">
-            <span className="text-sm font-semibold text-neutral-8">
-              {comment.author?.fullName ?? 'Ẩn danh'}
-            </span>
-            <span className="text-xs text-neutral-4">{formatRelative(comment.createdAt)}</span>
-            {comment.isEdited && <span className="text-[11px] text-neutral-4">(đã sửa)</span>}
-          </div>
+          {comment.isDeleted ? (
+            // Soft-deleted comment kept only to preserve the reply thread below it.
+            <p className="py-1 text-sm italic text-neutral-4">Bình luận đã bị xoá</p>
+          ) : (
+            <>
+              <div className="mb-1 flex flex-wrap items-center gap-2">
+                <span className="text-sm font-semibold text-neutral-8">
+                  {comment.author?.fullName ?? 'Ẩn danh'}
+                </span>
+                <span className="text-xs text-neutral-4">{formatRelative(comment.createdAt)}</span>
+                {comment.isEdited && <span className="text-[11px] text-neutral-4">(đã sửa)</span>}
+                {isAccepted && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-success-2 px-1.5 py-0.5 text-[11px] font-medium text-success-7">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Câu trả lời được chấp nhận
+                  </span>
+                )}
+              </div>
 
-          <div
-            className="prose max-w-none text-sm text-neutral-8"
-            dangerouslySetInnerHTML={{ __html: comment.content }}
-          />
+              <div
+                className="prose max-w-none text-sm text-neutral-8"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(comment.content) }}
+              />
 
-          <button
-            onClick={handleReplyClick}
-            className="mt-1.5 flex items-center gap-1 text-xs text-neutral-5 transition-colors hover:text-neutral-8"
-          >
-            <MessageSquare className="h-[13px] w-[13px]" />
-            Trả lời
-          </button>
+              <div className="mt-1.5 flex items-center gap-3">
+                <button
+                  onClick={handleLike}
+                  disabled={reactBusy}
+                  className={`flex items-center gap-1 text-xs transition-colors disabled:opacity-60 ${
+                    reacted ? 'font-medium text-primary-6' : 'text-neutral-5 hover:text-neutral-8'
+                  }`}
+                >
+                  <ThumbsUp className="h-[13px] w-[13px]" />
+                  {reactCount > 0 ? reactCount : 'Thích'}
+                </button>
+                <button
+                  onClick={handleReplyClick}
+                  className="flex items-center gap-1 text-xs text-neutral-5 transition-colors hover:text-neutral-8"
+                >
+                  <MessageSquare className="h-[13px] w-[13px]" />
+                  Trả lời
+                </button>
+                {canAccept && (
+                  <button
+                    onClick={() => onAccept(isAccepted ? null : comment.id)}
+                    className="flex items-center gap-1 text-xs text-success-7 transition-colors hover:text-success-8"
+                  >
+                    <CheckCircle2 className="h-[13px] w-[13px]" />
+                    {isAccepted ? 'Bỏ chọn câu trả lời' : 'Chọn làm câu trả lời'}
+                  </button>
+                )}
+              </div>
 
-          {replying && (
-            <ReplyBox
-              threadId={threadId}
-              parentId={replyParentId}
-              initialValue={replyPrefill}
-              onDone={() => {
-                setReplying(false)
-                onReplied(replyParentId)
-              }}
-              onCancel={() => setReplying(false)}
-            />
+              {replying && (
+                <ReplyBox
+                  threadId={threadId}
+                  parentId={replyParentId}
+                  initialValue={replyPrefill}
+                  onDone={() => {
+                    setReplying(false)
+                    onReplied(replyParentId)
+                  }}
+                  onCancel={() => setReplying(false)}
+                />
+              )}
+            </>
           )}
         </div>
       </div>
@@ -384,6 +469,9 @@ const CommentNode = ({
                   expandedIds={expandedIds}
                   onToggleExpand={onToggleExpand}
                   onReplied={onReplied}
+                  acceptedCommentId={acceptedCommentId}
+                  canAccept={canAccept}
+                  onAccept={onAccept}
                 />
               ))}
               <button
@@ -522,23 +610,75 @@ const Composer = ({
 // ─── replies section ─────────────────────────────────────────────────────────────
 
 const RepliesSection = ({ thread }: { thread: ForumThread }) => {
+  const { user } = useAuth()
   const [comments, setComments] = useState<ForumComment[]>([])
   const [loading, setLoading] = useState(true)
-  const [visibleRootCount, setVisibleRootCount] = useState(ROOT_PAGE_SIZE)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [page, setPage] = useState(1)
+  const [hasNext, setHasNext] = useState(false)
+  const [totalComments, setTotalComments] = useState(0)
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
+  const [acceptedCommentId, setAcceptedCommentId] = useState<string | null>(
+    thread.acceptedCommentId ?? null,
+  )
 
-  const load = useCallback(async () => {
+  // Only the thread author may pick the accepted answer (admins use the admin UI).
+  const canAccept = !!user && user.id === thread.authorId
+
+  const handleAccept = useCallback(
+    async (commentId: string | null) => {
+      try {
+        const updated = await setAcceptedAnswer(thread.id, commentId)
+        setAcceptedCommentId(updated.acceptedCommentId ?? null)
+      } catch {
+        // ignore; state stays as-is
+      }
+    },
+    [thread.id],
+  )
+
+  // Load pages 1..upTo from the server and replace the list. Used on first load
+  // and after a mutation so already-loaded pages stay visible.
+  const load = useCallback(
+    async (upTo = 1) => {
+      try {
+        const all: ForumComment[] = []
+        let last: Awaited<ReturnType<typeof getThreadComments>> | undefined
+        for (let p = 1; p <= upTo; p++) {
+          last = await getThreadComments(thread.id, { page: p, limit: ROOT_PAGE_SIZE })
+          all.push(...last.items)
+        }
+        setComments(all)
+        setPage(upTo)
+        setHasNext(last?.pagination.hasNext ?? false)
+        setTotalComments(last?.totalComments ?? all.length)
+      } catch {
+        // keep previous list; error surfaced by empty state
+      } finally {
+        setLoading(false)
+      }
+    },
+    [thread.id],
+  )
+
+  const loadMore = useCallback(async () => {
+    setLoadingMore(true)
     try {
-      setComments(await getThreadComments(thread.id))
+      const next = page + 1
+      const res = await getThreadComments(thread.id, { page: next, limit: ROOT_PAGE_SIZE })
+      setComments(prev => [...prev, ...res.items])
+      setPage(next)
+      setHasNext(res.pagination.hasNext)
+      setTotalComments(res.totalComments)
     } catch {
-      // keep previous list; error surfaced by empty state
+      // ignore; user can retry
     } finally {
-      setLoading(false)
+      setLoadingMore(false)
     }
-  }, [thread.id])
+  }, [thread.id, page])
 
   useEffect(() => {
-    void load()
+    void load(1)
   }, [load])
 
   const toggleExpand = useCallback((id: string) => {
@@ -550,26 +690,22 @@ const RepliesSection = ({ thread }: { thread: ForumThread }) => {
     })
   }, [])
 
-  // Giữ nhánh vừa reply ở trạng thái mở để thấy comment mới sau reload.
+  // Giữ nhánh vừa reply ở trạng thái mở; reload các trang đã tải để thấy comment mới.
   const handleReplied = useCallback(
     (parentId: string) => {
       setExpandedIds(prev => new Set(prev).add(parentId))
-      void load()
+      void load(page)
     },
-    [load],
+    [load, page],
   )
-
-  const visibleRoots = comments.slice(0, visibleRootCount)
-  const hiddenRootCount = comments.length - visibleRoots.length
 
   return (
     <section className="mt-7">
       <h2 className="mb-4 text-base font-semibold text-neutral-9">
-        Bình luận{' '}
-        <span className="font-normal text-neutral-4 tabular-nums">{countComments(comments)}</span>
+        Bình luận <span className="font-normal text-neutral-4 tabular-nums">{totalComments}</span>
       </h2>
 
-      <Composer threadId={thread.id} locked={thread.isLocked} onPosted={load} />
+      <Composer threadId={thread.id} locked={thread.isLocked} onPosted={() => void load(page)} />
 
       {loading ? (
         <div className="mt-3 flex flex-col gap-4">
@@ -592,7 +728,7 @@ const RepliesSection = ({ thread }: { thread: ForumThread }) => {
         </div>
       ) : (
         <div className="mt-2">
-          {visibleRoots.map(c => (
+          {comments.map(c => (
             <CommentNode
               key={c.id}
               comment={c}
@@ -601,14 +737,18 @@ const RepliesSection = ({ thread }: { thread: ForumThread }) => {
               expandedIds={expandedIds}
               onToggleExpand={toggleExpand}
               onReplied={handleReplied}
+              acceptedCommentId={acceptedCommentId}
+              canAccept={canAccept}
+              onAccept={handleAccept}
             />
           ))}
-          {hiddenRootCount > 0 && (
+          {hasNext && (
             <button
-              onClick={() => setVisibleRootCount(c => c + ROOT_PAGE_SIZE)}
-              className="mt-2 w-full rounded-lg border border-neutral-3 py-2.5 text-sm font-medium text-neutral-6 transition-colors hover:bg-neutral-1"
+              onClick={() => void loadMore()}
+              disabled={loadingMore}
+              className="mt-2 w-full rounded-lg border border-neutral-3 py-2.5 text-sm font-medium text-neutral-6 transition-colors hover:bg-neutral-1 disabled:opacity-60"
             >
-              Xem thêm {hiddenRootCount} bình luận
+              {loadingMore ? 'Đang tải…' : 'Xem thêm bình luận'}
             </button>
           )}
         </div>

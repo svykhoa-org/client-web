@@ -52,6 +52,7 @@ export interface ForumThread extends BaseModel {
   authorId: string
   author?: ForumAuthor
   subCategoryId: string
+  subCategory?: ForumSubCategory
   prefixTagId: string | null
   prefixTag?: ForumPrefixTag | null
   isPinned: boolean
@@ -63,6 +64,8 @@ export interface ForumThread extends BaseModel {
   lastReplyUser?: ForumAuthor | null
   reactionCount?: number
   hasReacted?: boolean
+  acceptedCommentId?: string | null
+  isSolved?: boolean
 }
 
 export interface ForumComment extends BaseModel {
@@ -72,6 +75,9 @@ export interface ForumComment extends BaseModel {
   author?: ForumAuthor
   parentId?: string | null
   isEdited?: boolean
+  isDeleted?: boolean
+  reactionCount?: number
+  hasReacted?: boolean
   replies?: ForumComment[]
 }
 

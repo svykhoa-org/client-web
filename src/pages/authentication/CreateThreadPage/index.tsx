@@ -2,7 +2,7 @@ import { RequireAuth } from '@/components/auth'
 import Editor from '@/components/ui/Editor'
 import RouteConfig from '@/constants/RouteConfig'
 import { useLayout } from '@/hooks/useLayout'
-import { createThread } from '@/services/forum/forumService'
+import { createThread, uploadForumImage } from '@/services/forum/forumService'
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
@@ -108,6 +108,7 @@ const CreateThreadForm = () => {
                   value={content}
                   onChange={setContent}
                   placeholder="Viết nội dung bài viết của bạn..."
+                  onImageUpload={async file => (await uploadForumImage(file)).url}
                 />
               </div>
             </div>

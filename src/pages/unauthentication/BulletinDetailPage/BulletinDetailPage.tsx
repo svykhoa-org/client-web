@@ -16,6 +16,7 @@ import { AsyncLoading } from '@/components/ui/AsyncLoading'
 import { useAsyncState } from '@/hooks/useAsyncState'
 import type { Attachment } from '@/models/Attachment'
 import type { Bulletin } from '@/models/Bulletin'
+import { sanitizeHtml } from '@/utils/sanitizeHtml'
 
 const { Title, Text } = Typography
 
@@ -376,7 +377,7 @@ const BulletinDetailPage: React.FC = () => {
                   <div className="prose prose-lg max-w-none">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: bulletinState.state.data.content,
+                        __html: sanitizeHtml(bulletinState.state.data.content),
                       }}
                     />
                   </div>

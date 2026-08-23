@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { Eye, MessageCircle, Paperclip, Pin } from 'lucide-react'
 
 import type { Post } from '@/models/Post'
+import { sanitizeHtml } from '@/utils/sanitizeHtml'
 
 type PostCardProps = {
   post: Post
@@ -56,7 +57,7 @@ const PostCard = ({ post, onViewMore }: PostCardProps) => {
         {/* Content preview */}
         <div
           className="mb-3 line-clamp-2 text-sm leading-relaxed text-neutral-6"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
         />
 
         {/* Tags */}

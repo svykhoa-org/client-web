@@ -72,6 +72,9 @@ const RouteConfig = {
   ForumPage: {
     path: '/forum',
   },
+  ForumSearchPage: {
+    path: '/forum/search',
+  },
   ForumSubCategoryPage: {
     path: '/forum/sub-categories/:id',
   },

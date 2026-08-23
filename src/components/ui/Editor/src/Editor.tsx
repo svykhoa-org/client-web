@@ -77,8 +77,9 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
           [{ list: 'ordered' }, { list: 'bullet' }],
           [{ indent: '-1' }, { indent: '+1' }],
           [{ align: [] }],
-          // ['link', 'image', 'video'],
-          ['link'],
+          // Chỉ hiện nút chèn ảnh khi caller cung cấp onImageUpload (tránh nút
+          // "chết" ở các Editor không hỗ trợ upload).
+          onImageUpload ? ['link', 'image'] : ['link'],
           ['clean'],
         ],
         handlers: {
