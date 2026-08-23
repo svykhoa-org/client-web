@@ -2,6 +2,7 @@ import type { SuccessResponse, ListResponseDataV2 } from '@/common/interface/Ser
 import type {
   ForumCategoryGroup,
   ForumComment,
+  ForumPrefixTag,
   ForumSubCategory,
   ForumThread,
   ThreadSortOption,
@@ -11,6 +12,11 @@ import { httpClient } from '../apiClient'
 export const getForumHomepage = async (): Promise<ForumCategoryGroup[]> => {
   const res = await httpClient.get<ForumCategoryGroup[]>('/forum/categories')
   return (res as SuccessResponse<ForumCategoryGroup[]>).data as ForumCategoryGroup[]
+}
+
+export const getPrefixTags = async (): Promise<ForumPrefixTag[]> => {
+  const res = await httpClient.get<ForumPrefixTag[]>('/forum/prefix-tags')
+  return (res as SuccessResponse<ForumPrefixTag[]>).data as ForumPrefixTag[]
 }
 
 export const getThreadsBySubCategory = async (
@@ -36,6 +42,17 @@ export const searchForumThreads = async (params: {
   limit?: number
 }): Promise<ListResponseDataV2<ForumThread>> => {
   const res = await httpClient.get<ListResponseDataV2<ForumThread>>('/forum/search', params)
+  return (res as SuccessResponse<ListResponseDataV2<ForumThread>>)
+    .data as ListResponseDataV2<ForumThread>
+}
+
+// Global (cross-category) thread list for the Hot / New tabs.
+export const getGlobalThreads = async (params: {
+  sort: 'hot' | 'new'
+  page?: number
+  limit?: number
+}): Promise<ListResponseDataV2<ForumThread>> => {
+  const res = await httpClient.get<ListResponseDataV2<ForumThread>>('/forum/threads', params)
   return (res as SuccessResponse<ListResponseDataV2<ForumThread>>)
     .data as ListResponseDataV2<ForumThread>
 }

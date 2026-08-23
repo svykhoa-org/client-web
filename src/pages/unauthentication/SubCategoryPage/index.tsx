@@ -1,16 +1,17 @@
-import { ProtectedButton } from '@/components/auth/ProtectedButton'
+import { ForumComposer } from '@/components/forum/ForumComposer'
+import { NewTopicButton } from '@/components/forum/NewTopicButton'
 import { AsyncLoading } from '@/components/ui/AsyncLoading'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAsyncState } from '@/hooks/useAsyncState'
 import { useLayout } from '@/hooks/useLayout'
-import type { ForumThread } from '@/models/Forum'
+import type { ForumPrefixTag, ForumThread } from '@/models/Forum'
 import { ThreadSortOption } from '@/models/Forum'
 import type { ListResponseDataV2 } from '@/common/interface/ServiceResponse'
-import { getThreadsBySubCategory } from '@/services/forum/forumService'
-import { PlusOutlined } from '@ant-design/icons'
+import { getPrefixTags, getThreadsBySubCategory } from '@/services/forum/forumService'
+import { Select } from 'antd'
+import { ChevronLeft } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { ChevronLeft } from 'lucide-react'
 import { ThreadListItem } from './components/ThreadListItem'
 
 const SORT_OPTIONS = [
@@ -26,18 +27,28 @@ export const SubCategoryPage = () => {
   const { setLeftSidebar, setRightSidebar, setBanner } = useLayout()
 
   const [sort, setSort] = useState<ThreadSortOption>(ThreadSortOption.LastReply)
+  const [prefixTagId, setPrefixTagId] = useState<string | undefined>()
+  const [prefixTags, setPrefixTags] = useState<ForumPrefixTag[]>([])
   const [page, setPage] = useState(1)
   const threadsState = useAsyncState<ListResponseDataV2<ForumThread>>()
 
   const load = useCallback(() => {
     if (!id) return
-    void threadsState.execute(() => getThreadsBySubCategory(id, { page, limit: PAGE_SIZE, sort }))
+    void threadsState.execute(() =>
+      getThreadsBySubCategory(id, { page, limit: PAGE_SIZE, sort, prefixTagId }),
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, page, sort])
+  }, [id, page, prefixTagId, sort])
 
   useEffect(() => {
     load()
   }, [load])
+
+  useEffect(() => {
+    void getPrefixTags()
+      .then(setPrefixTags)
+      .catch(() => setPrefixTags([]))
+  }, [])
 
   useEffect(() => {
     setLeftSidebar(null)
@@ -54,7 +65,7 @@ export const SubCategoryPage = () => {
   return (
     <div className="bg-neutral-2 pb-8">
       <div className="container mx-auto px-4 pt-4">
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mb-4 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
           <button
             onClick={() => navigate(RouteConfig.ForumPage.path)}
             className="flex items-center gap-1 text-sm text-neutral-5 hover:text-neutral-7 transition-colors"
@@ -63,32 +74,36 @@ export const SubCategoryPage = () => {
             Diễn đàn
           </button>
 
-          <div className="flex items-center gap-2">
-            <select
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:flex-nowrap">
+            <Select
               value={sort}
-              onChange={e => {
-                setSort(e.target.value as ThreadSortOption)
+              onChange={value => {
+                setSort(value)
                 setPage(1)
               }}
-              className="rounded-lg border border-neutral-3 bg-white px-3 py-1.5 text-sm text-neutral-7 focus:outline-none"
-            >
-              {SORT_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
+              options={SORT_OPTIONS}
+              size="middle"
+              aria-label="Sắp xếp bài viết"
+              className="min-w-0 flex-1 sm:w-44 sm:flex-none [&_.ant-select-selector]:!rounded-lg"
+            />
 
-            <ProtectedButton
-              type="primary"
-              icon={<PlusOutlined />}
-              size="small"
-              modalTitle="Yêu cầu đăng nhập"
-              modalContent="Bạn cần đăng nhập để đăng bài viết."
-              onClick={() => navigate(`${RouteConfig.CreateThreadPage.path}?subCategoryId=${id}`)}
-            >
-              Đăng bài
-            </ProtectedButton>
+            <Select
+              value={prefixTagId}
+              onChange={value => {
+                setPrefixTagId(value)
+                setPage(1)
+              }}
+              options={prefixTags.map(tag => ({ label: tag.name, value: tag.id }))}
+              placeholder="Tất cả nhãn"
+              allowClear
+              showSearch
+              optionFilterProp="label"
+              size="middle"
+              aria-label="Lọc theo nhãn"
+              className="min-w-0 flex-1 sm:w-48 sm:flex-none [&_.ant-select-selector]:!rounded-lg"
+            />
+
+            <NewTopicButton subCategoryId={id} />
           </div>
         </div>
 
@@ -142,6 +157,7 @@ export const SubCategoryPage = () => {
           )}
         </AsyncLoading>
       </div>
+      <ForumComposer />
     </div>
   )
 }

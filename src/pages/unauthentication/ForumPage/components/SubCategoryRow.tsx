@@ -7,17 +7,6 @@ interface Props {
   subCategory: SubCategoryWithPreview
 }
 
-const formatRelativeTime = (dateStr: string | null): string => {
-  if (!dateStr) return ''
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const minutes = Math.floor(diff / 60000)
-  if (minutes < 60) return `${minutes} phút trước`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours} giờ trước`
-  const days = Math.floor(hours / 24)
-  return `${days} ngày trước`
-}
-
 export const SubCategoryRow = ({ subCategory }: Props) => {
   const navigate = useNavigate()
 
@@ -50,24 +39,6 @@ export const SubCategoryRow = ({ subCategory }: Props) => {
           </p>
           <p className="text-xs text-neutral-4">Bình luận</p>
         </div>
-      </div>
-
-      <div className="hidden w-52 shrink-0 lg:block">
-        {subCategory.latestThread ? (
-          <div>
-            <p className="line-clamp-1 text-xs font-medium text-neutral-7">
-              {subCategory.latestThread.title}
-            </p>
-            <p className="mt-0.5 text-xs text-neutral-4">
-              {subCategory.latestThread.lastReplyUser?.fullName ?? 'Ai đó'}
-              {subCategory.latestThread.lastReplyAt
-                ? ` · ${formatRelativeTime(subCategory.latestThread.lastReplyAt)}`
-                : ''}
-            </p>
-          </div>
-        ) : (
-          <p className="text-xs text-neutral-3">Chưa có bài viết</p>
-        )}
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 
 interface Props {
   thread: ForumThread
+  showPinned?: boolean
 }
 
 const formatDate = (dateStr: string | null): string => {
@@ -12,7 +13,7 @@ const formatDate = (dateStr: string | null): string => {
   return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
-export const ThreadListItem = ({ thread }: Props) => {
+export const ThreadListItem = ({ thread, showPinned = true }: Props) => {
   const navigate = useNavigate()
 
   return (
@@ -22,7 +23,7 @@ export const ThreadListItem = ({ thread }: Props) => {
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          {thread.isPinned && (
+          {showPinned && thread.isPinned && (
             <span className="inline-flex items-center gap-1 rounded-md bg-primary-1 px-1.5 py-0.5 text-xs font-medium text-primary-7">
               <Pin className="h-3 w-3" />
               Ghim

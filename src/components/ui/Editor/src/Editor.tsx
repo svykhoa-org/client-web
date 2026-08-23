@@ -16,7 +16,7 @@
 //   />
 // );
 // export default Editor;
-import React, { useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 
@@ -37,7 +37,7 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
   const quillRef = useRef<ReactQuill>(null)
 
   // Xử lý upload ảnh
-  const imageHandler = () => {
+  const imageHandler = useCallback(() => {
     const input = document.createElement('input')
     input.setAttribute('type', 'file')
     input.setAttribute('accept', 'image/*')
@@ -62,7 +62,7 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
         }
       }
     }
-  }
+  }, [onImageUpload])
 
   // Cấu hình modules
   const modules = useMemo(
@@ -87,7 +87,7 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
         },
       },
     }),
-    [onImageUpload],
+    [imageHandler, onImageUpload],
   )
 
   // Cấu hình formats
@@ -105,7 +105,6 @@ const Editor: React.FC<EditorProps> = ({ value, onChange, placeholder, onImageUp
     'blockquote',
     'code-block',
     'list',
-    'bullet',
     'indent',
     'align',
     'link',
