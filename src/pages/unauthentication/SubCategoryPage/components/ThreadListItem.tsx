@@ -1,10 +1,12 @@
-import type { ForumThread } from '@/models/Forum'
+import { ThreadStatus, type ForumThread } from '@/models/Forum'
 import { Eye, Clock, Pin, Lock } from 'lucide-react'
 import { useNavigate } from 'react-router'
 
 interface Props {
   thread: ForumThread
   showPinned?: boolean
+  showStatus?: boolean
+  canOpen?: boolean
 }
 
 const formatDate = (dateStr: string | null): string => {
@@ -13,16 +15,41 @@ const formatDate = (dateStr: string | null): string => {
   return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
-export const ThreadListItem = ({ thread, showPinned = true }: Props) => {
+export const ThreadListItem = ({
+  thread,
+  showPinned = true,
+  showStatus = false,
+  canOpen = true,
+}: Props) => {
   const navigate = useNavigate()
 
   return (
     <div
-      onClick={() => navigate(`/forum/threads/${thread.id}`)}
-      className="flex items-start gap-3 rounded-lg border border-neutral-3 bg-white p-4 cursor-pointer transition-shadow hover:shadow-sm"
+      onClick={canOpen ? () => navigate(`/forum/threads/${thread.id}`) : undefined}
+      onKeyDown={
+        canOpen
+          ? event => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                navigate(`/forum/threads/${thread.id}`)
+              }
+            }
+          : undefined
+      }
+      role={canOpen ? 'link' : undefined}
+      tabIndex={canOpen ? 0 : undefined}
+      aria-disabled={canOpen ? undefined : true}
+      className={`flex items-start gap-3 rounded-lg border border-neutral-3 bg-white p-4 transition-shadow ${
+        canOpen ? 'cursor-pointer hover:shadow-sm' : 'cursor-default'
+      }`}
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
+          {showStatus && thread.status === ThreadStatus.Pending && (
+            <span className="inline-flex rounded-md bg-warning-1 px-1.5 py-0.5 text-xs font-medium text-warning-3">
+              Chờ đăng
+            </span>
+          )}
           {showPinned && thread.isPinned && (
             <span className="inline-flex items-center gap-1 rounded-md bg-primary-1 px-1.5 py-0.5 text-xs font-medium text-primary-7">
               <Pin className="h-3 w-3" />

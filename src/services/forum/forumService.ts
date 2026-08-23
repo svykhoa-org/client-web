@@ -57,6 +57,15 @@ export const getGlobalThreads = async (params: {
     .data as ListResponseDataV2<ForumThread>
 }
 
+export const getMyForumThreads = async (params?: {
+  page?: number
+  limit?: number
+}): Promise<ListResponseDataV2<ForumThread>> => {
+  const res = await httpClient.get<ListResponseDataV2<ForumThread>>('/forum/my/threads', params)
+  return (res as SuccessResponse<ListResponseDataV2<ForumThread>>)
+    .data as ListResponseDataV2<ForumThread>
+}
+
 export const getThreadById = async (id: string): Promise<ForumThread> => {
   const res = await httpClient.get<ForumThread>(`/forum/threads/${id}`)
   return (res as SuccessResponse<ForumThread>).data as ForumThread

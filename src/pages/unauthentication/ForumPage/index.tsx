@@ -1,11 +1,13 @@
 import { AsyncLoading } from '@/components/ui/AsyncLoading'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAsyncState } from '@/hooks/useAsyncState'
+import { useAuth } from '@/hooks/useAuth'
 import { useLayout } from '@/hooks/useLayout'
 import type { ForumCategoryGroup } from '@/models/Forum'
 import { getForumHomepage } from '@/services/forum/forumService'
 import {
   Clock,
+  FileText,
   Flame,
   LayoutGrid,
   MessageCircleQuestion,
@@ -17,16 +19,23 @@ import { type FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { CategoryGroupSection } from './components/CategoryGroupSection'
 import { GlobalThreadList } from './components/GlobalThreadList'
+import { MyThreadList } from './components/MyThreadList'
 import { ForumComposer } from '@/components/forum/ForumComposer'
 import { NewTopicButton } from '@/components/forum/NewTopicButton'
 
-type ForumTab = 'categories' | 'hot' | 'new'
+type ForumTab = 'categories' | 'hot' | 'new' | 'mine'
 
 const TABS: { key: ForumTab; label: string; icon: typeof Flame }[] = [
   { key: 'categories', label: 'Danh mục', icon: LayoutGrid },
   { key: 'hot', label: 'Nổi bật', icon: Flame },
   { key: 'new', label: 'Mới nhất', icon: Clock },
 ]
+
+const MY_POSTS_TAB: { key: ForumTab; label: string; icon: typeof Flame } = {
+  key: 'mine',
+  label: 'Bài viết của tôi',
+  icon: FileText,
+}
 
 const ForumHero = () => {
   const navigate = useNavigate()
@@ -117,9 +126,11 @@ const ForumHero = () => {
 }
 
 export const ForumPage = () => {
+  const { isAuthenticated } = useAuth()
   const { setLeftSidebar, setRightSidebar, setBanner } = useLayout()
   const forumState = useAsyncState<ForumCategoryGroup[]>()
   const [tab, setTab] = useState<ForumTab>('categories')
+  const visibleTabs = isAuthenticated ? [...TABS, MY_POSTS_TAB] : TABS
 
   useEffect(() => {
     void forumState.execute(() => getForumHomepage().then(data => data))
@@ -136,12 +147,16 @@ export const ForumPage = () => {
     }
   }, [setBanner, setLeftSidebar, setRightSidebar])
 
+  useEffect(() => {
+    if (!isAuthenticated && tab === 'mine') setTab('categories')
+  }, [isAuthenticated, tab])
+
   return (
     <div className="bg-neutral-2 pb-8">
       <div className="container mx-auto px-4 pt-6">
         <div className="mb-4 flex items-center justify-between gap-2 border-b border-neutral-3">
           <div className="flex items-center gap-1">
-            {TABS.map(({ key, label, icon: Icon }) => (
+            {visibleTabs.map(({ key, label, icon: Icon }) => (
               <button
                 key={key}
                 onClick={() => setTab(key)}
@@ -185,6 +200,8 @@ export const ForumPage = () => {
               </div>
             )}
           </AsyncLoading>
+        ) : tab === 'mine' ? (
+          <MyThreadList />
         ) : (
           <GlobalThreadList sort={tab === 'hot' ? 'hot' : 'new'} />
         )}
