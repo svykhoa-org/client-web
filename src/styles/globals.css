@@ -51,6 +51,10 @@
   --color-neutral-9: #262626; /* Darker gray - important text */
   --color-neutral-10: #171717; /* Darkest gray - high contrast text */
 
+  /* Danger / alert — used for URGENT bulletins (thông báo khẩn). */
+  --color-danger-1: #fef2f2; /* Soft red background - badges */
+  --color-danger-6: #dc2626; /* Base danger - urgent accent, dot, text */
+
   /* ========================================
      WARNING COLORS
      ============================================== */

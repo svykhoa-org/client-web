@@ -1,27 +1,21 @@
+import type { ListResponseDataV2, SuccessResponse } from '@/common/interface/ServiceResponse'
 import type { Bulletin } from '@/models/Bulletin'
 
-import { mockBulletins } from './mockBulletins'
+import { httpClient } from '../apiClient'
 
-export type GetBulletinsResponseData = Bulletin
-
-export interface GetBulletins {
+export interface GetBulletinsParams {
   page?: number
   limit?: number
+  categoryId?: string
 }
 
-export const getBulletins = async ({ page = 1, limit = 10 }: GetBulletins) => {
-  await Promise.resolve(new Promise(resolve => setTimeout(resolve, 2000)))
-  return {
-    code: 200,
-    message: 'Bulletins fetched successfully',
-    data: {
-      items: mockBulletins.slice((page - 1) * (limit || 10), page * (limit || 10)),
-      pagination: {
-        totalItems: mockBulletins.length,
-        totalPages: Math.ceil(mockBulletins.length / (limit || 10)),
-        page: page || 1,
-        limit: limit || 10,
-      },
-    },
-  }
+// Public list of PUBLISHED, non-expired bulletins (pinned/featured first).
+export const getBulletins = async (
+  params: GetBulletinsParams = {},
+): Promise<ListResponseDataV2<Bulletin>> => {
+  const res = await httpClient.get<ListResponseDataV2<Bulletin>>(
+    '/bulletins',
+    params as Record<string, unknown>,
+  )
+  return (res as SuccessResponse<ListResponseDataV2<Bulletin>>).data as ListResponseDataV2<Bulletin>
 }
