@@ -1,43 +1,24 @@
+import type { ListResponseDataV2, SuccessResponse } from '@/common/interface/ServiceResponse'
 import type { Article } from '@/models/Article'
 
-import { PAGE_DEFAULT, PAGE_SIZE_DEFAULT } from '../_shared/constants'
-import type { BaseQuery, ResponseListSuccess, Searcher, Sorter } from '../_shared/types/query.types'
-import apiClient from '../_shared/utils/api'
-import { bindStage } from '../_shared/utils/bind-stage'
-import { buildSearcherParams, buildSorterParams } from '../_shared/utils/query'
-import { mockArticles } from './mockArticles'
+import { httpClient } from '../apiClient'
 
-export interface GetArticles extends BaseQuery {
-  searcher: Searcher<Article>
-  sorter: Sorter<Article>
+export interface GetArticlesParams {
+  page?: number
+  limit?: number
+  search?: string
+  categoryId?: string
+  featured?: boolean
 }
 
-export const getArticles = bindStage<GetArticles, ResponseListSuccess<Article>>({
-  stage: 'mock',
-  mockFn: async ({ page = PAGE_DEFAULT, pageSize = PAGE_SIZE_DEFAULT }) => {
-    await Promise.resolve(new Promise(resolve => setTimeout(resolve, 2000)))
-    return {
-      statusCode: 200,
-      message: 'Articles fetched successfully',
-      data: {
-        hits: mockArticles.slice((page - 1) * pageSize, page * pageSize),
-        pagination: {
-          total: mockArticles.length,
-          totalPages: Math.ceil(mockArticles.length / (pageSize || 10)),
-        },
-      },
-    }
-  },
-  devFn: async ({ page = PAGE_DEFAULT, pageSize = PAGE_SIZE_DEFAULT, searcher, sorter }) => {
-    const response = await apiClient.request<ResponseListSuccess<Article>>({
-      url: '/articles',
-      params: {
-        page,
-        pageSize,
-        ...buildSearcherParams(searcher),
-        ...buildSorterParams(sorter),
-      },
-    })
-    return response.data
-  },
-})
+// Public list of PUBLISHED articles (featured-first). Backing the home
+// "Tin nổi bật" block — replaces the previous mock service.
+export const getArticles = async (
+  params: GetArticlesParams = {},
+): Promise<ListResponseDataV2<Article>> => {
+  const res = await httpClient.get<ListResponseDataV2<Article>>(
+    '/articles',
+    params as Record<string, unknown>,
+  )
+  return (res as SuccessResponse<ListResponseDataV2<Article>>).data as ListResponseDataV2<Article>
+}

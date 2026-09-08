@@ -12,15 +12,13 @@ export const ListArticles = () => {
     getListService: async ({ page, limit }) => {
       const response = await getArticles({
         page: page || 1,
-        pageSize: limit || 6,
-        searcher: {},
-        sorter: {},
+        limit: limit || 6,
       })
 
       return {
-        data: response.data.hits,
-        totalItems: response.data.pagination.total,
-        totalPages: response.data.pagination.totalPages,
+        data: response.items,
+        totalItems: response.pagination.totalItems,
+        totalPages: response.pagination.totalPages,
         page: page || 1,
         limit: limit || 6,
       }
