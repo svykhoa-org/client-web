@@ -72,7 +72,7 @@ export const ArticleReader: FC<{ article: Article }> = ({ article }) => {
 
       {/* Content */}
       <div
-        className="article-reader-content prose max-w-none"
+        className="article-reader-content rich-content prose max-w-none"
         style={{ fontFamily: fontStack, fontSize: `${fontSize}px`, lineHeight }}
         dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }}
       />

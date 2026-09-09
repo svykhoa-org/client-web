@@ -155,7 +155,7 @@ const BulletinDetailPage: React.FC = () => {
                   />
                 )}
                 <div
-                  className="prose max-w-none px-6 py-5 text-neutral-8"
+                  className="rich-content prose max-w-none px-6 py-5 text-neutral-8"
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(bulletin.content) }}
                 />
 

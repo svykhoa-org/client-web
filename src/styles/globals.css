@@ -279,6 +279,38 @@ body {
   border-color: var(--color-primary-5);
 }
 
+/* Rich HTML content (article/bulletin detail) rendered via dangerouslySetInnerHTML.
+   Pasted markup can carry white-space:pre/nowrap or long unbreakable words/URLs,
+   which otherwise refuse to wrap and overflow the reading column. Force wrapping
+   and cap child widths so content always stays inside its column. */
+.rich-content {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.rich-content * {
+  max-width: 100%;
+}
+/* Convert non-wrapping whitespace from pasted content to pre-wrap: keeps the
+   author's line breaks/indentation but lets long lines wrap instead of overflow. */
+.rich-content [style*='white-space'] {
+  white-space: pre-wrap !important;
+}
+.rich-content pre,
+.rich-content code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.rich-content img,
+.rich-content video {
+  height: auto;
+}
+.rich-content table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
 /* Hide the horizontal scrollbar on the category chip scroller while keeping it
    scrollable (affordance is provided by edge fades + chevrons instead). */
 .hide-scrollbar {
