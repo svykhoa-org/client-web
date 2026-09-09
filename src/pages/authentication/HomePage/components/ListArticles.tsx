@@ -1,5 +1,9 @@
+import { Link } from 'react-router'
+
+import { RightOutlined } from '@ant-design/icons'
 import { Pagination, Skeleton, Spin } from 'antd'
 
+import RouteConfig from '@/constants/RouteConfig'
 import { useListing } from '@/hooks/useCRUD/useListing'
 import type { Article } from '@/models/Article'
 import { getArticles } from '@/services/Article/getArticles'
@@ -27,7 +31,16 @@ export const ListArticles = () => {
 
   return (
     <>
-      <h4 className="mb-4 text-start text-xl font-bold">Tin nổi bật</h4>
+      <div className="mb-4 flex items-center justify-between">
+        <h4 className="text-start text-xl font-bold">Tin nổi bật</h4>
+        <Link
+          to={RouteConfig.ArticleListPage.path}
+          className="text-primary-7 hover:text-primary-8 inline-flex items-center gap-1 text-sm font-medium"
+        >
+          Xem tất cả
+          <RightOutlined className="text-xs" />
+        </Link>
+      </div>
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (

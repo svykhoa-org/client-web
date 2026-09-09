@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'
 
-import { ArrowLeftOutlined, DownloadOutlined, PaperClipOutlined } from '@ant-design/icons'
-import { Button, Tag } from 'antd'
+import { DownloadOutlined, HomeOutlined, PaperClipOutlined } from '@ant-design/icons'
+import { Breadcrumb, Tag } from 'antd'
 import dayjs from 'dayjs'
 
+import RouteConfig from '@/constants/RouteConfig'
 import { AsyncLoading } from '@/components/ui/AsyncLoading'
+import { downloadFile } from '@/utils/downloadFile'
 import { useAsyncState } from '@/hooks/useAsyncState'
 import { BulletinImportance, type Bulletin, type BulletinAttachmentRef } from '@/models/Bulletin'
 import { getBulletinBySlug } from '@/services/Bulletin/getBulletinBySlug'
@@ -19,11 +21,11 @@ const fmtSize = (bytes?: number | null): string => {
 }
 
 const AttachmentRow: React.FC<{ file: BulletinAttachmentRef }> = ({ file }) => (
-  <a
-    href={file.url || undefined}
-    target="_blank"
-    rel="noreferrer"
-    className="flex items-center justify-between rounded-lg border border-neutral-3 px-3 py-2.5 text-sm text-primary-7 transition-colors hover:bg-neutral-2"
+  <button
+    type="button"
+    disabled={!file.url}
+    onClick={() => file.url && downloadFile(file.url, file.originalName ?? undefined)}
+    className="flex w-full items-center justify-between rounded-lg border border-neutral-3 px-3 py-2.5 text-left text-sm text-primary-7 transition-colors hover:bg-neutral-2 disabled:cursor-not-allowed disabled:opacity-60"
   >
     <span className="flex items-center gap-2 truncate">
       <PaperClipOutlined /> {file.originalName || 'Tệp đính kèm'}
@@ -32,7 +34,7 @@ const AttachmentRow: React.FC<{ file: BulletinAttachmentRef }> = ({ file }) => (
       {fmtSize(file.size)}
       <DownloadOutlined className="text-primary-6" />
     </span>
-  </a>
+  </button>
 )
 
 const BulletinDetailPage: React.FC = () => {
@@ -71,14 +73,43 @@ const BulletinDetailPage: React.FC = () => {
     <div className="min-h-screen bg-neutral-2 pb-16">
       <div className="container mx-auto px-4 pt-5">
         <div className="mx-auto max-w-[760px]">
-          <Button
-            icon={<ArrowLeftOutlined />}
-            type="text"
-            className="mb-3"
-            onClick={() => navigate(-1)}
-          >
-            Quay lại
-          </Button>
+          {/* Gap lives on a wrapper div — antd resets margin on .ant-breadcrumb,
+              so a Tailwind margin class on <Breadcrumb> itself gets overridden. */}
+          <div className="mb-3">
+            <Breadcrumb
+              items={[
+                {
+                  title: (
+                    <Link to="/">
+                      <HomeOutlined />
+                    </Link>
+                  ),
+                },
+                { title: <Link to={RouteConfig.BulletinListPage.path}>Thông báo</Link> },
+                // Clickable category → deep-links into the filtered list.
+                ...(bulletin?.category
+                  ? [
+                      {
+                        title: (
+                          <Link
+                            to={`${RouteConfig.BulletinListPage.path}?category=${bulletin.category.slug}`}
+                          >
+                            {bulletin.category.name}
+                          </Link>
+                        ),
+                      },
+                    ]
+                  : []),
+                {
+                  title: (
+                    <span className="line-clamp-1 max-w-[220px] align-bottom text-neutral-7 sm:max-w-[360px]">
+                      {bulletin?.title ?? 'Chi tiết'}
+                    </span>
+                  ),
+                },
+              ]}
+            />
+          </div>
 
           <AsyncLoading
             loading={state.state.loading}

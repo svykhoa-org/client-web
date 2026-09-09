@@ -20,6 +20,8 @@ import ProfilePage from '@/pages/authentication/ProfilePage'
 import AboutPage from '@/pages/unauthentication/AboutPage'
 import ArticleDetailPage from '@/pages/unauthentication/ArticleDetailPage'
 import BulletinDetailPage from '@/pages/unauthentication/BulletinDetailPage'
+import { ArticleListPage } from '@/pages/public/ArticleListPage'
+import { BulletinListPage } from '@/pages/public/BulletinListPage'
 // import { CoursePlayerPage } from '@/pages/unauthentication/CoursePlayerPage';
 import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage'
 import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
@@ -144,8 +146,16 @@ const router = createBrowserRouter([
         element: <PaymentResultPage />,
       },
       {
+        path: RouteConfig.ArticleListPage.path,
+        element: <ArticleListPage />,
+      },
+      {
         path: RouteConfig.ArticleDetailPage.path,
         element: <ArticleDetailPage />,
+      },
+      {
+        path: RouteConfig.BulletinListPage.path,
+        element: <BulletinListPage />,
       },
       {
         path: RouteConfig.BulletinDetailPage.path,

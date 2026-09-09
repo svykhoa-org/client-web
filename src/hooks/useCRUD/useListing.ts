@@ -5,6 +5,11 @@ import type { BaseModel } from '@/models/BaseModel'
 export interface SearchParams {
   page?: number
   limit?: number
+  // Optional list filters passed through to the list service. Additive so
+  // existing callers (ListArticles/ListBulletins) are unaffected; the list
+  // pages set these to trigger a refetch on search/category change.
+  search?: string
+  categoryId?: string
 }
 
 export interface UseListing<Model extends BaseModel> {

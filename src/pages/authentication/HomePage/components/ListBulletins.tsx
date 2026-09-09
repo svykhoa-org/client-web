@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
-import { PushpinFilled } from '@ant-design/icons'
+import { PushpinFilled, RightOutlined } from '@ant-design/icons'
 import { Skeleton, Spin } from 'antd'
 import dayjs from 'dayjs'
 
@@ -34,9 +34,18 @@ export const ListBulletins = () => {
 
   return (
     <div className="rounded-xl border border-gray-100 bg-white">
-      <div className="flex items-center gap-2 border-b border-gray-100 px-4 py-3">
-        <span className="h-4 w-1 rounded-full bg-primary-6" />
-        <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Thông báo</h4>
+      <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="h-4 w-1 rounded-full bg-primary-6" />
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Thông báo</h4>
+        </div>
+        <Link
+          to={RouteConfig.BulletinListPage.path}
+          className="text-primary-7 hover:text-primary-8 inline-flex items-center gap-1 text-xs font-medium"
+        >
+          Xem tất cả
+          <RightOutlined className="text-[10px]" />
+        </Link>
       </div>
       {isLoading ? (
         <ul className="divide-y divide-gray-50 px-4 py-1">

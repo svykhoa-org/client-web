@@ -6,6 +6,7 @@ import { httpClient } from '../apiClient'
 export interface GetBulletinsParams {
   page?: number
   limit?: number
+  search?: string
   categoryId?: string
 }
 

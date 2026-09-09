@@ -6,7 +6,6 @@ import type { Article } from '@/models/Article'
 import { getTypefaceStack, LINE_WIDTH_PX, useArticleReaderStore } from '@/stores/articleReaderStore'
 import { sanitizeHtml } from '@/utils/sanitizeHtml'
 
-import { ReaderSettingsPanel } from './ReaderSettingsPanel'
 import { ShareRow } from './ShareRow'
 
 const readingMinutes = (article: Article): number => {
@@ -28,11 +27,6 @@ export const ArticleReader: FC<{ article: Article }> = ({ article }) => {
 
   return (
     <div className="article-reader mx-auto px-4" style={{ maxWidth, fontFamily: fontStack }}>
-      {/* Floating reader-settings control */}
-      <div className="mb-4 flex justify-end pt-2">
-        <ReaderSettingsPanel />
-      </div>
-
       {article.thumbnail && (
         <img
           src={article.thumbnail}

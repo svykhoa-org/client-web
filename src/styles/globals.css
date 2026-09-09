@@ -278,3 +278,13 @@ body {
   box-shadow: 0 0 0 1px var(--color-primary-4);
   border-color: var(--color-primary-5);
 }
+
+/* Hide the horizontal scrollbar on the category chip scroller while keeping it
+   scrollable (affordance is provided by edge fades + chevrons instead). */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}

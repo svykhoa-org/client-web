@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'
 
-import { ArrowLeftOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { HomeOutlined } from '@ant-design/icons'
+import { Breadcrumb } from 'antd'
 
+import RouteConfig from '@/constants/RouteConfig'
 import { AsyncLoading } from '@/components/ui/AsyncLoading'
 import { useAsyncState } from '@/hooks/useAsyncState'
 import type { Article } from '@/models/Article'
 import { getArticleBySlug } from '@/services/Article/getArticleBySlug'
 
 import { ArticleReader } from './components/ArticleReader'
+import { ReaderSettingsPanel } from './components/ReaderSettingsPanel'
 
 const ArticleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>()
@@ -40,15 +42,42 @@ const ArticleDetailPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-neutral-1 pb-16">
       <div className="container mx-auto px-4 pt-5">
-        <div className="mx-auto max-w-[760px]">
-          <Button
-            icon={<ArrowLeftOutlined />}
-            type="text"
-            className="mb-2"
-            onClick={() => navigate(-1)}
-          >
-            Quay lại
-          </Button>
+        {/* Breadcrumb + reader settings share one row (settings aligned right). */}
+        <div className="mx-auto mb-3 flex max-w-[760px] items-center justify-between gap-3">
+          <Breadcrumb
+            items={[
+              {
+                title: (
+                  <Link to="/">
+                    <HomeOutlined />
+                  </Link>
+                ),
+              },
+              { title: <Link to={RouteConfig.ArticleListPage.path}>Bài viết</Link> },
+              // Clickable category → deep-links into the filtered list.
+              ...(article?.category
+                ? [
+                    {
+                      title: (
+                        <Link
+                          to={`${RouteConfig.ArticleListPage.path}?category=${article.category.slug}`}
+                        >
+                          {article.category.name}
+                        </Link>
+                      ),
+                    },
+                  ]
+                : []),
+              {
+                title: (
+                  <span className="line-clamp-1 max-w-[220px] align-bottom text-neutral-7 sm:max-w-[360px]">
+                    {article?.title ?? 'Chi tiết'}
+                  </span>
+                ),
+              },
+            ]}
+          />
+          <ReaderSettingsPanel />
         </div>
 
         <AsyncLoading

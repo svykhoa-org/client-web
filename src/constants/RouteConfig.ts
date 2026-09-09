@@ -63,8 +63,14 @@ const RouteConfig = {
   LibraryPage: {
     path: '/library',
   },
+  ArticleListPage: {
+    path: '/articles',
+  },
   ArticleDetailPage: {
     path: '/article/:slug',
+  },
+  BulletinListPage: {
+    path: '/bulletins',
   },
   BulletinDetailPage: {
     path: '/bulletin/:slug',
