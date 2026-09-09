@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { BRAND_NAME } from '@/constants/brand'
+
 const features = [
   {
     number: '01',
@@ -32,7 +34,7 @@ export const AboutUs: React.FC = () => {
           <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
             Về chúng tôi
           </p>
-          <h2 className="text-3xl font-bold leading-tight text-gray-900">Về SVYKHOA</h2>
+          <h2 className="text-3xl font-bold leading-tight text-gray-900">Về {BRAND_NAME}</h2>
         </div>
         <p className="max-w-lg text-sm leading-relaxed text-gray-500">
           Nền tảng học tập trực tuyến dành riêng cho sinh viên y khoa, giúp tìm kiếm thông tin và

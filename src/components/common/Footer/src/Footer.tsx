@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons'
 
 import fallbackLogo from '@/assets/images/logo.png'
+import { BRAND_NAME } from '@/constants/brand'
 import { useSiteSettings } from '@/hooks/useSiteSettings'
 import { resolveUrl } from '@/utils/resolveUrl'
 
@@ -24,7 +25,7 @@ const Footer = () => {
           <div className="col-span-2 flex flex-col gap-3 lg:col-span-1">
             <img
               src={logoSrc}
-              alt="SVYKHOA"
+              alt={BRAND_NAME}
               className="h-8 w-auto object-contain"
               style={{ transformOrigin: 'left' }}
             />
@@ -122,12 +123,12 @@ const Footer = () => {
 
         <div className="flex flex-col items-center justify-between gap-1 sm:flex-row">
           <p className="text-neutral-5 text-sm">
-            © {currentYear} SVYKHOA. Tất cả quyền được bảo lưu.
+            © {currentYear} {BRAND_NAME}. Tất cả quyền được bảo lưu.
           </p>
           <div className="text-neutral-5 flex items-center gap-1 text-sm">
             <span>Phát triển với</span>
             <HeartFilled className="text-error-3 text-sm" />
-            <span>bởi Đội ngũ SVYKHOA</span>
+            <span>bởi Đội ngũ {BRAND_NAME}</span>
           </div>
         </div>
       </div>

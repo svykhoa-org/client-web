@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { BRAND_NAME } from '@/constants/brand'
 import { fetchSiteSettings, type SiteSettings } from '@/services/SiteSettings'
 
 const FALLBACK: SiteSettings = {
-  siteName: 'SVYKHOA',
+  siteName: BRAND_NAME,
   tagline: null,
   logoId: null,
   logoUrl: null,

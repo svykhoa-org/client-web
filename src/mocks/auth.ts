@@ -1,3 +1,4 @@
+import { BRAND_NAME } from '@/constants/brand'
 import type { User } from '@/models/User'
 import { UserRole, UserStatus } from '@/models/User'
 
@@ -13,7 +14,7 @@ const mockUsers: Record<string, { password: string; user: User }> = {
       status: UserStatus.Active,
       avatarUrl:
         'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face',
-      bio: 'Quản trị viên hệ thống SVYKHOA',
+      bio: `Quản trị viên hệ thống ${BRAND_NAME}`,
       specialization: 'Quản lý Y tế',
       certificates: ['Chứng chỉ Quản lý Bệnh viện', 'Thạc sĩ Y tế Công cộng'],
       workplaces: ['Bệnh viện Đa khoa Trung ương', 'Sở Y tế TP.HCM'],

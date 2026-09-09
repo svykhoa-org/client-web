@@ -7,6 +7,7 @@ import { isAxiosError } from 'axios'
 
 import authImage from '@/assets/images/auth.jpg'
 import { GoogleAuthButton } from '@/components/auth'
+import { BRAND_NAME } from '@/constants/brand'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -59,7 +60,7 @@ export const LoginPage = () => {
     <div className="flex min-h-screen">
       {/* Left: image */}
       <div className="hidden w-1/2 lg:block">
-        <img src={authImage} alt="SVYKHOA" className="h-full w-full object-cover" />
+        <img src={authImage} alt={BRAND_NAME} className="h-full w-full object-cover" />
       </div>
 
       {/* Right: form */}
@@ -69,7 +70,7 @@ export const LoginPage = () => {
             <Title level={2} className="mb-1">
               Đăng nhập
             </Title>
-            <Text className="text-gray-500">Chào mừng bạn trở lại với SVYKHOA</Text>
+            <Text className="text-gray-500">Chào mừng bạn trở lại với {BRAND_NAME}</Text>
           </div>
 
           {error && (

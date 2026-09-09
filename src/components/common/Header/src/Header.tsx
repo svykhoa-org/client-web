@@ -17,6 +17,7 @@ import { Avatar, Button, Drawer, Dropdown, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 
 import fallbackLogo from '@/assets/images/logo.png'
+import { BRAND_NAME } from '@/constants/brand'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 import { useSiteSettings } from '@/hooks/useSiteSettings'
@@ -272,7 +273,11 @@ const HeaderLogo = ({ onClick, src }: HeaderLogoProps) => {
       onClick={onClick}
       aria-label="Về trang chủ"
     >
-      <img src={src} alt="SVYKHOA" className="h-9 w-auto scale-[1.65] rounded-xl object-contain" />
+      <img
+        src={src}
+        alt={BRAND_NAME}
+        className="h-9 w-auto scale-[1.65] rounded-xl object-contain"
+      />
     </button>
   )
 }

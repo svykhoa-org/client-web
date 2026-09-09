@@ -6,6 +6,7 @@ import { Alert, Button, Divider, Form, Input, Typography } from 'antd'
 
 import authImage from '@/assets/images/auth.jpg'
 import { GoogleAuthButton } from '@/components/auth'
+import { BRAND_NAME } from '@/constants/brand'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -56,7 +57,7 @@ const RegisterPage = () => {
     <div className="flex min-h-screen">
       {/* Left: image */}
       <div className="hidden w-1/2 lg:block">
-        <img src={authImage} alt="SVYKHOA" className="h-full w-full object-cover" />
+        <img src={authImage} alt={BRAND_NAME} className="h-full w-full object-cover" />
       </div>
 
       {/* Right: form */}
@@ -66,7 +67,9 @@ const RegisterPage = () => {
             <Title level={2} className="mb-1">
               Đăng ký tài khoản
             </Title>
-            <Text className="text-gray-500">Tạo tài khoản để tham gia vào cộng đồng SVYKHOA</Text>
+            <Text className="text-gray-500">
+              Tạo tài khoản để tham gia vào cộng đồng {BRAND_NAME}
+            </Text>
           </div>
 
           {error && (

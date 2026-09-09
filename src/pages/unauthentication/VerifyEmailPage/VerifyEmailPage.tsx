@@ -5,6 +5,7 @@ import { MailOutlined } from '@ant-design/icons'
 import { Alert, Button, Form, Input, Typography } from 'antd'
 
 import authImage from '@/assets/images/auth.jpg'
+import { BRAND_NAME } from '@/constants/brand'
 import RouteConfig from '@/constants/RouteConfig'
 import { resendVerifyEmail, verifyEmail } from '@/services/auth/authService'
 import { ApiError } from '@/services/httpClient'
@@ -76,7 +77,7 @@ export const VerifyEmailPage = () => {
   return (
     <div className="flex min-h-screen">
       <div className="hidden w-1/2 lg:block">
-        <img src={authImage} alt="SVYKHOA" className="h-full w-full object-cover" />
+        <img src={authImage} alt={BRAND_NAME} className="h-full w-full object-cover" />
       </div>
 
       <div className="flex w-full flex-col items-center justify-center bg-white px-8 lg:w-1/2">
