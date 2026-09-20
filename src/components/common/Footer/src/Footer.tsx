@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 
 import fallbackLogo from '@/assets/images/logo.png'
-import { BRAND_NAME } from '@/constants/brand'
+import { APP_VERSION, BRAND_NAME } from '@/constants/brand'
 import { useSiteSettings } from '@/hooks/useSiteSettings'
 import { resolveUrl } from '@/utils/resolveUrl'
 
@@ -121,11 +121,12 @@ const Footer = () => {
 
         <hr className="border-neutral-3 my-4" />
 
-        <div className="flex flex-col items-center justify-between gap-1 sm:flex-row">
+        <div className="grid grid-cols-1 items-center gap-1 sm:grid-cols-3">
           <p className="text-neutral-5 text-sm">
             © {currentYear} {BRAND_NAME}. Tất cả quyền được bảo lưu.
           </p>
-          <div className="text-neutral-5 flex items-center gap-1 text-sm">
+          <span className="text-neutral-5 text-center text-xs">Version {APP_VERSION}</span>
+          <div className="text-neutral-5 flex items-center gap-1 text-sm sm:justify-self-end">
             <span>Phát triển với</span>
             <HeartFilled className="text-error-3 text-sm" />
             <span>bởi Đội ngũ {BRAND_NAME}</span>

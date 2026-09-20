@@ -5,3 +5,6 @@
 // domains, storage bucket, DB name, service hostnames) are intentionally NOT
 // derived from it.
 export const BRAND_NAME = 'NHAKHOASH'
+
+// 0.0.0
+export const APP_VERSION = '0.0.16'

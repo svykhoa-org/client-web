@@ -38,6 +38,17 @@
   --color-secondary-10: #0b3258; /* Darkest blue */
 
   /* ==============================================
+     ACCENT COLORS (teal / cyan)
+     Accent for the dark home hero banner (badge dot, gradient headline,
+     card highlights). Design reference uses a cyan/teal accent on dark that
+     the blue primary scale can't express; kept to 3 tokens (why: §0.1 —
+     token-based instead of hardcoded hex per svykhoa-client CLAUDE.md).
+     ============================================== */
+  --color-accent-3: #67e8f9; /* Light cyan - accent text/label on dark bg */
+  --color-accent-5: #22d3ee; /* Cyan - dots, borders, icons */
+  --color-accent-6: #00d2b4; /* Base teal - gradient stops, primary accent */
+
+  /* ==============================================
      NEUTRAL COLORS
      ============================================== */
   --color-neutral-1: #fafafa; /* Almost white - page backgrounds */

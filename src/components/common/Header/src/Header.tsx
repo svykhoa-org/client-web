@@ -6,12 +6,18 @@ import {
   BookOutlined,
   CloseOutlined,
   DownOutlined,
+  FacebookFilled,
   FileTextOutlined,
+  GlobalOutlined,
   HomeOutlined,
+  InstagramOutlined,
   LogoutOutlined,
+  MailOutlined,
   MenuOutlined,
   MessageOutlined,
+  PhoneOutlined,
   UserOutlined,
+  YoutubeFilled,
 } from '@ant-design/icons'
 import { Avatar, Button, Drawer, Dropdown, Menu } from 'antd'
 import type { MenuProps } from 'antd'
@@ -24,8 +30,12 @@ import { useSiteSettings } from '@/hooks/useSiteSettings'
 import { cn } from '@/lib/utils'
 
 import './Header.css'
+import SearchBar from './SearchBar'
 import { RoutePath } from '@/routes'
 import { resolveUrl } from '@/utils/resolveUrl'
+
+// Honest fallback tagline when site settings haven't set one yet.
+const FALLBACK_TAGLINE = 'Nền tảng tri thức & đào tạo nha khoa'
 
 type NavMenuMode = 'horizontal' | 'vertical'
 
@@ -89,7 +99,7 @@ const HeaderNavMenu = ({ mode = 'horizontal', onItemClick }: HeaderNavMenuProps)
       className={cn(
         'sv-header-nav border-0 bg-transparent',
         mode === 'horizontal'
-          ? 'sv-header-nav--horizontal flex justify-center'
+          ? 'sv-header-nav--horizontal flex justify-start'
           : 'sv-header-nav--vertical',
       )}
       theme="light"
@@ -276,7 +286,7 @@ const HeaderLogo = ({ onClick, src }: HeaderLogoProps) => {
       <img
         src={src}
         alt={BRAND_NAME}
-        className="h-9 w-auto scale-[1.65] rounded-xl object-contain"
+        className="h-8 w-auto origin-left scale-[1.5] rounded-xl object-contain"
       />
     </button>
   )
@@ -321,80 +331,202 @@ const Header = () => {
     navigate(RouteConfig.HomePage.path)
   }
 
+  // Relocated from the home hero (plan 0014): the medical search now lives in
+  // the header. Same behavior — navigate to /search carrying the query in state.
+  const handleSearch = (searchQuery: string) => {
+    setMobileMenuOpen(false)
+    navigate(RouteConfig.MedicalSearchPage.path, {
+      state: { searchQuery },
+    })
+  }
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(prev => !prev)
   }
 
   return (
-    <header
-      className={cn(
-        'sv-header sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm',
-      )}
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="shrink-0">
-            <HeaderLogo onClick={handleLogoClick} src={logoSrc} />
-          </div>
+    <>
+      {/* Top utility bar — tagline + real contact/social from site settings +
+          language (scrolls away, not sticky). All contact/social fields are
+          conditional: they appear once configured in admin site settings. */}
+      <div className="bg-primary-10 text-neutral-3 w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex h-9 items-center justify-between gap-4 text-xs">
+            {/* Left — tagline + contact */}
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="text-accent-3 truncate font-medium">
+                {settings.tagline || FALLBACK_TAGLINE}
+              </span>
+              {settings.contactPhone && (
+                <>
+                  <span className="text-neutral-6 hidden sm:inline">|</span>
+                  <a
+                    href={`tel:${settings.contactPhone.replace(/\s/g, '')}`}
+                    className="hidden items-center gap-1.5 transition-colors hover:text-white sm:flex"
+                  >
+                    <PhoneOutlined className="text-accent-3" />
+                    <strong className="font-medium text-white">{settings.contactPhone}</strong>
+                  </a>
+                </>
+              )}
+              {settings.contactEmail && (
+                <a
+                  href={`mailto:${settings.contactEmail}`}
+                  className="hidden items-center gap-1.5 transition-colors hover:text-white lg:flex"
+                >
+                  <MailOutlined className="text-accent-3" />
+                  {settings.contactEmail}
+                </a>
+              )}
+            </div>
 
-          <div className="hidden flex-1 px-4 md:block">
-            <HeaderNavMenu mode="horizontal" />
-          </div>
-
-          <div className="hidden items-center space-x-4 md:flex">
-            <HeaderUserMenu
-              isAuthenticated={isAuthenticated}
-              user={user}
-              userName={userName}
-              onLogin={handleLogin}
-              onRegister={handleRegister}
-              onLogout={handleLogout}
-              onProfile={handleProfile}
-            />
-          </div>
-
-          <div className="md:hidden">
-            <Button
-              type="text"
-              icon={<MenuOutlined className="text-slate-600" />}
-              onClick={toggleMobileMenu}
-              aria-label="Mở menu điều hướng"
-              className="rounded-md p-2 text-slate-700 hover:bg-slate-100"
-            />
+            {/* Right — socials + language */}
+            <div className="flex shrink-0 items-center gap-3">
+              <div className="hidden items-center gap-3 sm:flex">
+                {settings.facebookUrl && (
+                  <a
+                    href={settings.facebookUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Facebook"
+                    className="transition-colors hover:text-white"
+                  >
+                    <FacebookFilled />
+                  </a>
+                )}
+                {settings.youtubeUrl && (
+                  <a
+                    href={settings.youtubeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="YouTube"
+                    className="transition-colors hover:text-white"
+                  >
+                    <YoutubeFilled />
+                  </a>
+                )}
+                {settings.instagramUrl && (
+                  <a
+                    href={settings.instagramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Instagram"
+                    className="transition-colors hover:text-white"
+                  >
+                    <InstagramOutlined />
+                  </a>
+                )}
+                {settings.zaloUrl && (
+                  <a
+                    href={settings.zaloUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium transition-colors hover:text-white"
+                  >
+                    Zalo
+                  </a>
+                )}
+                <span className="text-neutral-6">|</span>
+              </div>
+              {/* Language — only Vietnamese for now (more languages later). */}
+              <div className="text-neutral-2 flex items-center gap-1.5">
+                <GlobalOutlined className="text-neutral-4" />
+                <span className="font-medium">Tiếng Việt</span>
+                <DownOutlined className="text-neutral-5 text-[10px]" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <Drawer
-        title="Menu"
-        placement="right"
-        onClose={toggleMobileMenu}
-        open={isMobileMenuOpen}
-        width={280}
-        className="sv-header__drawer md:hidden"
-        closeIcon={<CloseOutlined className="text-slate-600" />}
-        bodyStyle={{ padding: 0 }}
+      <header
+        className={cn(
+          'sv-header sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm',
+        )}
       >
-        <div className="flex h-full flex-col">
-          <div className="flex-1 py-4">
-            <HeaderNavMenu mode="vertical" onItemClick={toggleMobileMenu} />
+        {/* Full-width, two-tier header (plan 0014 + feedback):
+          row 1 = logo · search (grows) · user; row 2 = nav (left-aligned). */}
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex h-14 items-center gap-4">
+            {/* Left — logo (flex-1 mirrors the right so the search stays centered) */}
+            <div className="flex flex-1 items-center">
+              <div className="shrink-0">
+                <HeaderLogo onClick={handleLogoClick} src={logoSrc} />
+              </div>
+            </div>
+
+            {/* Center — search (desktop md+) */}
+            <div className="hidden w-full max-w-2xl shrink-0 md:block">
+              <SearchBar variant="header" onSearch={handleSearch} />
+            </div>
+
+            {/* Right — user (md+) or hamburger (mobile); flex-1 mirrors the left */}
+            <div className="flex flex-1 items-center justify-end">
+              <div className="hidden items-center md:flex">
+                <HeaderUserMenu
+                  isAuthenticated={isAuthenticated}
+                  user={user}
+                  userName={userName}
+                  onLogin={handleLogin}
+                  onRegister={handleRegister}
+                  onLogout={handleLogout}
+                  onProfile={handleProfile}
+                />
+              </div>
+              <div className="md:hidden">
+                <Button
+                  type="text"
+                  icon={<MenuOutlined className="text-slate-600" />}
+                  onClick={toggleMobileMenu}
+                  aria-label="Mở menu điều hướng"
+                  className="rounded-md p-2 text-slate-700 hover:bg-slate-100"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="border-t border-gray-100 bg-gray-50 p-4">
-            <HeaderUserMenu
-              isAuthenticated={isAuthenticated}
-              user={user}
-              userName={userName}
-              onLogin={handleLogin}
-              onRegister={handleRegister}
-              onLogout={handleLogout}
-              onProfile={handleProfile}
-              isMobile
-            />
+          {/* Search — mobile row (below, when the inline search is hidden) */}
+          <div className="pb-3 md:hidden">
+            <SearchBar variant="header" onSearch={handleSearch} />
+          </div>
+
+          {/* Tier 2 — primary navigation, left-aligned (desktop md+) */}
+          <div className="hidden border-t border-neutral-2 md:block">
+            <HeaderNavMenu mode="horizontal" />
           </div>
         </div>
-      </Drawer>
-    </header>
+
+        <Drawer
+          title="Menu"
+          placement="right"
+          onClose={toggleMobileMenu}
+          open={isMobileMenuOpen}
+          width={280}
+          className="sv-header__drawer md:hidden"
+          closeIcon={<CloseOutlined className="text-slate-600" />}
+          bodyStyle={{ padding: 0 }}
+        >
+          <div className="flex h-full flex-col">
+            <div className="flex-1 py-4">
+              <HeaderNavMenu mode="vertical" onItemClick={toggleMobileMenu} />
+            </div>
+
+            <div className="border-t border-gray-100 bg-gray-50 p-4">
+              <HeaderUserMenu
+                isAuthenticated={isAuthenticated}
+                user={user}
+                userName={userName}
+                onLogin={handleLogin}
+                onRegister={handleRegister}
+                onLogout={handleLogout}
+                onProfile={handleProfile}
+                isMobile
+              />
+            </div>
+          </div>
+        </Drawer>
+      </header>
+    </>
   )
 }
 
