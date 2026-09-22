@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 import {
   EnvironmentFilled,
   FacebookFilled,
@@ -9,6 +11,7 @@ import {
 
 import fallbackLogo from '@/assets/images/logo.png'
 import { APP_VERSION, BRAND_NAME } from '@/constants/brand'
+import { PRIMARY_NAV_ITEMS } from '@/constants/nav'
 import { useSiteSettings } from '@/hooks/useSiteSettings'
 import { resolveUrl } from '@/utils/resolveUrl'
 
@@ -26,7 +29,7 @@ const Footer = () => {
             <img
               src={logoSrc}
               alt={BRAND_NAME}
-              className="h-8 w-auto object-contain"
+              className="h-16 w-auto object-contain"
               style={{ transformOrigin: 'left' }}
             />
             <p className="text-neutral-6 text-sm leading-relaxed">
@@ -75,19 +78,22 @@ const Footer = () => {
             )}
           </div>
 
-          {/* Danh mục */}
+          {/* Danh mục — mirrors the header primary nav (shared PRIMARY_NAV_ITEMS)
+              and uses react-router Link for real SPA navigation. */}
           <div className="flex flex-col gap-2">
             <h5 className="text-neutral-8 mb-1 text-sm font-semibold uppercase tracking-wider">
               Danh mục
             </h5>
-            {['Sức khỏe tổng quát', 'Dược phẩm', 'Dinh dưỡng', 'Sức khỏe tinh thần'].map(label => (
-              <a
-                key={label}
-                href="/"
+            {/* Skip "Trang chủ" here — it already lives in the "Liên kết"
+                column above. Header keeps it via the shared PRIMARY_NAV_ITEMS. */}
+            {PRIMARY_NAV_ITEMS.filter(item => item.path !== '/').map(item => (
+              <Link
+                key={item.path}
+                to={item.path}
                 className="text-neutral-6 hover:text-primary-6 text-sm transition-colors"
               >
-                {label}
-              </a>
+                {item.label}
+              </Link>
             ))}
           </div>
 

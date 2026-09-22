@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import {
@@ -24,6 +25,7 @@ import type { MenuProps } from 'antd'
 
 import fallbackLogo from '@/assets/images/logo.png'
 import { BRAND_NAME } from '@/constants/brand'
+import { PRIMARY_NAV_ITEMS } from '@/constants/nav'
 import RouteConfig from '@/constants/RouteConfig'
 import { useAuth } from '@/hooks/useAuth'
 import { useSiteSettings } from '@/hooks/useSiteSettings'
@@ -48,33 +50,22 @@ const HeaderNavMenu = ({ mode = 'horizontal', onItemClick }: HeaderNavMenuProps)
   const navigate = useNavigate()
   const location = useLocation()
 
-  const menuItems: MenuProps['items'] = [
-    {
-      key: RouteConfig.HomePage.path,
-      icon: mode === 'vertical' ? <HomeOutlined /> : null,
-      label: 'Trang chủ',
-    },
-    {
-      key: RouteConfig.ForumPage.path,
-      icon: mode === 'vertical' ? <MessageOutlined /> : null,
-      label: 'Diễn đàn',
-    },
-    {
-      key: RouteConfig.CoursePage.path,
-      icon: mode === 'vertical' ? <BookOutlined /> : null,
-      label: 'E-Learning',
-    },
-    {
-      key: RoutePath.DocumentListPage.path,
-      icon: mode === 'vertical' ? <FileTextOutlined /> : null,
-      label: 'Thư viện',
-    },
-    {
-      key: RouteConfig.JobListPage.path,
-      icon: mode === 'vertical' ? <BankOutlined /> : null,
-      label: 'Tuyển dụng',
-    },
-  ]
+  // Icons live here (header-only concern); labels/paths come from the shared
+  // PRIMARY_NAV_ITEMS so the footer nav stays in sync. Icons show in vertical
+  // (mobile drawer) mode only, matching the previous behavior.
+  const navIcons: Record<string, ReactNode> = {
+    [RouteConfig.HomePage.path]: <HomeOutlined />,
+    [RouteConfig.ForumPage.path]: <MessageOutlined />,
+    [RouteConfig.CoursePage.path]: <BookOutlined />,
+    [RoutePath.DocumentListPage.path]: <FileTextOutlined />,
+    [RouteConfig.JobListPage.path]: <BankOutlined />,
+  }
+
+  const menuItems: MenuProps['items'] = PRIMARY_NAV_ITEMS.map(item => ({
+    key: item.path,
+    icon: mode === 'vertical' ? navIcons[item.path] : null,
+    label: item.label,
+  }))
 
   const menuRouteKeys = menuItems
     .map(item => item?.key)
