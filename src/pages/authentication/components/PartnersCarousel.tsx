@@ -2,66 +2,41 @@ import React from 'react'
 
 import { Carousel } from 'antd'
 
-// Mock data cho các đối tác - bạn có thể thay thế bằng dữ liệu thực
+import bvRhmTwHanoi from '@/assets/images/partners/bv-rhm-tw-hanoi.png'
+import bvRhmTwHcm from '@/assets/images/partners/bv-rhm-tw-hcm.png'
+import dhPhanChauTrinh from '@/assets/images/partners/dh-phan-chau-trinh.png'
+import dhYDuocCanTho from '@/assets/images/partners/dh-y-duoc-can-tho.png'
+import dhYDuocHue from '@/assets/images/partners/dh-y-duoc-hue.png'
+import dhYDuocThaiBinh from '@/assets/images/partners/dh-y-duoc-thai-binh.png'
+import hoiRhmVietNam from '@/assets/images/partners/hoi-rhm-viet-nam.png'
+import khoaRhmUmp from '@/assets/images/partners/khoa-rhm-ump.png'
+import vienDaoTaoRhmHmu from '@/assets/images/partners/vien-dao-tao-rhm-hmu.png'
+
+// Logos are self-hosted (taken from each partner's official website) so the
+// carousel never depends on a third-party host staying up.
+// Each name is pre-split into two lines at a meaningful break (institution
+// type / proper name) so it never wraps mid-phrase at arbitrary widths.
 const partners = [
-  {
-    id: 1,
-    name: 'Bệnh viện Chợ Rẫy',
-    logo: 'http://i.pinimg.com/1200x/69/c6/33/69c6338afc9ebc645d9c2b989f738e67.jpg',
-    alt: 'Bệnh viện Chợ Rẫy',
-  },
-  {
-    id: 2,
-    name: 'Bệnh viện Bạch Mai',
-    logo: 'https://i.pinimg.com/1200x/f5/64/d1/f564d158b6142dd54fdec75567f4bdce.jpg',
-    alt: 'Bệnh viện Bạch Mai',
-  },
-  {
-    id: 3,
-    name: 'Đại học Y Dược TP.HCM',
-    logo: 'http://i.pinimg.com/1200x/69/c6/33/69c6338afc9ebc645d9c2b989f738e67.jpg',
-    alt: 'Đại học Y Dược TP.HCM',
-  },
-  {
-    id: 4,
-    name: 'Bệnh viện Đại học Y Hà Nội',
-    logo: 'https://i.pinimg.com/1200x/f5/64/d1/f564d158b6142dd54fdec75567f4bdce.jpg',
-    alt: 'Bệnh viện Đại học Y Hà Nội',
-  },
-  {
-    id: 5,
-    name: 'Pfizer Việt Nam',
-    logo: 'http://i.pinimg.com/1200x/69/c6/33/69c6338afc9ebc645d9c2b989f738e67.jpg',
-    alt: 'Pfizer Việt Nam',
-  },
-  {
-    id: 6,
-    name: 'Johnson & Johnson',
-    logo: 'https://i.pinimg.com/1200x/f5/64/d1/f564d158b6142dd54fdec75567f4bdce.jpg',
-    alt: 'Johnson & Johnson',
-  },
-  {
-    id: 7,
-    name: 'Abbott Việt Nam',
-    logo: 'http://i.pinimg.com/1200x/69/c6/33/69c6338afc9ebc645d9c2b989f738e67.jpg',
-    alt: 'Abbott Việt Nam',
-  },
-  {
-    id: 8,
-    name: 'Roche Việt Nam',
-    logo: 'https://i.pinimg.com/1200x/f5/64/d1/f564d158b6142dd54fdec75567f4bdce.jpg',
-    alt: 'Roche Việt Nam',
-  },
+  { lines: ['Bệnh viện Răng Hàm Mặt', 'Trung ương Hà Nội'], logo: bvRhmTwHanoi },
+  { lines: ['Bệnh viện Răng Hàm Mặt', 'Trung ương TP. Hồ Chí Minh'], logo: bvRhmTwHcm },
+  { lines: ['Viện Đào tạo Răng Hàm Mặt', 'Trường Đại học Y Hà Nội'], logo: vienDaoTaoRhmHmu },
+  { lines: ['Khoa Răng Hàm Mặt', 'Trường Đại học Y Dược TP.HCM'], logo: khoaRhmUmp },
+  { lines: ['Trường Đại học', 'Y Dược Thái Bình'], logo: dhYDuocThaiBinh },
+  { lines: ['Trường Đại học', 'Y Dược Cần Thơ'], logo: dhYDuocCanTho },
+  { lines: ['Trường Đại học Y Dược', 'Đại học Huế'], logo: dhYDuocHue },
+  { lines: ['Trường Đại học', 'Phan Châu Trinh'], logo: dhPhanChauTrinh },
+  { lines: ['Hội Răng Hàm Mặt', 'Việt Nam'], logo: hoiRhmVietNam },
 ]
 
 export const PartnersCarousel: React.FC = () => {
   return (
-    <section className="py-12">
-      <div className="container mx-auto px-4">
+    <section>
+      <div>
         <div className="mb-8 text-center">
           <h4 className="mb-3 text-xl font-semibold text-gray-800">Đối tác tin cậy</h4>
-          <p className="mx-auto max-w-2xl text-sm text-gray-600">
-            Chúng tôi hợp tác với các bệnh viện, trường đại học y khoa và công ty dược phẩm hàng đầu
+          <p className="mx-auto max-w-2xl text-sm text-balance text-gray-600">
+            Đồng hành cùng các bệnh viện, cơ sở đào tạo và hội chuyên ngành Răng Hàm Mặt hàng đầu
+            Việt Nam
           </p>
         </div>
 
@@ -73,6 +48,14 @@ export const PartnersCarousel: React.FC = () => {
           infinite={true}
           pauseOnHover={true}
           responsive={[
+            // 3-up below 1024px: at 4-up each slide is ~180px and the
+            // two-line names start wrapping mid-phrase.
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 3,
+              },
+            },
             {
               breakpoint: 768,
               settings: {
@@ -88,19 +71,26 @@ export const PartnersCarousel: React.FC = () => {
           ]}
         >
           {partners.map(partner => (
-            <div key={partner.id} className="px-2">
+            <div key={partner.lines.join(' ')} className="px-2">
               <div className="text-center">
-                <img
-                  src={partner.logo}
-                  alt={partner.alt}
-                  style={{
-                    height: '120px',
-                    width: 'auto',
-                    margin: '0 auto',
-                    objectFit: 'contain',
-                  }}
-                />
-                <p className="mt-3 text-sm font-medium text-gray-700">{partner.name}</p>
+                {/* Fixed box + object-contain: round seals and wide wordmarks
+                    (e.g. Huế) render at a comparable visual weight. */}
+                <div className="mx-auto flex h-24 w-full max-w-56 items-center justify-center">
+                  <img
+                    src={partner.logo}
+                    alt={partner.lines.join(' ')}
+                    loading="lazy"
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+                {/* Two fixed lines: same height for every card, logos stay aligned */}
+                <p className="mt-3 text-sm leading-snug font-medium text-neutral-8">
+                  {partner.lines.map(line => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
               </div>
             </div>
           ))}

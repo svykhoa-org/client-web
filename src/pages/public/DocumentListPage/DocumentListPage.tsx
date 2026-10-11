@@ -353,9 +353,7 @@ export const DocumentListPage = () => {
                 <FileTextOutlined />
               </span>
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-neutral-10">
-                  Thư viện tài liệu
-                </h1>
+                <h1 className="text-xl font-bold tracking-tight text-neutral-10">Tàng kinh các</h1>
                 <p className="mt-0.5 text-sm text-neutral-6">
                   Tài liệu y khoa chọn lọc, tải về dễ dàng
                 </p>

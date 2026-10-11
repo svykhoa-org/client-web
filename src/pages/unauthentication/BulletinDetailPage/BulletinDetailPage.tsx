@@ -85,7 +85,7 @@ const BulletinDetailPage: React.FC = () => {
                     </Link>
                   ),
                 },
-                { title: <Link to={RouteConfig.BulletinListPage.path}>Thông báo</Link> },
+                { title: <Link to={RouteConfig.BulletinListPage.path}>Văn bản pháp luật</Link> },
                 // Clickable category → deep-links into the filtered list.
                 ...(bulletin?.category
                   ? [
@@ -129,7 +129,7 @@ const BulletinDetailPage: React.FC = () => {
                         urgent ? 'bg-danger-6' : 'bg-primary-6'
                       }`}
                     >
-                      {urgent ? 'Khẩn' : 'Thông báo'}
+                      {urgent ? 'Khẩn' : 'Văn bản'}
                     </span>
                     {bulletin.category && (
                       <Tag color={bulletin.category.color || 'blue'}>{bulletin.category.name}</Tag>
@@ -175,7 +175,7 @@ const BulletinDetailPage: React.FC = () => {
               </div>
             )}
             {!bulletin && !state.state.loading && (
-              <div className="py-20 text-center text-neutral-6">Không tìm thấy thông báo.</div>
+              <div className="py-20 text-center text-neutral-6">Không tìm thấy văn bản.</div>
             )}
           </AsyncLoading>
         </div>

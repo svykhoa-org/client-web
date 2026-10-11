@@ -62,7 +62,7 @@ export const ListCoursePage = () => {
               </span>
               <div>
                 <h1 className="text-2xl font-bold tracking-tight text-neutral-10 text-balance">
-                  Khoá học E-Learning
+                  Khoá học E-Learning cấp chứng chỉ CME
                 </h1>
                 <p className="mt-1 max-w-prose text-sm text-neutral-6">
                   Nâng cao kiến thức y khoa với các khoá học chuyên sâu

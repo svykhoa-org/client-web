@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router'
 
 import { ArrowRight, Check, FileText, GraduationCap, MessageCircle } from 'lucide-react'
 
-import heroImage from '@/assets/images/hero-clinic.jpg'
+import heroImage from '@/assets/images/hero-dental-academy.jpg'
 import RouteConfig from '@/constants/RouteConfig'
 import { RoutePath } from '@/routes'
 
@@ -29,7 +29,7 @@ const HomeHero = () => {
       {/* Background image + readability overlays (token-based gradients) */}
       <img
         src={heroImage}
-        alt="Phòng khám nha khoa hiện đại với màn hình mô phỏng cấy ghép implant 3D"
+        alt="Sinh viên nha khoa thực hành trên mô hình trong phòng đào tạo tiền lâm sàng"
         className="absolute inset-0 h-full w-full scale-105 object-cover"
       />
       <div className="from-primary-10/95 via-primary-10/80 to-primary-10/40 absolute inset-0 bg-gradient-to-r" />
@@ -52,8 +52,8 @@ const HomeHero = () => {
             </h1>
 
             <p className="max-w-2xl text-base leading-relaxed text-pretty text-neutral-2 sm:text-lg">
-              Thư viện tài liệu, phác đồ điều trị và khóa đào tạo chuyên sâu — hỗ trợ bác sĩ và sinh
-              viên Răng Hàm Mặt trong thực hành lâm sàng hằng ngày.
+              Tàng kinh các tài liệu, phác đồ điều trị và khóa đào tạo chuyên sâu — hỗ trợ bác sĩ và
+              sinh viên Răng Hàm Mặt trong thực hành lâm sàng hằng ngày.
             </p>
 
             {/* CTAs → real routes */}
@@ -63,7 +63,7 @@ const HomeHero = () => {
                 onClick={() => navigate(RoutePath.DocumentListPage.path)}
                 className="from-primary-6 to-accent-6 hover:from-primary-7 hover:to-accent-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r px-7 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:-translate-y-0.5"
               >
-                Khám phá thư viện tài liệu
+                Khám phá Tàng kinh các
                 <ArrowRight size={16} />
               </button>
               <button
@@ -97,7 +97,7 @@ const HomeHero = () => {
                   <FileText size={18} />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-bold text-white">Thư viện tài liệu & phác đồ</p>
+                  <p className="text-sm font-bold text-white">Tàng kinh các</p>
                   <p className="text-xs text-neutral-3">
                     Tra cứu tài liệu chuyên môn & ca lâm sàng
                   </p>

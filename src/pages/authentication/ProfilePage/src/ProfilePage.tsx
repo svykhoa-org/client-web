@@ -835,7 +835,7 @@ const ProfilePage: React.FC = () => {
               className="rounded-lg"
               onClick={() => navigate(RoutePath.DocumentListPage.path)}
             >
-              Khám phá thư viện
+              Khám phá Tàng kinh các
             </Button>
           </Empty>
         </Section>

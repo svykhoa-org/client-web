@@ -9,7 +9,7 @@ import RouteConfig from '@/constants/RouteConfig'
 // why: import only the pure constants module `@/constants/RouteConfig` (no
 // deps). Importing `@/routes` here would form an init-time cycle
 // (@/routes → MainLayout → Footer → nav → @/routes) and read RoutePath before
-// it is defined. The one path not in RouteConfig — "Thư viện" — is inlined as
+// it is defined. The one path not in RouteConfig — "Tàng kinh các" — is inlined as
 // a literal; its canonical definition lives in routes/PublicRoute.tsx:10
 // (PublicPath.DocumentListPage.path).
 export interface PrimaryNavItem {
@@ -21,6 +21,6 @@ export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
   { path: RouteConfig.HomePage.path, label: 'Trang chủ' },
   { path: RouteConfig.ForumPage.path, label: 'Diễn đàn' },
   { path: RouteConfig.CoursePage.path, label: 'E-Learning' },
-  { path: '/documents', label: 'Thư viện' }, // routes/PublicRoute.tsx:10
+  { path: '/documents', label: 'Tàng kinh các' }, // routes/PublicRoute.tsx:10
   { path: RouteConfig.JobListPage.path, label: 'Tuyển dụng' },
 ]

@@ -37,7 +37,9 @@ export const ListBulletins = () => {
       <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
         <div className="flex items-center gap-2">
           <span className="h-4 w-1 rounded-full bg-primary-6" />
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Thông báo</h4>
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Văn bản pháp luật
+          </h4>
         </div>
         <Link
           to={RouteConfig.BulletinListPage.path}

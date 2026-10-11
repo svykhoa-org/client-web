@@ -67,7 +67,7 @@ const experts = [
 
 export const ExpertTeam: React.FC = () => {
   return (
-    <section className="py-12">
+    <section>
       <div className="mb-10">
         <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
           Chuyên gia
@@ -82,7 +82,7 @@ export const ExpertTeam: React.FC = () => {
         {experts.map(expert => (
           <div
             key={expert.id}
-            className="group flex gap-4 rounded-xl border border-gray-100 bg-white p-5 transition-all duration-200 hover:border-teal-200 hover:shadow-md"
+            className="group flex gap-4 rounded-xl border border-neutral-3 bg-white p-5 transition-all duration-200 hover:border-teal-200 hover:shadow-md"
           >
             <Avatar
               size={56}

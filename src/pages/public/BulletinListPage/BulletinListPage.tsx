@@ -99,7 +99,9 @@ export const BulletinListPage = () => {
               <SoundOutlined />
             </span>
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-neutral-10">Thông báo</h1>
+              <h1 className="text-xl font-bold tracking-tight text-neutral-10">
+                Văn bản pháp luật
+              </h1>
               <p className="mt-0.5 text-sm text-neutral-6">
                 Thông tin chính thức từ ban điều hành, cập nhật liên tục
               </p>
@@ -109,7 +111,7 @@ export const BulletinListPage = () => {
             <div className="text-primary-9 text-2xl font-bold leading-none tabular-nums">
               {totalItems}
             </div>
-            <div className="mt-1 text-xs text-neutral-5">thông báo</div>
+            <div className="mt-1 text-xs text-neutral-5">văn bản</div>
           </div>
         </div>
 
@@ -118,7 +120,7 @@ export const BulletinListPage = () => {
             value={searchInput}
             onChange={event => setSearchInput(event.target.value)}
             prefix={<SearchOutlined className="text-neutral-5" />}
-            placeholder="Tìm thông báo theo tiêu đề, nội dung..."
+            placeholder="Tìm văn bản theo tiêu đề, nội dung..."
             className="rounded-lg"
             size="large"
             allowClear
@@ -144,7 +146,7 @@ export const BulletinListPage = () => {
         </div>
       ) : data.length === 0 ? (
         <div className="rounded-xl border border-neutral-3 bg-white py-16">
-          <Empty description="Không tìm thấy thông báo phù hợp" />
+          <Empty description="Không tìm thấy văn bản phù hợp" />
         </div>
       ) : (
         <>

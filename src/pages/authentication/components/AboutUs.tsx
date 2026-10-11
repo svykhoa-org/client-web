@@ -2,58 +2,99 @@ import React from 'react'
 
 import { BRAND_NAME } from '@/constants/brand'
 
-const features = [
+// "About" and "Mission & Vision" merged into one section, kept in the original
+// two-card layout. Both columns hold three items of near-identical length
+// (~76-83 chars each) so the cards end at the same height. Copy describes only
+// what the platform ships today; the one aspirational claim is the vision.
+const columns = [
   {
-    number: '01',
-    title: 'Tài liệu học tập',
-    description:
-      'Kho tài liệu y khoa phong phú với slide bài giảng, bài tập và tài liệu tham khảo cập nhật.',
+    title: `Về ${BRAND_NAME}`,
+    subtitle: 'Những gì chúng tôi mang đến',
+    barClass: 'bg-primary-6',
+    badgeClass: 'bg-primary-1 text-primary-7',
+    items: [
+      {
+        title: 'Tri thức chuyên ngành',
+        description:
+          'Tàng kinh các tài liệu, phác đồ điều trị và ca lâm sàng Răng Hàm Mặt được chọn lọc.',
+      },
+      {
+        title: 'Đào tạo liên tục',
+        description: 'Khoá học E-Learning chuyên sâu, học theo tiến độ riêng, nhận chứng chỉ CME.',
+      },
+      {
+        title: 'Cộng đồng & nghề nghiệp',
+        description:
+          'Diễn đàn hỏi đáp ca khó, cập nhật văn bản pháp luật và cơ hội tuyển dụng nha khoa.',
+      },
+    ],
   },
   {
-    number: '02',
-    title: 'Cộng đồng sinh viên',
-    description: 'Kết nối và trao đổi kiến thức với hàng nghìn sinh viên y khoa trên toàn quốc.',
-  },
-  {
-    number: '03',
-    title: 'Học tập thông minh',
-    description: 'Phương pháp học tập hiệu quả với quiz, flashcard và hệ thống theo dõi tiến độ.',
-  },
-  {
-    number: '04',
-    title: 'Phát triển sự nghiệp',
-    description: 'Chuẩn bị cho tương lai với thông tin thực tập, nghiên cứu và cơ hội việc làm.',
+    title: 'Sứ mệnh & Tầm nhìn',
+    subtitle: 'Định hướng phát triển',
+    barClass: 'bg-accent-5',
+    badgeClass: 'bg-accent-5/15 text-accent-6',
+    items: [
+      {
+        title: 'Sứ mệnh',
+        description:
+          'Nâng chuẩn thực hành nha khoa Việt Nam bằng tri thức cập nhật và đào tạo liên tục.',
+      },
+      {
+        title: 'Tầm nhìn',
+        description:
+          'Trở thành hệ sinh thái tri thức và đào tạo nha khoa được tin cậy hàng đầu Việt Nam.',
+      },
+      {
+        title: 'Kết nối',
+        description:
+          'Gắn kết bác sĩ, sinh viên, cơ sở đào tạo và phòng khám trong cùng một hệ sinh thái.',
+      },
+    ],
   },
 ]
 
 export const AboutUs: React.FC = () => {
   return (
-    <section className="py-16">
-      <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="max-w-sm">
-          <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
-            Về chúng tôi
-          </p>
-          <h2 className="text-3xl font-bold leading-tight text-gray-900">Về {BRAND_NAME}</h2>
-        </div>
-        <p className="max-w-lg text-sm leading-relaxed text-gray-500">
-          Nền tảng học tập trực tuyến dành riêng cho sinh viên y khoa, giúp tìm kiếm thông tin và
-          tài liệu y khoa dễ dàng và hiệu quả.
+    <section>
+      <div className="mx-auto mb-12 max-w-2xl text-center">
+        <p className="mb-2 text-xs font-semibold tracking-widest text-primary-6 uppercase">
+          Về chúng tôi
+        </p>
+        <h2 className="text-3xl font-bold text-neutral-10">Hệ sinh thái nha khoa DSC</h2>
+        <p className="mt-3 text-sm leading-relaxed text-balance text-neutral-6">
+          {BRAND_NAME} (Dental Solution Center) đồng hành cùng bác sĩ, sinh viên và phòng khám Răng
+          Hàm Mặt trên mọi chặng đường nghề nghiệp.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {features.map(feature => (
+      <div className="grid gap-6 md:grid-cols-2">
+        {columns.map(column => (
           <div
-            key={feature.number}
-            className="group flex gap-5 rounded-xl border border-gray-100 bg-white p-6 transition-all duration-200 hover:border-teal-200 hover:shadow-md"
+            key={column.title}
+            className="rounded-xl border border-neutral-3 bg-white p-8 shadow-sm"
           >
-            <span className="flex-shrink-0 text-3xl font-bold text-gray-100 transition-colors duration-200 group-hover:text-teal-100">
-              {feature.number}
-            </span>
-            <div>
-              <h3 className="mb-1.5 text-sm font-semibold text-gray-800">{feature.title}</h3>
-              <p className="text-xs leading-relaxed text-gray-500">{feature.description}</p>
+            <div className="mb-6 flex items-center gap-3">
+              <div className={`h-8 w-1 rounded-full ${column.barClass}`} />
+              <div>
+                <h3 className="text-base font-bold text-neutral-10">{column.title}</h3>
+                <p className="text-xs text-neutral-5">{column.subtitle}</p>
+              </div>
+            </div>
+            <div className="space-y-5">
+              {column.items.map((item, i) => (
+                <div key={item.title} className="flex gap-3">
+                  <span
+                    className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${column.badgeClass}`}
+                  >
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="mb-0.5 text-sm font-semibold text-neutral-10">{item.title}</p>
+                    <p className="text-xs leading-relaxed text-neutral-6">{item.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}

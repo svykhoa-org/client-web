@@ -4,7 +4,7 @@
 // Note: this is the display name only — infrastructure identifiers (email
 // domains, storage bucket, DB name, service hostnames) are intentionally NOT
 // derived from it.
-export const BRAND_NAME = 'NHAKHOASH'
+export const BRAND_NAME = 'DSC'
 
 // 0.0.0
 export const APP_VERSION = '0.0.17'
