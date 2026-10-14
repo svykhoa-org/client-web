@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useState, type SyntheticEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import {
   CheckCircleFilled,
   DownloadOutlined,
   LockOutlined,
+  PlayCircleOutlined,
   SafetyCertificateOutlined,
 } from '@ant-design/icons'
 import { Alert, Button, Modal, Skeleton, message } from 'antd'
@@ -12,9 +13,10 @@ import dayjs from 'dayjs'
 
 import RouteConfig from '@/constants/RouteConfig'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { WatermarkedVideoPlayer } from '@/components/WatermarkedVideoPlayer/WatermarkedVideoPlayer'
 import { useDetail, useRequest } from '@/hooks'
 import { useAuth } from '@/hooks/useAuth'
-import type { Document } from '@/models/Document'
+import { DocumentKind, type Document } from '@/models/Document'
 import { DocumentLicenseStatus } from '@/models/DocumentLicense'
 import { FileSize } from '@/models/enum/FileSize'
 import { RoutePath } from '@/routes'
@@ -78,6 +80,14 @@ export const DocumentDetailPage = () => {
   // Tài liệu 0đ KHÔNG còn mặc định sở hữu: phải qua popup để ghi nhận order + cấp license.
   const isOwned = document?.license?.status === DocumentLicenseStatus.ACTIVE || false
   const isFree = document?.price === 0
+  const isVideo = document?.kind === DocumentKind.VIDEO
+  const playerSectionRef = useRef<HTMLDivElement>(null)
+
+  // Video documents are watched in-page (no download); the CTA just brings the
+  // player into view.
+  const handleWatch = () => {
+    playerSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const previewUrl = useMemo(() => resolvePreviewUrl(document), [document])
   const thumbnailUrl = useMemo(() => resolveThumbnailUrl(document), [document])
@@ -279,16 +289,24 @@ export const DocumentDetailPage = () => {
                 </h1>
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold tabular-nums">
-                    {formatFileSize({ bytes: document.fileSize ?? 0, toUnit: FileSize.MB })}
-                  </span>
-                  {document.totalPages ? (
+                  {isVideo ? (
+                    document.durationMinutes ? (
+                      <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold tabular-nums">
+                        {document.durationMinutes} phút
+                      </span>
+                    ) : null
+                  ) : (
+                    <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold tabular-nums">
+                      {formatFileSize({ bytes: document.fileSize ?? 0, toUnit: FileSize.MB })}
+                    </span>
+                  )}
+                  {!isVideo && document.totalPages ? (
                     <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold tabular-nums">
                       {document.totalPages} trang
                     </span>
                   ) : null}
                   <span className="bg-primary-1 text-primary-8 rounded-md px-2.5 py-1 text-xs font-semibold">
-                    PDF
+                    {isVideo ? 'Video' : 'PDF'}
                   </span>
                 </div>
 
@@ -307,26 +325,50 @@ export const DocumentDetailPage = () => {
             </p>
           </div>
 
-          {/* Preview */}
-          <div className="overflow-hidden rounded-xl border border-neutral-3 bg-white">
-            <div className="border-b border-neutral-2 px-5 py-4">
-              <h2 className="font-semibold text-neutral-10">Xem trước tài liệu</h2>
+          {/* Video player (owned) / locked placeholder */}
+          {isVideo ? (
+            <div
+              ref={playerSectionRef}
+              className="overflow-hidden rounded-xl border border-neutral-3 bg-white"
+            >
+              <div className="border-b border-neutral-2 px-5 py-4">
+                <h2 className="font-semibold text-neutral-10">Xem video</h2>
+              </div>
+              <div className="p-4">
+                {isOwned ? (
+                  <WatermarkedVideoPlayer documentId={document.id} />
+                ) : (
+                  <div className="flex h-70 flex-col items-center justify-center rounded-lg border border-dashed border-neutral-3 bg-neutral-1 text-center">
+                    <LockOutlined className="mb-3 text-3xl text-neutral-5" />
+                    <p className="text-neutral-7">Mua tài liệu để xem video này</p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="p-4">
-              {previewUrl ? (
-                <iframe
-                  title="Xem trước tài liệu"
-                  src={previewUrl}
-                  className="h-140 w-full rounded-lg border border-neutral-3"
-                />
-              ) : (
-                <div className="flex h-70 flex-col items-center justify-center rounded-lg border border-dashed border-neutral-3 bg-neutral-1 text-center">
-                  <LockOutlined className="mb-3 text-3xl text-neutral-5" />
-                  <p className="text-neutral-7">Phiên bản xem trước không khả dụng</p>
-                </div>
-              )}
+          ) : null}
+
+          {/* Preview (PDF only) */}
+          {!isVideo ? (
+            <div className="overflow-hidden rounded-xl border border-neutral-3 bg-white">
+              <div className="border-b border-neutral-2 px-5 py-4">
+                <h2 className="font-semibold text-neutral-10">Xem trước tài liệu</h2>
+              </div>
+              <div className="p-4">
+                {previewUrl ? (
+                  <iframe
+                    title="Xem trước tài liệu"
+                    src={previewUrl}
+                    className="h-140 w-full rounded-lg border border-neutral-3"
+                  />
+                ) : (
+                  <div className="flex h-70 flex-col items-center justify-center rounded-lg border border-dashed border-neutral-3 bg-neutral-1 text-center">
+                    <LockOutlined className="mb-3 text-3xl text-neutral-5" />
+                    <p className="text-neutral-7">Phiên bản xem trước không khả dụng</p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
         </section>
 
         <aside className="hidden lg:block lg:sticky lg:top-20 lg:w-80 lg:self-start">
@@ -358,13 +400,13 @@ export const DocumentDetailPage = () => {
                 <Button
                   type="primary"
                   size="large"
-                  icon={<DownloadOutlined />}
-                  onClick={handleDownload}
-                  loading={isPreparingDownload}
+                  icon={isVideo ? <PlayCircleOutlined /> : <DownloadOutlined />}
+                  onClick={isVideo ? handleWatch : handleDownload}
+                  loading={isVideo ? false : isPreparingDownload}
                   block
                   className="h-12 font-semibold"
                 >
-                  Tải xuống PDF
+                  {isVideo ? 'Xem video' : 'Tải xuống PDF'}
                 </Button>
               ) : (
                 <Button
@@ -384,11 +426,15 @@ export const DocumentDetailPage = () => {
             <ul className="space-y-2.5 text-[13px] text-neutral-7">
               <li className="flex items-start gap-2.5">
                 <CheckCircleFilled className="text-success-3 mt-0.5 shrink-0" />
-                <span>PDF có watermark bảo vệ bản quyền</span>
+                <span>
+                  {isVideo
+                    ? 'Xem trực tuyến, gắn watermark theo tài khoản của bạn'
+                    : 'PDF có watermark bảo vệ bản quyền'}
+                </span>
               </li>
               <li className="flex items-start gap-2.5">
                 <CheckCircleFilled className="text-success-3 mt-0.5 shrink-0" />
-                <span>Truy cập &amp; tải lại trọn đời</span>
+                <span>{isVideo ? 'Xem lại trọn đời' : 'Truy cập & tải lại trọn đời'}</span>
               </li>
             </ul>
 
@@ -418,12 +464,12 @@ export const DocumentDetailPage = () => {
             <Button
               type="primary"
               block
-              icon={<DownloadOutlined />}
-              onClick={handleDownload}
-              loading={isPreparingDownload}
+              icon={isVideo ? <PlayCircleOutlined /> : <DownloadOutlined />}
+              onClick={isVideo ? handleWatch : handleDownload}
+              loading={isVideo ? false : isPreparingDownload}
               className="h-10 font-semibold"
             >
-              Tải xuống PDF
+              {isVideo ? 'Xem video' : 'Tải xuống PDF'}
             </Button>
           ) : (
             <Button

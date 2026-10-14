@@ -35,6 +35,7 @@ import { useRequest } from '@/hooks'
 import { useAuth } from '@/hooks/useAuth'
 import { httpClient } from '@/services/apiClient'
 import { cn } from '@/lib/utils'
+import { DocumentKind } from '@/models/Document'
 import { FileSize } from '@/models/enum/FileSize'
 import RouteConfig from '@/constants/RouteConfig'
 import { RoutePath } from '@/routes'
@@ -787,7 +788,9 @@ const ProfilePage: React.FC = () => {
             <p className="mb-1 truncate text-sm font-medium text-neutral-9">{document.title}</p>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-neutral-5">
               <span className="tabular-nums">
-                {formatFileSize({ bytes: document.fileSize || 0, toUnit: FileSize.MB })}
+                {document.kind === DocumentKind.VIDEO
+                  ? `Video${document.durationMinutes ? ` · ${document.durationMinutes} phút` : ''}`
+                  : formatFileSize({ bytes: document.fileSize || 0, toUnit: FileSize.MB })}
               </span>
               <span className="text-neutral-3">•</span>
               <span>Mua lúc {formatDateTime(item.purchasedAt)}</span>
@@ -795,15 +798,18 @@ const ProfilePage: React.FC = () => {
           </div>
 
           <div className="flex shrink-0 gap-2">
-            <Button
-              size="small"
-              icon={<DownloadOutlined />}
-              className="rounded-lg"
-              onClick={() => void handleDownloadDocument(document.id)}
-              loading={downloadingDocumentId === document.id}
-            >
-              Tải xuống
-            </Button>
+            {/* Video documents are watch-only: no watermarked-PDF download exists. */}
+            {document.kind !== DocumentKind.VIDEO && (
+              <Button
+                size="small"
+                icon={<DownloadOutlined />}
+                className="rounded-lg"
+                onClick={() => void handleDownloadDocument(document.id)}
+                loading={downloadingDocumentId === document.id}
+              >
+                Tải xuống
+              </Button>
+            )}
             <Button
               size="small"
               type="primary"

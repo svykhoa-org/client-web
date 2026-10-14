@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import { RightOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
-import type { Document } from '@/models/Document'
+import { DocumentKind, type Document } from '@/models/Document'
 import { RoutePath } from '@/routes'
 import { formatCurrency } from '@/utils/currency/formatCurrency'
 import { getPublicUrl } from '@/utils/getPublicUrl'
@@ -42,7 +42,13 @@ export const DocumentCard = ({ document }: DocumentCardProps) => {
       </span>,
     )
   }
-  if (document.totalPages) {
+  if (document.kind === DocumentKind.VIDEO) {
+    metaItems.push(
+      <span key="video" className="tabular-nums">
+        Video{document.durationMinutes ? ` · ${document.durationMinutes} phút` : ''}
+      </span>,
+    )
+  } else if (document.totalPages) {
     metaItems.push(
       <span key="pages" className="tabular-nums">
         {document.totalPages} trang

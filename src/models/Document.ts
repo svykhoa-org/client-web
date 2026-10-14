@@ -9,7 +9,15 @@ export enum DocumentStatus {
   PUBLISHED = 'PUBLISHED',
 }
 
+export enum DocumentKind {
+  PDF = 'PDF',
+  VIDEO = 'VIDEO',
+}
+
 export interface Document extends BaseModel {
+  // Older API responses may omit it; treat undefined as PDF.
+  kind?: DocumentKind
+  durationMinutes?: number | null
   title: string
   description?: string | null
   slug: string
