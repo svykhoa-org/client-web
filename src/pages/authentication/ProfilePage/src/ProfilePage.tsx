@@ -33,6 +33,8 @@ import type { ColumnsType } from 'antd/es/table'
 
 import { useRequest } from '@/hooks'
 import { useAuth } from '@/hooks/useAuth'
+import { updateProfile } from '@/services/auth/authService'
+import { useAuthStore } from '@/stores/authStore'
 import { httpClient } from '@/services/apiClient'
 import { cn } from '@/lib/utils'
 import { DocumentKind } from '@/models/Document'
@@ -263,6 +265,8 @@ const FieldRow = ({
 
 const ProfilePage: React.FC = () => {
   const { user } = useAuth()
+  const setUser = useAuthStore(s => s.setUser)
+  const [isSavingProfile, setIsSavingProfile] = useState(false)
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -317,7 +321,12 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (!user) return
-    form.setFieldsValue({ name: user.fullName, email: user.email, bio: user.bio || '' })
+    form.setFieldsValue({
+      name: user.fullName,
+      email: user.email,
+      headline: user.headline || '',
+      bio: user.bio || '',
+    })
     if (user.avatarUrl) {
       setFileList([{ uid: '-1', name: 'avatar.png', status: 'done', url: user.avatarUrl }])
     }
@@ -420,9 +429,24 @@ const ProfilePage: React.FC = () => {
           <Form
             form={form}
             layout="vertical"
-            onFinish={() => {
-              message.success('Đã cập nhật thông tin của bạn')
-              setIsEditing(false)
+            onFinish={async (values: { name: string; headline?: string; bio?: string }) => {
+              setIsSavingProfile(true)
+              try {
+                const response = await updateProfile({
+                  fullName: values.name,
+                  headline: values.headline ?? null,
+                  bio: values.bio ?? null,
+                })
+                if (user) setUser({ ...user, ...response.data })
+                message.success('Đã cập nhật thông tin của bạn')
+                setIsEditing(false)
+              } catch (error) {
+                message.error(
+                  error instanceof Error ? error.message : 'Không thể cập nhật thông tin.',
+                )
+              } finally {
+                setIsSavingProfile(false)
+              }
             }}
           >
             <SectionTitle>Thông tin liên hệ</SectionTitle>
@@ -453,6 +477,22 @@ const ProfilePage: React.FC = () => {
               </Form.Item>
             </FieldRow>
 
+            <FieldRow
+              label="Chức danh"
+              hint={isEditing ? 'Hiển thị trên hồ sơ công khai' : undefined}
+            >
+              <Form.Item name="headline" className="mb-0">
+                <Input
+                  size="large"
+                  variant={variant}
+                  readOnly={readOnly}
+                  className="rounded-lg"
+                  maxLength={150}
+                  placeholder="Ví dụ: BS CKII Răng Hàm Mặt"
+                />
+              </Form.Item>
+            </FieldRow>
+
             <FieldRow label="Giới thiệu">
               <Form.Item name="bio" className="mb-0">
                 <Input.TextArea
@@ -461,7 +501,7 @@ const ProfilePage: React.FC = () => {
                   autoSize={{ minRows: 2, maxRows: 8 }}
                   className="rounded-lg"
                   showCount={isEditing}
-                  maxLength={300}
+                  maxLength={1000}
                   placeholder="Chưa cập nhật"
                 />
               </Form.Item>
@@ -476,6 +516,7 @@ const ProfilePage: React.FC = () => {
                   type="primary"
                   htmlType="submit"
                   icon={<SaveOutlined />}
+                  loading={isSavingProfile}
                   className="rounded-lg"
                 >
                   Lưu thay đổi

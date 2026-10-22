@@ -98,6 +98,16 @@ export const getCurrentUser = async (): Promise<SuccessResponse<User>> => {
   return await httpClient.get<User>('/auth/profile')
 }
 
+export interface UpdateProfileRequest {
+  fullName?: string
+  headline?: string | null
+  bio?: string | null
+}
+
+export const updateProfile = async (data: UpdateProfileRequest): Promise<SuccessResponse<User>> => {
+  return await httpClient.patch<User>('/auth/profile', data)
+}
+
 export const changePassword = async (
   data: ChangePasswordRequest,
 ): Promise<SuccessResponse<{ message: string }>> => {

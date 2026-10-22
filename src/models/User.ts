@@ -29,7 +29,9 @@ export interface User extends BaseModel {
   role?: UserRole
   status?: UserStatus
   avatarUrl?: string
-  bio?: string
+  // Self-declared public profile text (PATCH /auth/profile).
+  headline?: string | null
+  bio?: string | null
   stats?: UserStats
   specialization?: string
   certificates?: string[]

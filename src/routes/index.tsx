@@ -24,6 +24,7 @@ import { ArticleListPage } from '@/pages/public/ArticleListPage'
 import { BulletinListPage } from '@/pages/public/BulletinListPage'
 // import { CoursePlayerPage } from '@/pages/unauthentication/CoursePlayerPage';
 import FeaturedUserDetailPage from '@/pages/unauthentication/FeaturedUserDetailPage'
+import PublicProfilePage from '@/pages/unauthentication/PublicProfilePage'
 import FeaturedUsersPage from '@/pages/unauthentication/FeaturedUsersPage'
 import { ForumPage } from '@/pages/unauthentication/ForumPage'
 import { ForumSearchPage } from '@/pages/unauthentication/ForumSearchPage'
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: RouteConfig.FeaturedUserDetailPage.path,
         element: <FeaturedUserDetailPage />,
+      },
+      {
+        path: RouteConfig.PublicProfilePage.path,
+        element: <PublicProfilePage />,
       },
       // {
       //   path: RouteConfig.ResourceListPage.path,

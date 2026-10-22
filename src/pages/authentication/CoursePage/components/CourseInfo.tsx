@@ -7,8 +7,10 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Avatar, Tag } from 'antd'
+import { Link } from 'react-router'
 
 import defaultThumbnail from '@/assets/course-thumbnail-default.jpeg'
+import RouteConfig from '@/constants/RouteConfig'
 import type { CourseApiItem, CourseInstructor } from '@/types/course-api'
 
 interface CourseInfoProps {
@@ -113,8 +115,9 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
             </SectionHeading>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {instructors.map(instructor => (
-                <div
+                <Link
                   key={instructor.id}
+                  to={RouteConfig.PublicProfilePage.getPath(instructor.id)}
                   className="hover:border-primary-3 hover:bg-primary-1/40 flex items-center gap-3.5 rounded-xl border border-neutral-2 bg-neutral-1 p-3.5 transition-colors"
                 >
                   <Avatar
@@ -130,7 +133,7 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
                       Giảng viên
                     </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

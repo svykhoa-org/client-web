@@ -47,6 +47,10 @@ const RouteConfig = {
   FeaturedUserDetailPage: {
     path: '/featured-user/:id',
   },
+  PublicProfilePage: {
+    path: '/u/:id',
+    getPath: (id: string) => `/u/${id}`,
+  },
   ELearningPage: {
     path: '/e-learning',
   },
