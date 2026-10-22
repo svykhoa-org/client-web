@@ -2,7 +2,9 @@ import type { BaseModel } from './BaseModel'
 
 // FIXME: ĐỔi thành uppercase
 export enum UserRole {
+  SuperAdmin = 'super_admin',
   Admin = 'admin',
+  Instructor = 'instructor',
   User = 'user',
   Mod = 'mod',
 }
