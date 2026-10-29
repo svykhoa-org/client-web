@@ -111,7 +111,7 @@ export const CourseLearningPage = () => {
   // Scheduled course not yet open: block content until the class starts (mirrors
   // the server gate BE-3, which 403s the content fetch). Preempts child fetches
   // with a friendly state whichever way the learner arrived here.
-  const cohort = curriculumData?.course ? getCohortState(curriculumData.course) : null
+  const cohort = curriculumData?.policySummary ? getCohortState(curriculumData.policySummary) : null
   if (cohort?.isScheduled && !cohort.learningStarted) {
     return (
       <div className="flex h-64 items-center justify-center">

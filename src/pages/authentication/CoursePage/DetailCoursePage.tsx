@@ -21,6 +21,7 @@ import { getMyVerification } from '@/services/Verification'
 import RouteConfig from '@/constants/RouteConfig'
 
 import { CourseActions } from './components/CourseActions'
+import { CoursePolicyCard } from './components/CoursePolicyCard'
 import { CourseInfo } from './components/CourseInfo'
 import { CourseModules } from './components/CourseModules'
 import { formatCohortDate, getCohortState, REGISTRATION_STATUS_LABEL } from './cohortState'
@@ -170,10 +171,10 @@ export const DetailCoursePage = () => {
     )
   }
 
-  const { course, curriculum, instructors = [] } = data
+  const { course, curriculum, instructors = [], policySummary } = data
   const firstLesson = curriculum[0]?.lessons[0] ?? null
   const isEnrolled = enrollment?.status === 'active' || enrollment?.status === 'completed'
-  const cohort = getCohortState(course)
+  const cohort = getCohortState(policySummary)
 
   // Block enrolment on a verified-only course until the doctor is verified. Only
   // block once the status is known so verified users never see a spurious popup;
@@ -220,6 +221,14 @@ export const DetailCoursePage = () => {
         <Col xs={24} lg={16}>
           <div className="flex flex-col gap-6">
             <CourseInfo course={course} instructors={instructors} />
+            {/* The right column (with this card) is hidden below lg. */}
+            <div className="rounded-lg border border-neutral-3 bg-white p-4 shadow-sm lg:hidden">
+              <CoursePolicyCard
+                policy={policySummary}
+                totalDurationMinutes={course.totalDurationMinutes}
+                showRegistration={!isEnrolled}
+              />
+            </div>
             <CourseModules curriculum={curriculum} />
           </div>
         </Col>
@@ -231,9 +240,8 @@ export const DetailCoursePage = () => {
                 id: course.id,
                 price: course.price,
                 totalDurationMinutes: course.totalDurationMinutes,
-                accessDurationDays: course.accessDurationDays,
-                cmeCredits: course.cmeCredits,
               }}
+              policy={policySummary}
               cohort={cohort}
               enrollment={enrollment}
               isEnrollmentLoading={isEnrollmentLoading}
@@ -281,7 +289,7 @@ export const DetailCoursePage = () => {
                 Vào học ngay
               </Button>
             )
-          ) : cohort.isScheduled && !cohort.canRegister ? (
+          ) : !cohort.canRegister ? (
             <Button block disabled className="h-10 font-semibold">
               {REGISTRATION_STATUS_LABEL[cohort.registrationStatus]}
             </Button>

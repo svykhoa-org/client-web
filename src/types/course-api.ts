@@ -149,6 +149,41 @@ export interface ProctoringConfig {
 
 export type ProctoringSnapshotStatus = 'submitted' | 'declined' | 'timeout'
 
+// ── Course policy (interpreted by the server) ─────────────────────────────────
+
+export type ProgressionMode = 'free' | 'sequential' | 'module_sequential'
+export type AccessMode = 'unlimited' | 'days_after_enroll' | 'until_course_end'
+
+/** Course rules already interpreted by the server — render these, never re-derive them. */
+export interface PolicySummary {
+  progressionMode: ProgressionMode
+  lessonThresholdPercent: number
+  access: { mode: AccessMode; days: number | null }
+  requiresVerification: boolean
+  schedule: {
+    isScheduled: boolean
+    registrationStart: string | null
+    registrationEnd: string | null
+    startDate: string | null
+    endDate: string | null
+  }
+  capacity: { max: number | null; remaining: number | null }
+  proctoring: { cameraRequired: boolean; inactivityPause: boolean }
+  certificate: {
+    enabled: boolean
+    cmeCredits: number | null
+    certifyingOrganization: string | null
+  }
+}
+
+/** GET /lesson-progress/courses/:courseId/access — unlock state of every lesson for the learner. */
+export interface CourseAccessResponse {
+  progressionMode: ProgressionMode
+  canLearn: boolean
+  blockedReason: string | null
+  lessons: Record<string, { isAccessible: boolean; prerequisiteLessonId: string | null }>
+}
+
 // ── LessonLearning ────────────────────────────────────────────────────────────
 
 export interface LessonPrerequisite {

@@ -12,6 +12,7 @@ import { Link } from 'react-router'
 import defaultThumbnail from '@/assets/course-thumbnail-default.jpeg'
 import RouteConfig from '@/constants/RouteConfig'
 import type { CourseApiItem, CourseInstructor } from '@/types/course-api'
+import { formatDurationMinutes } from '@/utils/formatDuration'
 
 interface CourseInfoProps {
   course: CourseApiItem
@@ -23,8 +24,8 @@ const SectionHeading = ({ children }: { children: React.ReactNode }) => (
 )
 
 export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
-  const durationHours = course.totalDurationMinutes
-    ? Math.round(course.totalDurationMinutes / 60)
+  const duration = course.totalDurationMinutes
+    ? formatDurationMinutes(course.totalDurationMinutes)
     : null
 
   return (
@@ -60,10 +61,10 @@ export const CourseInfo = ({ course, instructors }: CourseInfoProps) => {
               học viên
             </span>
           )}
-          {durationHours !== null && (
+          {duration !== null && (
             <span className="flex items-center gap-1.5">
               <ClockCircleOutlined className="text-neutral-5" />
-              {durationHours} giờ học
+              {duration} học
             </span>
           )}
           {course.cmeCredits != null && (

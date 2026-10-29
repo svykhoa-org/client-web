@@ -8,6 +8,7 @@ import defaultThumbnail from '@/assets/course-thumbnail-default.jpeg'
 import RouteConfig from '@/constants/RouteConfig'
 import { cn } from '@/lib/utils'
 import type { CourseApiItem } from '@/types/course-api'
+import { formatDurationMinutes } from '@/utils/formatDuration'
 
 interface Props {
   course: CourseApiItem
@@ -21,8 +22,8 @@ export const CourseItem = ({ course, onClick }: Props) => {
     onClick ?? (() => navigate(RouteConfig.CourseDetailPage.path.replace(':id', course.id)))
 
   const isFree = course.price === 0
-  const durationHours = course.totalDurationMinutes
-    ? Math.round(course.totalDurationMinutes / 60)
+  const duration = course.totalDurationMinutes
+    ? formatDurationMinutes(course.totalDurationMinutes)
     : null
   const estimatedLessons = course.totalDurationMinutes
     ? Math.round(course.totalDurationMinutes / 10)
@@ -103,10 +104,10 @@ export const CourseItem = ({ course, onClick }: Props) => {
               </span>
             </span>
           )}
-          {durationHours !== null && (
+          {duration !== null && (
             <span className="flex items-center gap-1">
               <ClockCircleOutlined />
-              {durationHours} giờ
+              {duration}
             </span>
           )}
         </div>

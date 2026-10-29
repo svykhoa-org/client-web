@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import type { Document } from '@/models/Document'
 import { RoutePath } from '@/routes'
 import { getPublicUrl } from '@/utils/getPublicUrl'
+import { formatDurationMinutes } from '@/utils/formatDuration'
 import type { CourseApiItem } from '@/types/course-api'
 
 interface ResourceRailProps {
@@ -177,7 +178,7 @@ export const ResourceRail = ({ courses, documents, loading, ready }: ResourceRai
                   meta={
                     course.category?.name ??
                     (course.totalDurationMinutes
-                      ? `${Math.round(course.totalDurationMinutes / 60)} giờ học`
+                      ? `${formatDurationMinutes(course.totalDurationMinutes)} học`
                       : 'Khóa học')
                   }
                   price={formatPrice(course.price)}

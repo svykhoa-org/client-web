@@ -1,4 +1,4 @@
-import type { Course } from '@/models/Course'
+import type { PolicySummary } from '@/types/course-api'
 
 export type RegistrationStatus = 'open' | 'not_open' | 'closed' | 'full'
 
@@ -13,58 +13,31 @@ export interface CohortState {
   registrationEnd: string | null
 }
 
-type CohortInput = Pick<
-  Course,
-  | 'isScheduled'
-  | 'startDate'
-  | 'registrationStart'
-  | 'registrationEnd'
-  | 'maxEnrollments'
-  | 'currentEnrollments'
->
-
 /**
- * Derive the cohort (scheduled-course) UI state. Mirrors the server gates:
- * registration window (BE-2 checkout gate), seat cap, and startDate learning gate
- * (BE-3). Non-scheduled courses are always open/learnable. The server remains the
- * real enforcement; this only drives proactive UI.
+ * Registration / class-start UI state from the server's policySummary. Mirrors the
+ * server gates: the registration window and seat cap apply to every course that
+ * sets them (not only scheduled ones); the startDate learning gate applies to
+ * scheduled courses. The server remains the real enforcement; this only drives
+ * proactive UI.
  */
-export function getCohortState(course: CohortInput, now: Date = new Date()): CohortState {
-  const {
-    isScheduled,
-    startDate,
-    registrationStart,
-    registrationEnd,
-    maxEnrollments,
-    currentEnrollments,
-  } = course
-
-  if (!isScheduled) {
-    return {
-      isScheduled: false,
-      registrationStatus: 'open',
-      canRegister: true,
-      learningStarted: true,
-      startDate,
-      registrationStart,
-      registrationEnd,
-    }
-  }
+export function getCohortState(policy: PolicySummary, now: Date = new Date()): CohortState {
+  const { schedule, capacity } = policy
+  const { isScheduled, startDate, registrationStart, registrationEnd } = schedule
 
   let registrationStatus: RegistrationStatus = 'open'
   if (registrationStart && now < new Date(registrationStart)) {
     registrationStatus = 'not_open'
   } else if (registrationEnd && now > new Date(registrationEnd)) {
     registrationStatus = 'closed'
-  } else if (maxEnrollments != null && currentEnrollments >= maxEnrollments) {
+  } else if (capacity.remaining !== null && capacity.remaining <= 0) {
     registrationStatus = 'full'
   }
 
   return {
-    isScheduled: true,
+    isScheduled,
     registrationStatus,
     canRegister: registrationStatus === 'open',
-    learningStarted: !startDate || now >= new Date(startDate),
+    learningStarted: !isScheduled || !startDate || now >= new Date(startDate),
     startDate,
     registrationStart,
     registrationEnd,

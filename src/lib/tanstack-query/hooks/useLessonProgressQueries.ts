@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { queryKeys } from '@/lib/tanstack-query'
 import { getLessonLearning } from '@/services/LessonProgress/getLessonLearning'
+import { getCourseAccess } from '@/services/LessonProgress/getCourseAccess'
 import { getProgressMap } from '@/services/LessonProgress/getProgressMap'
 import { updateWatchTime } from '@/services/LessonProgress/updateWatchTime'
 
@@ -22,6 +23,17 @@ export const useProgressMap = (enrollmentId: string, enabled = true) => {
     enabled: enabled && !!enrollmentId,
     staleTime: 0,
     refetchOnMount: 'always',
+  })
+}
+
+/** Server-computed unlock state of every lesson (sidebar). */
+export const useCourseAccess = (courseId: string, enabled = true) => {
+  return useQuery({
+    queryKey: queryKeys.lessonProgress.access(courseId),
+    queryFn: () => getCourseAccess(courseId),
+    enabled: enabled && !!courseId,
+    staleTime: 0,
+    retry: false,
   })
 }
 

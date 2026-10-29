@@ -10,6 +10,7 @@ import {
   EyeOutlined,
   FileTextOutlined,
   LeftOutlined,
+  LoadingOutlined,
   LockOutlined,
   PlayCircleOutlined,
   QuestionCircleOutlined,
@@ -21,7 +22,10 @@ import { Avatar, Progress, Spin } from 'antd'
 import RouteConfig from '@/constants/RouteConfig'
 import { useCourseWithCurriculum } from '@/lib/tanstack-query/hooks/useCourseQueries'
 import { useMyEnrollment } from '@/lib/tanstack-query/hooks/useEnrollmentQueries'
-import { useProgressMap } from '@/lib/tanstack-query/hooks/useLessonProgressQueries'
+import {
+  useCourseAccess,
+  useProgressMap,
+} from '@/lib/tanstack-query/hooks/useLessonProgressQueries'
 import type { CourseInstructor, LessonProgressApi, LessonType } from '@/types/course-api'
 
 const lessonTypeIcon = (type: LessonType) => {
@@ -116,25 +120,10 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
     .sort((a, b) => a.order - b.order)
     .flatMap(mod => [...mod.lessons].sort((a, b) => a.order - b.order))
 
-  const accessibilityMap: Record<string, boolean> = {}
-  flatLessons.forEach((lesson, i) => {
-    if (lesson.isPreview || i === 0) {
-      accessibilityMap[lesson.id] = true
-      return
-    }
-    const prev = flatLessons[i - 1]
-    const prevProgress = progressMap.get(prev.id)
-    if (prevProgress?.status === 'completed') {
-      accessibilityMap[lesson.id] = true
-      return
-    }
-    const prevWatched = prevProgress?.watchedSeconds ?? 0
-    if (prev.durationMinutes > 0) {
-      accessibilityMap[lesson.id] = prevWatched / (prev.durationMinutes * 60) >= 0.8
-    } else {
-      accessibilityMap[lesson.id] = false
-    }
-  })
+  // Unlock state comes from the server (same rules the content endpoints enforce);
+  // the sidebar only renders it and never re-derives course rules.
+  const { data: access } = useCourseAccess(courseId, !!enrollment?.id)
+  const lessonTitleById = new Map(flatLessons.map(l => [l.id, l.title]))
 
   const [flashSet, setFlashSet] = useState<Set<string>>(new Set())
   const flashTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
@@ -220,6 +209,11 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
             />
           </div>
         )}
+        {access && !access.canLearn && access.blockedReason && (
+          <p className="mt-2.5 rounded-lg border border-warning-2 bg-warning-1 px-2.5 py-1.5 text-xs text-neutral-8">
+            {access.blockedReason}
+          </p>
+        )}
       </div>
 
       {/* Module accordion */}
@@ -256,7 +250,16 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                       .sort((a, b) => a.order - b.order)
                       .map(lesson => {
                         const isActive = lesson.id === activeLessonId
-                        const isAccessible = accessibilityMap[lesson.id] ?? true
+                        const state = access?.lessons[lesson.id]
+                        // Until the state loads, only preview + the current lesson are
+                        // clickable — avoids flashing "locked → open" (server still gates).
+                        const isPending = !access && !lesson.isPreview && !isActive
+                        // Once loaded, the server decides — even for the current lesson.
+                        const isAccessible =
+                          lesson.isPreview || (access ? !!state?.isAccessible : isActive)
+                        const blockingTitle = state?.prerequisiteLessonId
+                          ? lessonTitleById.get(state.prerequisiteLessonId)
+                          : undefined
                         const isCompleted = progressMap.get(lesson.id)?.status === 'completed'
                         const isFlashing = flashSet.has(lesson.id)
 
@@ -264,6 +267,11 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                           <button
                             key={lesson.id}
                             disabled={!isAccessible}
+                            title={
+                              !isAccessible && blockingTitle
+                                ? `Hoàn thành bài “${blockingTitle}” để mở`
+                                : undefined
+                            }
                             onClick={() =>
                               navigate(RouteConfig.CourseLearningPage.getPath(courseId, lesson.id))
                             }
@@ -283,6 +291,8 @@ export const ListModuleSidebar = ({ latestUnlockedId }: ListModuleSidebarProps) 
                             <span className="mt-0.5 shrink-0 text-sm">
                               {isCompleted ? (
                                 <CheckCircleFilled className="text-success-3" />
+                              ) : isPending ? (
+                                <LoadingOutlined className="text-neutral-4" />
                               ) : isAccessible ? (
                                 lessonTypeIcon(lesson.type)
                               ) : (

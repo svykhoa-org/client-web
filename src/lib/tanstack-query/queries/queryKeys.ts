@@ -45,6 +45,8 @@ export const queryKeys = {
       [...queryKeys.lessonProgress.all, 'learning', lessonId] as const,
     progressMap: (enrollmentId: string) =>
       [...queryKeys.lessonProgress.all, 'progressMap', enrollmentId] as const,
+    // Under lessonProgress.all so progress updates (watch time, quiz pass) refetch it.
+    access: (courseId: string) => [...queryKeys.lessonProgress.all, 'access', courseId] as const,
   },
 
   // LessonNotes

@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
-import { LockOutlined } from '@ant-design/icons'
 import { Result, Spin, message } from 'antd'
 import {
   MediaControlBar,
@@ -20,6 +19,7 @@ import ReactPlayer from 'react-player'
 import { useLessonDetail, useLessonLearning, useUpdateWatchTime } from '@/lib/tanstack-query'
 
 import { IdlePrompt } from './IdlePrompt'
+import { LockedLessonNotice } from './LockedLessonNotice'
 import { ProctoringModal } from './ProctoringModal'
 import { useProctoring } from '../hooks/useProctoring'
 
@@ -180,15 +180,13 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>((prop
   }
 
   if (!learningData.isAccessible) {
-    const pct = learningData.prerequisite?.watchedPercent ?? 0
     return (
-      <div className="relative aspect-video w-full bg-slate-900 flex flex-col items-center justify-center gap-3 text-white">
-        <LockOutlined style={{ fontSize: 40 }} />
-        <p className="font-semibold text-lg">Bài học bị khoá</p>
-        <p className="text-sm text-slate-300">
-          Bạn cần xem ít nhất 80% bài trước (đã xem {pct.toFixed(0)}%)
-        </p>
-      </div>
+      <LockedLessonNotice
+        courseId={props.courseId}
+        prerequisite={learningData.prerequisite}
+        className="relative aspect-video w-full bg-slate-900 flex flex-col items-center justify-center gap-3 text-white"
+        dark
+      />
     )
   }
 

@@ -4,26 +4,26 @@ import { useNavigate } from 'react-router'
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
-  LaptopOutlined,
   PlayCircleOutlined,
-  SafetyCertificateOutlined,
   ShoppingCartOutlined,
 } from '@ant-design/icons'
 import { Button } from 'antd'
 
 import RouteConfig from '@/constants/RouteConfig'
 import type { Enrollment } from '@/models/Enrollment'
+import type { PolicySummary } from '@/types/course-api'
 
 import { formatCohortDate, REGISTRATION_STATUS_LABEL, type CohortState } from '../cohortState'
+
+import { CoursePolicyCard } from './CoursePolicyCard'
 
 interface CourseActionsProps {
   course: {
     id: string
     price: number
     totalDurationMinutes: number | null
-    accessDurationDays: number | null
-    cmeCredits: number | null
   }
+  policy: PolicySummary
   cohort: CohortState
   enrollment: Enrollment | null | undefined
   isEnrollmentLoading: boolean
@@ -37,6 +37,7 @@ interface CourseActionsProps {
 
 export const CourseActions = ({
   course,
+  policy,
   cohort,
   enrollment,
   isEnrollmentLoading,
@@ -87,7 +88,8 @@ export const CourseActions = ({
     }
 
     // Scheduled course outside its registration window / full: block registration (BE-2).
-    if (cohort.isScheduled && !cohort.canRegister) {
+    // Registration window / seat cap apply to every course that sets them.
+    if (!cohort.canRegister) {
       return (
         <Button size="large" disabled block className="h-12 text-base font-semibold">
           {REGISTRATION_STATUS_LABEL[cohort.registrationStatus]}
@@ -154,48 +156,17 @@ export const CourseActions = ({
         {renderCTA()}
       </div>
 
-      {cohort.isScheduled &&
-        !isEnrolled &&
-        (cohort.registrationStart || cohort.registrationEnd) && (
-          <p className="mt-2 text-center text-xs text-neutral-5">
-            Thời gian đăng ký: {formatCohortDate(cohort.registrationStart) || '—'}
-            {' → '}
-            {formatCohortDate(cohort.registrationEnd) || '—'}
-          </p>
-        )}
-
       {!isEnrolled && course.price > 0 && (
         <p className="mt-2 text-center text-xs text-neutral-5">Thanh toán qua cổng SePay</p>
       )}
 
       <div className="my-5 h-px bg-neutral-2" />
 
-      <ul className="space-y-2.5 text-sm text-neutral-7">
-        <li className="flex items-center gap-2.5">
-          <LaptopOutlined className="text-primary-6" />
-          <span>Học trên mọi thiết bị</span>
-        </li>
-        {course.totalDurationMinutes && (
-          <li className="flex items-center gap-2.5">
-            <ClockCircleOutlined className="text-primary-6" />
-            <span>{Math.round(course.totalDurationMinutes / 60)} giờ học</span>
-          </li>
-        )}
-        <li className="flex items-center gap-2.5">
-          <SafetyCertificateOutlined className="text-primary-6" />
-          <span>
-            {course.accessDurationDays
-              ? `Truy cập ${course.accessDurationDays} ngày`
-              : 'Truy cập vĩnh viễn'}
-          </span>
-        </li>
-        {course.cmeCredits && (
-          <li className="flex items-center gap-2.5">
-            <CheckCircleOutlined className="text-primary-6" />
-            <span>{course.cmeCredits} CME credits</span>
-          </li>
-        )}
-      </ul>
+      <CoursePolicyCard
+        policy={policy}
+        totalDurationMinutes={course.totalDurationMinutes}
+        showRegistration={!isEnrolled}
+      />
     </div>
   )
 }

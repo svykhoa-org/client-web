@@ -1,7 +1,9 @@
-import { FileTextOutlined, LockOutlined } from '@ant-design/icons'
+import { FileTextOutlined } from '@ant-design/icons'
 import { Result, Skeleton, Spin } from 'antd'
 
 import { PdfViewer } from '@/components/PdfViewer/PdfViewer'
+
+import { LockedLessonNotice } from './LockedLessonNotice'
 import {
   useDocumentTimer,
   useLessonDocumentContent,
@@ -55,15 +57,13 @@ export const DocumentViewer = ({
 
   // ── Locked ───────────────────────────────────────────────────────────────────
   if (!isAccessible) {
-    const pct = learningData.prerequisite?.watchedPercent ?? 0
     return (
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 bg-slate-900 text-white">
-        <LockOutlined style={{ fontSize: 40 }} />
-        <p className="text-lg font-semibold">Bài học bị khoá</p>
-        <p className="text-sm text-slate-300">
-          Bạn cần hoàn thành ít nhất 80% bài trước (đã xem {pct.toFixed(0)}%)
-        </p>
-      </div>
+      <LockedLessonNotice
+        courseId={courseId}
+        prerequisite={learningData.prerequisite}
+        className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 bg-slate-900 text-white"
+        dark
+      />
     )
   }
 

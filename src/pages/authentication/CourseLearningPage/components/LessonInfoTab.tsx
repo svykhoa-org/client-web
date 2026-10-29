@@ -7,6 +7,7 @@ import {
 import { Tag } from 'antd'
 
 import type { CourseApiItem, CourseLesson, LessonType } from '@/types/course-api'
+import { formatDurationMinutes } from '@/utils/formatDuration'
 
 interface LessonInfoTabProps {
   course: CourseApiItem
@@ -34,11 +35,7 @@ function formatDuration(minutes: number): string {
 }
 
 function formatTotalDuration(minutes: number | null): string {
-  if (!minutes) return '—'
-  const h = Math.floor(minutes / 60)
-  const m = minutes % 60
-  if (h > 0) return `${h} giờ ${m} phút`
-  return `${m} phút`
+  return minutes ? formatDurationMinutes(minutes) : '—'
 }
 
 export function LessonInfoTab({ course, lesson }: LessonInfoTabProps) {

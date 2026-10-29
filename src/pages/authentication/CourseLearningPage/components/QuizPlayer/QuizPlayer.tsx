@@ -1,5 +1,4 @@
-import { LockOutlined } from '@ant-design/icons'
-import { Result, Skeleton } from 'antd'
+import { Skeleton } from 'antd'
 
 import {
   useMyAttempts,
@@ -9,6 +8,8 @@ import {
 } from '@/lib/tanstack-query/hooks/useQuizQueries'
 import { useLessonLearning } from '@/lib/tanstack-query/hooks/useLessonProgressQueries'
 import type { SubmitQuizPayload } from '@/types/course-api'
+
+import { LockedLessonNotice } from '../LockedLessonNotice'
 
 import { QuizIntro } from './QuizIntro'
 import { QuizResult } from './QuizResult'
@@ -39,17 +40,11 @@ export const QuizPlayer = ({ quizId, courseId, lessonId, onCourseComplete }: Qui
 
   if (!lessonData?.isAccessible) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <Result
-          icon={<LockOutlined className="text-slate-400" />}
-          title="Bài học bị khóa"
-          subTitle={
-            lessonData?.prerequisite
-              ? `Hoàn thành bài học trước để mở khóa`
-              : 'Bạn chưa có quyền truy cập bài học này'
-          }
-        />
-      </div>
+      <LockedLessonNotice
+        courseId={courseId}
+        prerequisite={lessonData?.prerequisite ?? null}
+        className="flex h-64 flex-col items-center justify-center gap-3 text-neutral-8"
+      />
     )
   }
 
